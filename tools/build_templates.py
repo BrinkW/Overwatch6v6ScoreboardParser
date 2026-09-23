@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT))
 
 import numpy as np  # noqa: E402
 
-from src import digits as D, layout as L  # noqa: E402
+from src import digits as D, icons as I, layout as L  # noqa: E402
 from src.parse import STATS, load_rgb  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures"
@@ -36,23 +36,31 @@ def fixtures(exclude=()):
 
 
 def build(exclude=(), cache: dict | None = None) -> dict:
-    """{"digits": (templates, labels)}. `cache` maps image -> harvested glyphs to avoid recomputation."""
+    """{"digits": (templates, labels), "roles": (templates, labels)}.
+    `cache` maps image -> harvested samples to avoid recomputation."""
     cache = cache if cache is not None else {}
-    glyphs, labels = [], []
+    glyphs, labels, roles, role_labels = [], [], [], []
     for fx in fixtures(exclude):
         if fx["image"] not in cache:
             rgb = load_rgb(SAMPLES / fx["image"])
             lay = L.detect(rgb)
-            got = []
+            got, got_roles = [], []
             for row, truth in zip(lay.rows, fx["rows"]):
                 for c in STATS:
                     if truth.get(c) is not None:
                         got += D.harvest(L.crop(rgb, row.rois[c]), truth[c])
-            cache[fx["image"]] = got
-        for g, lab in cache[fx["image"]]:
+                if truth.get("role"):
+                    got_roles.append((I.role_descriptor(L.crop(rgb, row.rois["role"])), truth["role"]))
+            cache[fx["image"]] = (got, got_roles)
+        got, got_roles = cache[fx["image"]]
+        for g, lab in got:
             glyphs.append(g)
             labels.append(lab)
-    return {"digits": (np.stack(glyphs), np.array(labels))}
+        for g, lab in got_roles:
+            roles.append(g)
+            role_labels.append(lab)
+    return {"digits": (np.stack(glyphs), np.array(labels)),
+            "roles": (np.stack(roles), np.array(role_labels))}
 
 
 def main(argv=None):
@@ -66,6 +74,9 @@ def main(argv=None):
                         labels=t["digits"][1].astype(np.uint8))
     print(f"digits: {len(t['digits'][1])} templates, per class "
           f"{np.bincount(t['digits'][1], minlength=10).tolist()} -> {args.out / 'digits.npz'}")
+    np.savez_compressed(args.out / "roles.npz", templates=(t["roles"][0] * 255).round().astype(np.uint8),
+                        labels=t["roles"][1])
+    print(f"roles: {len(t['roles'][1])} templates -> {args.out / 'roles.npz'}")
 
 
 if __name__ == "__main__":

@@ -76,14 +76,33 @@ value = best if score > 80 else None
 Turns a hard recognition problem into an easy retrieval problem.
 
 ### Perk and role icons
-Pure black glyphs on a white disc, fixed size, no skin variation. Binarize, mask
-to the disc interior (radius ≈ 0.42 × crop size, to keep the surrounding team
-color out), resize to 32×32, nearest-neighbour. Exact, not probabilistic.
+Pure black glyphs on a white disc, fixed size, no skin variation. The glyph is
+~28 px inside a ~52 px disc at 1440p, and thin strokes are lost at that size.
+Take soft darkness inside 0.72 × the half-crop (0.62 clipped large glyphs), crop
+to the glyph's tight bounding box, resize to 24×24, blur σ=1, then nearest
+neighbour. The same normalisation applied to the 128 px wiki artwork makes the
+two comparable without any scale calibration. On the 13 reviewed screenshots:
+290/292 glyphs name the right hero with no other help; with the hero known,
+291/291 recognisable perks are identified; empty slots (no white disc) 20/20.
+Role icons: 156/156 with templates harvested from the answer keys.
+
+**The game's art can differ from the wiki's.** One Baptiste glyph (a turret with
+healing pluses, test6) matches none of his wiki icons: the in-game Automated
+Healing icon appears to have been redrawn after the wiki's 2025-03 upload.
+Matches further than 0.65 from every artwork are reported as unrecognised rather
+than forced (correct matches sit ≤ 0.59, median 0.16).
 
 ### Hero portraits
-The hard case — skins change them completely. Enumerate (hero, skin) portraits
-and NN over all of them. Cross-check against the perk-derived hero and the role
-icon; vote.
+**The scoreboard shows each hero's standard illustrated portrait, whatever skin
+is equipped.** Matching the portrait against `assets/heroes/<slug>.png` (24×24
+colour, z-scored) identifies 156/156 rows, skinned ones included, with a minimum
+margin of 2.7 (median 16.6). The 3D ban-screen art (`assets/bans`) gets only
+48/156, so it is the wrong library for rows. The portrait is therefore the
+primary hero signal; perk glyphs and the role icon confirm it.
+
+### Role composition
+6v6 allows 1–3 of each role per team: the reviewed screenshots include teams
+with 3 supports and 3 damage heroes. A 2/2/2 check would be wrong here.
 
 ---
 
@@ -182,7 +201,20 @@ must not assume every row has two perks.
 
 ## 6. Open questions
 
-- Perk slot ordering (left = major?) needs confirmation from a capture where the
-  player's own perk selections are known.
+- **Perk slot ordering: usually left = major, but not always.** Across 13
+  screenshots, perks whose tier never changed appear major/left 119 times and
+  minor/left 4; minor/right 123 and major/right 9. 110 of the 111 rows with two
+  such perks fit left=major, right=minor. Tier-swapped perks sit where their
+  *pre-swap* tier would put them (Vendetta's Raging Storm, Hanzo's Dragon Fury,
+  Tracer's Blink Packs), which fits screenshots taken before those patches.
+  **But some rows are reversed with no patch history to explain it:** Juno shows
+  Locked On (minor) left and Lift Off (major) right in 7 of 8 rows; Reaper,
+  Moira and Sojourn show the same pattern. Lift Off and Reversal only exist
+  since the patch that made their neighbours minor, so patch timing cannot
+  explain these rows. Working hypothesis: the scoreboard lists perks in **pick
+  order, most recent first**, so picking the major before the minor (holding
+  the minor pick, or competitive round resets that unlock both at once) swaps
+  them. Consequence: slot order is a soft prior, never a validation rule.
+  Confirm with a capture where the pick order is known.
 - Whether Emerald's badge art reuses a hue close to Master's.
 - Whether perk icons are ever rendered at a different size in 5v5 vs 6v6 layouts.

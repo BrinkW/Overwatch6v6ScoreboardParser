@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 sys.dont_write_bytecode = True
 
 from build_templates import SAMPLES, build  # noqa: E402
-from src import digits as D, layout as L  # noqa: E402
+from src import digits as D, icons as I, layout as L  # noqa: E402
 from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
 
 FIXTURE = json.loads((ROOT / "tests" / "fixtures" / "maintest.json").read_text(encoding="utf-8"))
@@ -28,7 +28,7 @@ IMAGE = SAMPLES / "maintest.png"
 @pytest.fixture(scope="module")
 def result():
     t = build(exclude=("maintest.png",))
-    return parse(IMAGE, Models(D.DigitClassifier(*t["digits"])))
+    return parse(IMAGE, Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"])))
 
 
 def test_layout_geometry():
@@ -45,6 +45,18 @@ def test_stats(result, field):
     got = [r[field] for r in result["rows"]]
     want = [r[field] for r in FIXTURE["rows"]]
     assert got == want
+
+
+@pytest.mark.parametrize("field", ["role", "hero", "perks"])
+def test_role_hero_perks(result, field):
+    got = [r[field] for r in result["rows"]]
+    want = [r[field] for r in FIXTURE["rows"]]
+    assert got == want
+
+
+def test_hero_signals_agree(result):
+    """Portrait, perk votes and role icon should never conflict on the reference capture."""
+    assert [r["hero_flags"] for r in result["rows"]] == [[]] * 12
 
 
 def test_no_structural_problems(result):
