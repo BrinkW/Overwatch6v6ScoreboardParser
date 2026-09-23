@@ -11,6 +11,7 @@ It maintains:
 |---|---|
 | `reference/heroes.json` | Roster: every hero, their role/subrole, wiki page, owperks page, official page, release status |
 | `reference/maps.json` | Every Standard Play map with its mode, plus former Assault/Clash maps: the list the header's map name is snapped to |
+| `reference/titles.json` | Player titles from the wiki, plus generated competitive reward titles: the list a row's title is snapped to |
 | `reference/perks.json` | Every perk that has an icon, live and removed, with tier, tier history and pick rate |
 | `assets/bans/<slug>.png` | 256×256 ban icon (3D render), wiki `File:Icon-<Name>.png` |
 | `assets/heroes/<slug>.png` | 256×256 illustrated portrait, wiki `File:<Name> Hero.png` |
@@ -69,11 +70,19 @@ A full run takes about a minute, mostly waiting on network requests.
    (Assault, Clash) as `current: false`, since older screenshots can show them.
    Added or removed maps are reported. The file isn't touched if the page yields
    fewer than 20 maps.
-3. **Hero icons.** For any hero missing a ban or hero icon, or whose icon is
+3. **Titles.** Reads every table on the wiki's Titles page into
+   `reference/titles.json` (`source: "wiki"`, with the page section). The wiki
+   misses the competitive reward titles seen on scoreboards, so the pattern
+   `<Tier> <Tank|Damage|Support|Open Competitor|Open Challenger>` (tiers Bronze
+   to Champion, plus Challenger) is added as `source: "rank-pattern"`. Event
+   titles the wiki lacks (e.g. Shinigami) are not added here: titles seen in
+   the answer keys are merged in at build time (`tools/build_templates.py`).
+   The file isn't touched if the page yields fewer than 100 titles.
+4. **Hero icons.** For any hero missing a ban or hero icon, or whose icon is
    listed in `provisional_icons`, it fetches the wiki files. Only exact
    256×256 PNGs are accepted, and it never resizes. A provisional icon is
    replaced (and delisted) as soon as a proper one exists.
-4. **Perks.** For each hero it compares three things:
+5. **Perks.** For each hero it compares three things:
    - every perk box on the wiki page, live and removed;
    - the 4 live perks on owperks;
    - `perks.json`.
@@ -82,13 +91,13 @@ A full run takes about a minute, mostly waiting on network requests.
    (the file the wiki box names, then `Perk <Name>.png` variants), downloads
    and verifies it, and adds a full entry: tier, tier history, effect,
    ability, era and pick rate.
-5. **Live set.** owperks is the source of truth for which 4 perks are live.
+6. **Live set.** owperks is the source of truth for which 4 perks are live.
    - A perk that became live is marked `current`.
    - A `current` perk that is no longer live is **retired**: it becomes
      `legacy`, loses its `pick_rate` field, and gets a `history_note`.
    - A perk whose owperks slot tier differs from the JSON gets its `tier`
      updated, `tier_swapped: true`, and a dated `tier_history` entry.
-6. **Official art.** For every hero with an official page on
+7. **Official art.** For every hero with an official page on
    overwatch.blizzard.com (`blizzard_path` in `heroes.json`), each live perk's
    icon is compared with ours by alpha mask.
    - The game sometimes redraws an icon after the wikis uploaded theirs (e.g.
@@ -101,7 +110,7 @@ A full run takes about a minute, mostly waiting on network requests.
      tier that disagrees with ours, is reported as a conflict. The official page
      occasionally misspells a name ("MEKA Mobilitiy"), so names are matched
      fuzzily.
-7. **Validate**, then write (with `--apply`) and print the report.
+8. **Validate**, then write (with `--apply`) and print the report.
 
 ## Rules
 
@@ -134,7 +143,7 @@ A full run takes about a minute, mostly waiting on network requests.
 
 | Section | Meaning / what to do |
 |---|---|
-| Roster, Hero icons, New perks, Official art, Retired perks, Reactivated perks, Tier changes, Pick-rate changes, Migrations | Changes. Check they look right, then `--apply`. |
+| Roster, Hero icons, Maps, Titles, New perks, Official art, Retired perks, Reactivated perks, Tier changes, Pick-rate changes, Migrations | Changes. Check they look right, then `--apply`. |
 | Pending | Normal for revealed or unreleased content (e.g. Doctrine before launch). Nothing to do. |
 | Warnings | Something unusual but not blocking, e.g. a wiki icon at the wrong size. Worth a look. |
 | **CONFLICTS** | The sources disagree; see below. The script held back instead of guessing. |

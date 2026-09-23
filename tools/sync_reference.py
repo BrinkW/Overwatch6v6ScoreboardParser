@@ -38,10 +38,10 @@ ROLE_FROM_PATH = {"tanks": "tank", "damages": "damage", "supports": "support"}
 # Report
 # ---------------------------------------------------------------------------
 class Report:
-    SECTIONS = ["Roster", "Hero icons", "Maps", "New perks", "Official art", "Pending (no icon / not live yet)", "Retired perks",
+    SECTIONS = ["Roster", "Hero icons", "Maps", "Titles", "New perks", "Official art", "Pending (no icon / not live yet)", "Retired perks",
                 "Reactivated perks", "Tier changes", "Pick-rate changes", "Migrations", "Warnings",
                 "CONFLICTS (need a human)", "VALIDATION ERRORS"]
-    CHANGE = {"Roster", "Hero icons", "Maps", "New perks", "Official art", "Retired perks", "Reactivated perks", "Tier changes",
+    CHANGE = {"Roster", "Hero icons", "Maps", "Titles", "New perks", "Official art", "Retired perks", "Reactivated perks", "Tier changes",
               "Pick-rate changes", "Migrations"}
 
     def __init__(self):
@@ -135,6 +135,8 @@ class Sync:
         self.roster_path = root / "reference" / "heroes.json"
         self.maps_path = root / "reference" / "maps.json"
         self.maps = load_json(self.maps_path, None)
+        self.titles_path = root / "reference" / "titles.json"
+        self.titles = load_json(self.titles_path, None)
         self.perks = load_json(self.perks_path, None)
         if self.perks is None:
             raise SystemExit(f"{self.perks_path} not found")
@@ -471,6 +473,41 @@ class Sync:
                                    "current": "true = in the Standard Play pool; false = a former mode (Assault, Clash)"},
                          "maps": sorted(found, key=lambda m: (not m["current"], m["mode"], m["name"]))}
 
+    # -- titles -------------------------------------------------------------
+    # Competitive reward titles the wiki doesn't list, seen on scoreboards as
+    # "<Tier> <Role>" ("Grandmaster Support", "Challenger Tank") and
+    # "<Tier> Open Competitor|Challenger" ("Champion Open Competitor").
+    RANK_TITLE_TIERS = ["Bronze", "Silver", "Gold", "Platinum", "Emerald", "Diamond", "Master", "Grandmaster",
+                        "Champion", "Challenger"]
+    RANK_TITLE_KINDS = ["Tank", "Damage", "Support", "Open Competitor", "Open Challenger"]
+
+    def sync_titles(self):
+        """reference/titles.json: the player titles a scoreboard title is snapped to."""
+        found = src.wiki_titles()
+        if len(found) < 100:
+            self.report.add("Warnings", f"the wiki Titles page yielded only {len(found)} titles; titles.json not updated")
+            return
+        entries = [{"title": t["title"], "source": "wiki", "section": t["section"]} for t in found]
+        have = {e["title"] for e in entries}
+        pattern = [f"{t} {k}" for t in self.RANK_TITLE_TIERS for k in self.RANK_TITLE_KINDS]
+        for t in pattern + ["Open Competitor", "Open Challenger"]:
+            if t not in have:
+                have.add(t)
+                entries.append({"title": t, "source": "rank-pattern"})
+        old = {e["title"] for e in (self.titles or {}).get("titles", [])}
+        for t in sorted(have - old):
+            self.report.add("Titles", f"add {t}")
+        for t in sorted(old - have):
+            self.report.add("Titles", f"remove {t} - no longer on the wiki's Titles page")
+        if have != old:
+            self.titles = {"_meta": {
+                "description": "Player titles, for snapping the scoreboard's title line. Maintained by "
+                               "tools/sync_reference.py from the wiki's Titles page, plus competitive reward "
+                               "titles generated from the pattern seen on scoreboards (source rank-pattern). "
+                               "Titles seen in the answer keys are added at build time "
+                               "(reference/templates/known_text.json), so event titles the wiki lacks still snap."},
+                "titles": entries}
+
     # -- migrations ---------------------------------------------------------
     def migrate(self):
         n = 0
@@ -495,6 +532,8 @@ class Sync:
         write_atomic(self.roster_path, dump_roster(self.roster))
         if self.maps is not None:
             write_atomic(self.maps_path, json.dumps(self.maps, ensure_ascii=False, indent=1) + "\n")
+        if self.titles is not None:
+            write_atomic(self.titles_path, json.dumps(self.titles, ensure_ascii=False, indent=1) + "\n")
 
 
 # ---------------------------------------------------------------------------
@@ -577,6 +616,7 @@ def main(argv=None):
     s.sync_roster()
     s.sync_hero_icons()
     s.sync_maps()
+    s.sync_titles()
     s.sync_perks()
     # validation warnings are only missing icons of unreleased heroes, already reported by sync_hero_icons
     errors, _ = validate(root, s.perks, s.roster, s.staged)

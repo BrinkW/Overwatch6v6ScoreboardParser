@@ -282,6 +282,21 @@ def wiki_maps() -> list[dict]:
     return out
 
 
+def wiki_titles() -> list[dict]:
+    """[{title, section}] from the wiki's Titles page: the first cell of every
+    table row, with the "== Section ==" it is listed under."""
+    text = wiki_page("Titles") or ""
+    out, seen = [], set()
+    for sec in re.finditer(r"^== *([^=\n]+?) *==\s*$(.*?)(?=^== |\Z)", text, re.M | re.S):
+        for row in re.split(r"\n\|-", sec.group(2))[1:]:
+            m = re.match(r"\s*\n?\|(?!\})([^\n|][^\n]*)", row)
+            title = clean(m.group(1).split("||")[0]) if m else ""
+            if title and title not in seen:
+                seen.add(title)
+                out.append({"title": title, "section": sec.group(1).strip()})
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Blizzard's official hero pages: current perk art and tiers
 # ---------------------------------------------------------------------------
