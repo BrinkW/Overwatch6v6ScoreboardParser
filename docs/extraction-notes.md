@@ -135,7 +135,7 @@ rather than Master; disambiguate on silhouette, not hue.
 From the analyzed capture — useful as a first regression fixture.
 
 Map `King's Row`, mode `Hybrid`, match time `21:32`, 6v6, rank range
-`Master 1 – Champion 4`. Bans: Zenyatta, Roadhog, Brigitte, Zarya.
+`Master 1 – Champion 4`. Bans: Zenyatta, Roadhog, Freja, Zarya.
 
 | Team | Player | Hero | Role | E | A | D | DMG | H | MIT |
 |---|---|---|---|---|---|---|---|---|---|
@@ -148,7 +148,7 @@ Map `King's Row`, mode `Hybrid`, match time `21:32`, 6v6, rank range
 | Red | ONMYB1KE | Sojourn | damage | 65 | 0 | 6 | 27,088 | 0 | 0 |
 | Red | DONKEYFARMER | Tracer | damage | 44 | 7 | 12 | 26,094 | 0 | 723 |
 | Red | FIA | Kiriko | support | 7 | 64 | 3 | 2,264 | 27,459 | 0 |
-| Red | KEXXAAR | Juno | support | 33 | 22 | 5 | 9,827 | 23,096 | 408 |
+| Red | KEXXAAR | Wuyang | support | 33 | 22 | 5 | 9,827 | 23,096 | 408 |
 | Red | KIMIKO | D.Va | tank | 45 | 24 | 9 | 20,690 | 0 | 12,443 |
 | Red | PALEWHISPER | Orisa | tank | 50 | 7 | 8 | 26,945 | 68 | 37,454 |
 
