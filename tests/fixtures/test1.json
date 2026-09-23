@@ -1,0 +1,226 @@
+{
+ "image": "test1.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Top row 3 player name uses non-Latin glyphs (reads like 'DĚXŦER'), left null.",
+ "header": {
+  "mode": "Escort",
+  "map": "Shambali Monastery",
+  "time": "16:12",
+  "bans": [
+   "zarya",
+   "kiriko",
+   null,
+   null
+  ],
+  "rank_range": [
+   "Grandmaster 3",
+   "Champion 4"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "MUFFIN",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 11,
+   "A": 19,
+   "D": 4,
+   "DMG": 8132,
+   "H": 24437,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "COLDSKIN",
+   "title": "6v6 Enthusiast",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 20,
+   "A": 4,
+   "D": 11,
+   "DMG": 11013,
+   "H": 225,
+   "MIT": 19784
+  },
+  {
+   "team": "top",
+   "player": null,
+   "title": null,
+   "hero": "ashe",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 21,
+   "A": 7,
+   "D": 13,
+   "DMG": 15265,
+   "H": 338,
+   "MIT": 1223
+  },
+  {
+   "team": "top",
+   "player": "JUICE",
+   "title": null,
+   "hero": "wuyang",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 12,
+   "A": 6,
+   "D": 11,
+   "DMG": 9527,
+   "H": 13343,
+   "MIT": 1411
+  },
+  {
+   "team": "top",
+   "player": "JACKLZ",
+   "title": "Mythic Rat",
+   "hero": "junkrat",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 17,
+   "A": 3,
+   "D": 7,
+   "DMG": 18016,
+   "H": 0,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "SPICE",
+   "title": "Divine Being",
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 17,
+   "A": 4,
+   "D": 14,
+   "DMG": 14884,
+   "H": 1372,
+   "MIT": 24252
+  },
+  {
+   "team": "bottom",
+   "player": "HAKOBOXX",
+   "title": "Grandmaster Damage",
+   "hero": "torbjorn",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 25,
+   "A": 0,
+   "D": 6,
+   "DMG": 12595,
+   "H": 0,
+   "MIT": 1900
+  },
+  {
+   "team": "bottom",
+   "player": "J4K3",
+   "title": "Champion Support",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 10,
+   "D": 4,
+   "DMG": 6984,
+   "H": 24204,
+   "MIT": 50
+  },
+  {
+   "team": "bottom",
+   "player": "KEPHRII",
+   "title": "Assassin",
+   "hero": "ashe",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 28,
+   "A": 5,
+   "D": 9,
+   "DMG": 20987,
+   "H": 0,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "REALDIRTYDAN",
+   "title": null,
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 21,
+   "A": 5,
+   "D": 6,
+   "DMG": 14174,
+   "H": 0,
+   "MIT": 28988
+  },
+  {
+   "team": "bottom",
+   "player": "SHIBUYA",
+   "title": "Champion Open Competitor",
+   "hero": "ramattra",
+   "role": "tank",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 23,
+   "A": 6,
+   "D": 10,
+   "DMG": 9856,
+   "H": 10380,
+   "MIT": 3421
+  },
+  {
+   "team": "bottom",
+   "player": "USURP3R",
+   "title": "Stalwart Hero",
+   "hero": "zenyatta",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 33,
+   "A": 25,
+   "D": 7,
+   "DMG": 14770,
+   "H": 11702,
+   "MIT": 0
+  }
+ ]
+}

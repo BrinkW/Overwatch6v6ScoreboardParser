@@ -1,0 +1,226 @@
+{
+ "image": "test11.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. 4th ban slot is empty (no ban). Bottom row 6 name uses stylised glyphs ('FRƐƐLØ'), left null.",
+ "header": {
+  "mode": "Control",
+  "map": "Samoa",
+  "time": "13:07",
+  "bans": [
+   null,
+   "wrecking_ball",
+   null,
+   "none"
+  ],
+  "rank_range": [
+   "Grandmaster 3",
+   "Champion 3"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "GSF",
+   "title": null,
+   "hero": "zarya",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 35,
+   "A": 14,
+   "D": 9,
+   "DMG": 13318,
+   "H": 0,
+   "MIT": 10208
+  },
+  {
+   "team": "top",
+   "player": "BABABOOEY",
+   "title": null,
+   "hero": "hanzo",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 31,
+   "A": 14,
+   "D": 8,
+   "DMG": 13679,
+   "H": 97,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "M4RTI4N",
+   "title": "Nulltrooper",
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 16,
+   "A": 28,
+   "D": 8,
+   "DMG": 6243,
+   "H": 12452,
+   "MIT": 538
+  },
+  {
+   "team": "top",
+   "player": "MISTERYMAN19",
+   "title": "Grandmaster Open Competitor",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 14,
+   "A": 22,
+   "D": 8,
+   "DMG": 3224,
+   "H": 16525,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "NOCHARIS",
+   "title": "Hashimoto Goon",
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 31,
+   "A": 7,
+   "D": 10,
+   "DMG": 13597,
+   "H": 0,
+   "MIT": 24596
+  },
+  {
+   "team": "top",
+   "player": "TINYRICHARD",
+   "title": "Behemoth",
+   "hero": "torbjorn",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 32,
+   "A": 2,
+   "D": 7,
+   "DMG": 15419,
+   "H": 0,
+   "MIT": 1910
+  },
+  {
+   "team": "bottom",
+   "player": "CHRONO",
+   "title": null,
+   "hero": "reaper",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 34,
+   "A": 0,
+   "D": 10,
+   "DMG": 10119,
+   "H": 1528,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "ESPURR",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 27,
+   "D": 4,
+   "DMG": 5882,
+   "H": 20379,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "RAORAFAN",
+   "title": "Champion Damage",
+   "hero": "zarya",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 27,
+   "A": 11,
+   "D": 11,
+   "DMG": 13664,
+   "H": 0,
+   "MIT": 12391
+  },
+  {
+   "team": "bottom",
+   "player": "TREE",
+   "title": "Champion Open Competitor",
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 3,
+   "D": 8,
+   "DMG": 11667,
+   "H": 2966,
+   "MIT": 18281
+  },
+  {
+   "team": "bottom",
+   "player": "YEATLE",
+   "title": "Legendary Beast",
+   "hero": null,
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 4,
+   "D": 12,
+   "DMG": 8877,
+   "H": 580,
+   "MIT": 2722
+  },
+  {
+   "team": "bottom",
+   "player": null,
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 13,
+   "A": 30,
+   "D": 3,
+   "DMG": 5302,
+   "H": 16037,
+   "MIT": 0
+  }
+ ]
+}

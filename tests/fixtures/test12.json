@@ -1,0 +1,226 @@
+{
+ "image": "test12.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Orange bottom-team colour.",
+ "header": {
+  "mode": "Push",
+  "map": "Colosseo",
+  "time": "7:53",
+  "bans": [
+   "reaper",
+   "roadhog",
+   null,
+   null
+  ],
+  "rank_range": [
+   "Master 1",
+   "Champion 2"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "ORANGE",
+   "title": null,
+   "hero": "doomfist",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 28,
+   "A": 8,
+   "D": 4,
+   "DMG": 7773,
+   "H": 238,
+   "MIT": 2745
+  },
+  {
+   "team": "top",
+   "player": "CUSI",
+   "title": null,
+   "hero": "ana",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 12,
+   "A": 17,
+   "D": 0,
+   "DMG": 3152,
+   "H": 9563,
+   "MIT": 425
+  },
+  {
+   "team": "top",
+   "player": "DRNEFARIO",
+   "title": "Hashimoto Goon",
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 9,
+   "A": 15,
+   "D": 4,
+   "DMG": 2241,
+   "H": 6625,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "FREEDOM",
+   "title": "GOAT of All Time",
+   "hero": "cassidy",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 21,
+   "A": 3,
+   "D": 3,
+   "DMG": 8755,
+   "H": 0,
+   "MIT": 196
+  },
+  {
+   "team": "top",
+   "player": "LOWENERGYZAR",
+   "title": null,
+   "hero": "mei",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 11,
+   "A": 0,
+   "D": 1,
+   "DMG": 6162,
+   "H": 901,
+   "MIT": 4089
+  },
+  {
+   "team": "top",
+   "player": "TS1FAN",
+   "title": null,
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 16,
+   "A": 4,
+   "D": 0,
+   "DMG": 6987,
+   "H": 0,
+   "MIT": 2977
+  },
+  {
+   "team": "bottom",
+   "player": "DMONICPOSSESSOR",
+   "title": null,
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 5,
+   "A": 2,
+   "D": 8,
+   "DMG": 7050,
+   "H": 0,
+   "MIT": 5100
+  },
+  {
+   "team": "bottom",
+   "player": "EGGHAUS",
+   "title": null,
+   "hero": "sombra",
+   "role": "damage",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 6,
+   "A": 0,
+   "D": 9,
+   "DMG": 9582,
+   "H": 85,
+   "MIT": 219
+  },
+  {
+   "team": "bottom",
+   "player": "JOYSTICKTTV",
+   "title": "Champion Open Competitor",
+   "hero": null,
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 7,
+   "A": 0,
+   "D": 9,
+   "DMG": 5114,
+   "H": 179,
+   "MIT": 761
+  },
+  {
+   "team": "bottom",
+   "player": "MOP20",
+   "title": null,
+   "hero": "ana",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 7,
+   "A": 7,
+   "D": 4,
+   "DMG": 2960,
+   "H": 7396,
+   "MIT": 488
+  },
+  {
+   "team": "bottom",
+   "player": "MUURIX",
+   "title": "Assassin",
+   "hero": "reinhardt",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 5,
+   "A": 0,
+   "D": 6,
+   "DMG": 5123,
+   "H": 0,
+   "MIT": 14257
+  },
+  {
+   "team": "bottom",
+   "player": "UNREFINEDAVI",
+   "title": "Lilypad Leaper",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 1,
+   "A": 3,
+   "D": 7,
+   "DMG": 1611,
+   "H": 7954,
+   "MIT": 0
+  }
+ ]
+}

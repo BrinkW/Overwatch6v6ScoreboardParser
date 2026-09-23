@@ -1,0 +1,226 @@
+{
+ "image": "test9.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. SPEEDSPORT! is rendered in a non-display font.",
+ "header": {
+  "mode": "Flashpoint",
+  "map": "Suravasa",
+  "time": "11:20",
+  "bans": [
+   "brigitte",
+   "zarya",
+   null,
+   "orisa"
+  ],
+  "rank_range": [
+   "Grandmaster 2",
+   "Champion 2"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "SNK",
+   "title": "Titan",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 22,
+   "D": 5,
+   "DMG": 7787,
+   "H": 12759,
+   "MIT": 4380
+  },
+  {
+   "team": "top",
+   "player": "GAARUTO",
+   "title": "Heroic Water Wielder",
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 23,
+   "A": 11,
+   "D": 5,
+   "DMG": 8701,
+   "H": 697,
+   "MIT": 13246
+  },
+  {
+   "team": "top",
+   "player": "LEGACY",
+   "title": null,
+   "hero": "hanzo",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 18,
+   "A": 9,
+   "D": 5,
+   "DMG": 12624,
+   "H": 0,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "PONYO",
+   "title": "Challenger Tank",
+   "hero": "symmetra",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 4,
+   "D": 9,
+   "DMG": 11192,
+   "H": 931,
+   "MIT": 6162
+  },
+  {
+   "team": "top",
+   "player": "SHREK",
+   "title": null,
+   "hero": "mauga",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 17,
+   "A": 13,
+   "D": 8,
+   "DMG": 13870,
+   "H": 2178,
+   "MIT": 7212
+  },
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 14,
+   "A": 33,
+   "D": 5,
+   "DMG": 4040,
+   "H": 13261,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "ANSR",
+   "title": "Nocturnal Creature",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 21,
+   "A": 2,
+   "D": 7,
+   "DMG": 9860,
+   "H": 4854,
+   "MIT": 4070
+  },
+  {
+   "team": "bottom",
+   "player": "ASPEN",
+   "title": "Wildflower",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 17,
+   "D": 4,
+   "DMG": 7752,
+   "H": 14562,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "CHRONO",
+   "title": null,
+   "hero": "reaper",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 0,
+   "D": 7,
+   "DMG": 12060,
+   "H": 2136,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "RONRON",
+   "title": null,
+   "hero": "tracer",
+   "role": "damage",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 13,
+   "A": 3,
+   "D": 7,
+   "DMG": 10948,
+   "H": 23,
+   "MIT": 1914
+  },
+  {
+   "team": "bottom",
+   "player": "RUDO",
+   "title": "Justice Execution",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 11,
+   "A": 13,
+   "D": 8,
+   "DMG": 6632,
+   "H": 11758,
+   "MIT": 3339
+  },
+  {
+   "team": "bottom",
+   "player": "SPEEDSPORT!",
+   "title": "Titan",
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 6,
+   "D": 8,
+   "DMG": 11948,
+   "H": 0,
+   "MIT": 22654
+  }
+ ]
+}

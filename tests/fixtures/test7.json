@@ -1,0 +1,226 @@
+{
+ "image": "test7.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified.",
+ "header": {
+  "mode": "Hybrid",
+  "map": "King's Row",
+  "time": "14:29",
+  "bans": [
+   "roadhog",
+   null,
+   null,
+   null
+  ],
+  "rank_range": [
+   "Master 1",
+   "Champion 2"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "SNK",
+   "title": "Titan",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 36,
+   "A": 22,
+   "D": 2,
+   "DMG": 11190,
+   "H": 13639,
+   "MIT": 5618
+  },
+  {
+   "team": "top",
+   "player": "COLDSKIN",
+   "title": "6v6 Enthusiast",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 40,
+   "A": 5,
+   "D": 9,
+   "DMG": 20699,
+   "H": 1642,
+   "MIT": 107
+  },
+  {
+   "team": "top",
+   "player": "HAVENLY",
+   "title": null,
+   "hero": "reinhardt",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 35,
+   "A": 8,
+   "D": 9,
+   "DMG": 20837,
+   "H": 0,
+   "MIT": 42727
+  },
+  {
+   "team": "top",
+   "player": "KAPPACAPPER",
+   "title": "Grandmaster Support",
+   "hero": "mercy",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 2,
+   "A": 46,
+   "D": 5,
+   "DMG": 184,
+   "H": 18543,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "KYOUKEU",
+   "title": "Grandmaster Open Competitor",
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 30,
+   "A": 14,
+   "D": 8,
+   "DMG": 18707,
+   "H": 0,
+   "MIT": 20229
+  },
+  {
+   "team": "top",
+   "player": "MISTERYMAN19",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 27,
+   "A": 45,
+   "D": 4,
+   "DMG": 6619,
+   "H": 24816,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "BACKBURNER",
+   "title": null,
+   "hero": "mei",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 22,
+   "A": 3,
+   "D": 10,
+   "DMG": 15960,
+   "H": 745,
+   "MIT": 6276
+  },
+  {
+   "team": "bottom",
+   "player": "BLITZEN",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 28,
+   "A": 19,
+   "D": 4,
+   "DMG": 11587,
+   "H": 21379,
+   "MIT": 316
+  },
+  {
+   "team": "bottom",
+   "player": "KAZUHA",
+   "title": "Fashion Icon",
+   "hero": "sojourn",
+   "role": "damage",
+   "perks": [
+    "none",
+    null
+   ],
+   "E": 18,
+   "A": 1,
+   "D": 11,
+   "DMG": 11515,
+   "H": 105,
+   "MIT": 473
+  },
+  {
+   "team": "bottom",
+   "player": "LAUDE",
+   "title": null,
+   "hero": "zarya",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 13,
+   "D": 11,
+   "DMG": 15901,
+   "H": 0,
+   "MIT": 10212
+  },
+  {
+   "team": "bottom",
+   "player": "YAKAYAKA",
+   "title": null,
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 26,
+   "A": 7,
+   "D": 13,
+   "DMG": 17306,
+   "H": 0,
+   "MIT": 25037
+  },
+  {
+   "team": "bottom",
+   "player": "ZYNO",
+   "title": "Femme Fatale",
+   "hero": "moira",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 26,
+   "D": 8,
+   "DMG": 11760,
+   "H": 25980,
+   "MIT": 0
+  }
+ ]
+}

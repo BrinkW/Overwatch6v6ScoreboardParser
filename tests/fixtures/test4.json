@@ -1,0 +1,226 @@
+{
+ "image": "test4.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified.",
+ "header": {
+  "mode": "Escort",
+  "map": "Junkertown",
+  "time": "13:18",
+  "bans": [
+   null,
+   "widowmaker",
+   null,
+   "zarya"
+  ],
+  "rank_range": [
+   "Grandmaster 5",
+   "Champion 4"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 22,
+   "D": 4,
+   "DMG": 6965,
+   "H": 11583,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "BLXCKOUT",
+   "title": null,
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 26,
+   "A": 0,
+   "D": 8,
+   "DMG": 12595,
+   "H": 427,
+   "MIT": 915
+  },
+  {
+   "team": "top",
+   "player": "JGARCIA",
+   "title": "Fallen Angel",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 23,
+   "A": 7,
+   "D": 12,
+   "DMG": 10703,
+   "H": 2623,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "KOKOMI",
+   "title": "Bytefixer",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 6,
+   "D": 9,
+   "DMG": 9278,
+   "H": 0,
+   "MIT": 5403
+  },
+  {
+   "team": "top",
+   "player": "METHPIPE3819",
+   "title": "Assassin",
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 23,
+   "A": 8,
+   "D": 7,
+   "DMG": 11823,
+   "H": 0,
+   "MIT": 22639
+  },
+  {
+   "team": "top",
+   "player": "TOYYGER",
+   "title": "Femme Fatale",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 16,
+   "A": 13,
+   "D": 8,
+   "DMG": 2628,
+   "H": 12983,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "CALA",
+   "title": null,
+   "hero": "hanzo",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 2,
+   "D": 5,
+   "DMG": 13604,
+   "H": 343,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "DOMINO",
+   "title": "Ancient One",
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 6,
+   "A": 16,
+   "D": 8,
+   "DMG": 4755,
+   "H": 13467,
+   "MIT": 1301
+  },
+  {
+   "team": "bottom",
+   "player": "GS25",
+   "title": null,
+   "hero": "cassidy",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 3,
+   "D": 9,
+   "DMG": 12342,
+   "H": 0,
+   "MIT": 96
+  },
+  {
+   "team": "bottom",
+   "player": "MERCYMAIN",
+   "title": null,
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    "none",
+    null
+   ],
+   "E": 17,
+   "A": 3,
+   "D": 12,
+   "DMG": 10104,
+   "H": 0,
+   "MIT": 24893
+  },
+  {
+   "team": "bottom",
+   "player": "N9YTE",
+   "title": null,
+   "hero": "roadhog",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 6,
+   "D": 7,
+   "DMG": 7127,
+   "H": 9240,
+   "MIT": 1139
+  },
+  {
+   "team": "bottom",
+   "player": "SWIM",
+   "title": null,
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 23,
+   "A": 0,
+   "D": 9,
+   "DMG": 15511,
+   "H": 105,
+   "MIT": 3090
+  }
+ ]
+}

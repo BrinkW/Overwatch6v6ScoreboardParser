@@ -1,0 +1,226 @@
+{
+ "image": "test5.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Top row 6 player name is Korean ('바람'), left null.",
+ "header": {
+  "mode": "Control",
+  "map": "Oasis",
+  "time": "12:46",
+  "bans": [
+   null,
+   null,
+   "roadhog",
+   "zarya"
+  ],
+  "rank_range": [
+   "Grandmaster 5",
+   "Champion 4"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 21,
+   "A": 22,
+   "D": 4,
+   "DMG": 10151,
+   "H": 11728,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "CRAZYHOBO",
+   "title": "Monstrosity",
+   "hero": "hazard",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 6,
+   "D": 8,
+   "DMG": 10673,
+   "H": 1495,
+   "MIT": 6772
+  },
+  {
+   "team": "top",
+   "player": "TOMCHEESE",
+   "title": null,
+   "hero": "wuyang",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 8,
+   "D": 6,
+   "DMG": 10499,
+   "H": 9755,
+   "MIT": 906
+  },
+  {
+   "team": "top",
+   "player": "WEY",
+   "title": "Stalwart Hero",
+   "hero": "doomfist",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 5,
+   "D": 9,
+   "DMG": 10236,
+   "H": 892,
+   "MIT": 5246
+  },
+  {
+   "team": "top",
+   "player": "YEAT",
+   "title": "Paladin",
+   "hero": null,
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 20,
+   "A": 4,
+   "D": 8,
+   "DMG": 9905,
+   "H": 0,
+   "MIT": 2668
+  },
+  {
+   "team": "top",
+   "player": null,
+   "title": "Grandmaster Damage",
+   "hero": null,
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 22,
+   "A": 0,
+   "D": 5,
+   "DMG": 15788,
+   "H": 10,
+   "MIT": 44
+  },
+  {
+   "team": "bottom",
+   "player": "DONUT",
+   "title": null,
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 21,
+   "A": 6,
+   "D": 10,
+   "DMG": 10522,
+   "H": 873,
+   "MIT": 10915
+  },
+  {
+   "team": "bottom",
+   "player": "JOYSTICKTTV",
+   "title": "Champion Open Competitor",
+   "hero": "brigitte",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 17,
+   "A": 22,
+   "D": 8,
+   "DMG": 4727,
+   "H": 13854,
+   "MIT": 6256
+  },
+  {
+   "team": "bottom",
+   "player": "LIV",
+   "title": "n00b",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "none",
+    null
+   ],
+   "E": 11,
+   "A": 5,
+   "D": 8,
+   "DMG": 9815,
+   "H": 1482,
+   "MIT": 4314
+  },
+  {
+   "team": "bottom",
+   "player": "MOP20",
+   "title": null,
+   "hero": "ana",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 9,
+   "A": 19,
+   "D": 5,
+   "DMG": 3399,
+   "H": 14684,
+   "MIT": 1414
+  },
+  {
+   "team": "bottom",
+   "player": "PAVID",
+   "title": "Epic Rat",
+   "hero": "junkrat",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 19,
+   "A": 4,
+   "D": 7,
+   "DMG": 10847,
+   "H": 187,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "RAORAFAN",
+   "title": "Champion Damage",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 25,
+   "A": 0,
+   "D": 11,
+   "DMG": 13675,
+   "H": 996,
+   "MIT": 188
+  }
+ ]
+}

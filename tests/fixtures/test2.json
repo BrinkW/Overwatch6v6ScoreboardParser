@@ -1,0 +1,226 @@
+{
+ "image": "test2.png",
+ "verified": false,
+ "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Rescaled, blurry capture; cyan/yellow team colours. Bottom row 3 name is non-Latin ('DəKǓ'), left null. Left rank division digit is blurry (read as 5).",
+ "header": {
+  "mode": "Flashpoint",
+  "map": "Suravasa",
+  "time": "16:47",
+  "bans": [
+   null,
+   null,
+   null,
+   "wrecking_ball"
+  ],
+  "rank_range": [
+   "Grandmaster 5",
+   "Champion 2"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "DANCER",
+   "title": null,
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 33,
+   "A": 26,
+   "D": 11,
+   "DMG": 10616,
+   "H": 11483,
+   "MIT": 4227
+  },
+  {
+   "team": "top",
+   "player": "1SHOT1KILL",
+   "title": "Nomad",
+   "hero": null,
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 26,
+   "A": 3,
+   "D": 13,
+   "DMG": 12640,
+   "H": 0,
+   "MIT": 3028
+  },
+  {
+   "team": "top",
+   "player": "FREDMASTER45",
+   "title": "Epic Gunslinger",
+   "hero": "reinhardt",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 2,
+   "D": 15,
+   "DMG": 11190,
+   "H": 0,
+   "MIT": 39390
+  },
+  {
+   "team": "top",
+   "player": "GIBBA",
+   "title": null,
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    "none",
+    null
+   ],
+   "E": 38,
+   "A": 17,
+   "D": 11,
+   "DMG": 16108,
+   "H": 2104,
+   "MIT": 9066
+  },
+  {
+   "team": "top",
+   "player": "MUFFIN",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 29,
+   "A": 34,
+   "D": 6,
+   "DMG": 9213,
+   "H": 19002,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "RONRON",
+   "title": null,
+   "hero": "reaper",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 31,
+   "A": 0,
+   "D": 13,
+   "DMG": 11045,
+   "H": 1606,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "ALUCARB",
+   "title": "Cozy Homebody",
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 18,
+   "A": 37,
+   "D": 15,
+   "DMG": 3651,
+   "H": 16437,
+   "MIT": 1383
+  },
+  {
+   "team": "bottom",
+   "player": "CODCODE904",
+   "title": null,
+   "hero": "junkrat",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 32,
+   "A": 6,
+   "D": 15,
+   "DMG": 17799,
+   "H": 0,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": null,
+   "title": "Kitten of Discord",
+   "hero": "tracer",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 36,
+   "A": 4,
+   "D": 14,
+   "DMG": 14127,
+   "H": 0,
+   "MIT": 658
+  },
+  {
+   "team": "bottom",
+   "player": "J4K3",
+   "title": "Champion Support",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 26,
+   "A": 41,
+   "D": 12,
+   "DMG": 5772,
+   "H": 15661,
+   "MIT": 4468
+  },
+  {
+   "team": "bottom",
+   "player": "L3RNT",
+   "title": "6v6 Enthusiast",
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 50,
+   "A": 10,
+   "D": 11,
+   "DMG": 18991,
+   "H": 0,
+   "MIT": 27756
+  },
+  {
+   "team": "bottom",
+   "player": "SINKORSWIM",
+   "title": null,
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 43,
+   "A": 27,
+   "D": 10,
+   "DMG": 12780,
+   "H": 0,
+   "MIT": 14519
+  }
+ ]
+}
