@@ -6,10 +6,10 @@ Score the parser against every answer-key fixture.
     python tools/evaluate.py --overlays   # also write debug/<image>_layout.png
     python tools/evaluate.py --tier-gaps  # rows whose perks contradict perks.json's tier history
 
-Leave-one-image-out: learned templates (digits, roles) used for an image never
-include samples from that image. Portrait and perk libraries come from the
-reference assets, not the fixtures. Fields that are null in a fixture are not
-scored.
+Leave-one-image-out: learned templates (stat digits, roles, header letters, time
+digits, division badges, rank emblems) used for an image never include samples
+from that image. Portrait, perk and ban libraries come from the reference
+assets, not the fixtures. Fields that are null in a fixture are not scored.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from build_templates import SAMPLES, build, fixtures  # noqa: E402
-from src import digits as D, icons as I, layout as L  # noqa: E402
+from src import digits as D, header as HD, icons as I, layout as L  # noqa: E402
 from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
 
 ROW_FIELDS = STATS + ["role", "hero"]
@@ -39,11 +39,14 @@ def main(argv=None):
                     help="list rows whose perks can't be one major + one minor under perks.json's tier history")
     args = ap.parse_args(argv)
 
-    portraits, perk_lib = I.PortraitLibrary(), I.PerkLibrary()
+    portraits, perk_lib, bans = I.PortraitLibrary(), I.PerkLibrary(), HD.BanReader()
 
     def models_for(excluded, cache):
         t = build(excluded, cache)
-        return Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), portraits, perk_lib)
+        header = HD.HeaderModels(HD.GlyphReader(*t["letters"]), HD.GlyphReader(*t["time_digits"]),
+                                 HD.DivisionReader(*t["division"]),
+                                 HD.TierReader(list(zip(t["rank_emblems"][1], t["rank_emblems"][0]))), bans)
+        return Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), portraits, perk_lib, header)
 
     cache, per_field, mismatches, flags = {}, defaultdict(lambda: [0, 0]), [], []
     gaps = Counter()
@@ -83,6 +86,26 @@ def main(argv=None):
                 flags.append(f"{where} {got['hero']:13} {fl}")
             for note in got.get("reference_notes", []):
                 gaps[note] += 1
+        hw, hg = fx.get("header", {}), result["header"]
+        for f in ("mode", "map", "time"):
+            if hw.get(f) is None:
+                continue
+            per_field[f][1] += 1
+            if hg.get(f) == hw[f]:
+                per_field[f][0] += 1
+            else:
+                mismatches.append(f"{img:12} header {f:5} want {hw[f]!r} got {hg.get(f)!r}  (raw {hg.get('raw')})")
+        for f, n in (("bans", 4), ("rank_range", 2)):
+            for k in range(n):
+                w = (hw.get(f) or [None] * n)[k]
+                if w is None:
+                    continue
+                key = "ban" if f == "bans" else "rank"
+                per_field[key][1] += 1
+                if hg[f][k] == w:
+                    per_field[key][0] += 1
+                else:
+                    mismatches.append(f"{img:12} header {key}{k} want {w!r} got {hg[f][k]!r}")
         for p in result["problems"]:
             mismatches.append(f"{img:12} STRUCTURE {p}")
 

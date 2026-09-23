@@ -52,8 +52,10 @@ HEADER = {
     # "MODE | MAP  TIME: mm:ss" is one right-aligned group whose left end moves with
     # the text length, so it is read as one strip and split on "TIME".
     "mode_map_time": (38.0, -4.15, 54.6, -2.75),
-    "rank_low": (48.8, -2.65, 51.0, -0.25),
-    "rank_high": (51.9, -2.65, 54.4, -0.25),
+    # wide enough for Grandmaster's wings (narrower boxes clipped 8 of 26 emblems);
+    # the white dash between the two is colourless, so the emblem mask ignores it
+    "rank_low": (47.9, -2.75, 51.35, -0.25),
+    "rank_high": (51.45, -2.75, 55.2, -0.25),
 }
 
 

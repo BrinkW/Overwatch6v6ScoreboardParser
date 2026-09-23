@@ -155,11 +155,56 @@ right emblem RMS 0.119 vs Champion (next best 0.226). Both confirmed
 independently by hue. Result: **Master 1 – Champion 4**.
 
 Division numbers (1 = highest, 5 = lowest) are rendered as Arabic numerals in a
-winged hexagon below the crest — treat as a digit-classifier field.
+winged hexagon below the crest.
 
-**Caveat.** Emerald was added between Platinum and Diamond on 2026-08-11 and had
-no published badge art at time of writing. A green emblem could be Emerald
-rather than Master; disambiguate on silhouette, not hue.
+### As implemented (`src/header.py`, 13 reviewed screenshots)
+
+**Tier: colour shortlists, shape decides.** References come from the tier sheet
+`assets/rankiconsnew.png` (all nine tiers, Emerald included, no glowing disc)
+plus in-game emblems harvested from the answer keys. The game renders emblems a
+little differently from the sheet; Grandmaster in particular matched its own
+sheet art poorly. Each candidate's score = hue gap / 40° + best silhouette RMS.
+Only tiers within 30° of the emblem's hue are candidates. Hue and silhouette use
+bright *saturated* metal pixels only. Measured hues, sheet → in game: Master
+161° → 156–160°, Grandmaster 244° → 239°, Champion 288° → 276–277°. Result:
+26/26 in-game emblems (leave-one-image-out), all 45 `assets/ranks` files and
+all 9 sheet emblems.
+
+**Emerald vs Master.** They are 7° apart in hue (154° vs 161°), so the silhouette
+decides. Emerald is a narrow V (aspect 0.92), Master a wide W (1.24). The 5
+in-game Master emblems score 0.07–0.12 as Master vs 0.40–0.47 as Emerald. `tests/test_ranks.py`
+guards this. `assets/ranks/emerald1..5.png` are **generated, not official art**
+(`tools/make_emerald_ranks.py`): Diamond's layout and badge, the disc rebuilt
+from Diamond's radial colour profile and hue-rotated to Emerald's (luminance
+kept), and the Emerald emblem from the tier sheet.
+
+**Rank boxes** were widened: the original boxes clipped Grandmaster's wings
+(8 of 26 emblems touched the crop edge). The white dash between the two emblems
+is colourless, so the saturated-metal mask ignores it.
+
+**Division: match the whole badge, not the digit.** The badge frame (wings,
+hexagon) is identical for every rank, so it cancels out and only the digit
+differs. It is cropped at a fixed height from the top of the wings. Result:
+26/26 (min margin 5.3) against templates from the other screenshots. Cutting the
+digit out was worse (25/26 at best): it touches the hexagon frame, and the hexagon
+doesn't always close at this size. Templates cut from `assets/ranks` fail too
+(2/26): their rendering differs.
+
+### Other header fields
+
+- **Bans:** `assets/bans` art has a transparent background, while the game draws
+  it on a red tile, so the art is composited onto red (140, 20, 25) before matching: 51/51.
+  Without that, Wuyang was read as Jetpack Cat. An empty
+  "no ban" slot is a grey icon (mean saturation 0.5 vs 66–93).
+- **Mode | map:** light-grey text left of the orange time. The glyph count is
+  always the known text + 1 (the mode icon). Letters are normalised to the
+  *line* height, so an apostrophe stays small, and read by NN over templates
+  harvested from the answer keys. The read is snapped to `reference/maps.json`
+  (37 maps, 7 modes, from the wiki). Letters never seen yet are misread ("OORAOO"
+  for Dorado), but snapping absorbs that: 13/13 maps and modes.
+- **Match time:** orange italic digits that touch; a shear of 0.2 separates them.
+  The tens-of-seconds digit is constrained to 0–5. 13/13 in-sample, 11/13
+  leave-one-image-out: 5 and 8 occur only once in the answer-key times.
 
 ---
 

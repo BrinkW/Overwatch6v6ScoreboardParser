@@ -8,7 +8,7 @@ Output follows the answer-key fixture schema (tests/fixtures/*.json), plus a
 margin between best and runner-up template is the confidence signal the rest
 of the system routes on (CLAUDE.md).
 
-Fields not implemented yet are returned as None.
+Player names and titles are not implemented yet and are returned as None.
 """
 
 from __future__ import annotations
@@ -22,6 +22,7 @@ import numpy as np
 from PIL import Image
 
 from . import digits as D
+from . import header as HD
 from . import icons as I
 from . import layout as L
 
@@ -38,15 +39,17 @@ class Models:
     plus libraries built from the synced reference assets (portraits, perks)."""
 
     def __init__(self, digit_clf: D.DigitClassifier, role_clf: I.RoleClassifier,
-                 portraits: I.PortraitLibrary | None = None, perks: I.PerkLibrary | None = None):
-        self.digits, self.roles = digit_clf, role_clf
+                 portraits: I.PortraitLibrary | None = None, perks: I.PerkLibrary | None = None,
+                 header: HD.HeaderModels | None = None):
+        self.digits, self.roles, self.header = digit_clf, role_clf, header
         self.portraits = portraits or I.PortraitLibrary()
         self.perks = perks or I.PerkLibrary()
         self.roster = json.loads((ROOT / "reference" / "heroes.json").read_text(encoding="utf-8"))["heroes"]
 
     @classmethod
     def load(cls, folder: Path = TEMPLATES) -> "Models":
-        return cls(D.DigitClassifier.load(folder / "digits.npz"), I.RoleClassifier.load(folder / "roles.npz"))
+        return cls(D.DigitClassifier.load(folder / "digits.npz"), I.RoleClassifier.load(folder / "roles.npz"),
+                   header=HD.HeaderModels.load(folder))
 
 
 def load_rgb(path) -> np.ndarray:
@@ -70,14 +73,20 @@ def parse(image, models: Models | None = None) -> dict:
                 review.append(f"{where}.{c}")
         identify_hero(rgb, r, out, models, review)
         rows.append(out)
+    header = {"mode": None, "map": None, "time": None, "bans": [None] * 4, "rank_range": [None, None]}
+    header_margin, header_problems = {}, []
+    if models.header is not None:
+        header, header_margin, header_review, header_problems = HD.read_header(rgb, lay, models.header)
+        review += header_review
     return {
         "image": Path(image).name if not isinstance(image, np.ndarray) else None,
         "layout": {"x0": lay.x0, "y0": lay.y0, "scale": round(lay.scale, 3),
                    "rows": {t: sum(1 for r in lay.rows if r.team == t) for t in ("top", "bottom")}},
-        "header": {"mode": None, "map": None, "time": None, "bans": [None] * 4, "rank_range": [None, None]},
+        "header": header,
+        "header_margin": header_margin,
         "rows": rows,
         "review": review,
-        "problems": problems(rows),
+        "problems": problems(rows) + header_problems,
     }
 
 

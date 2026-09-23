@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 sys.dont_write_bytecode = True
 
 from build_templates import SAMPLES, build  # noqa: E402
-from src import digits as D, icons as I, layout as L  # noqa: E402
+from src import digits as D, header as HD, icons as I, layout as L  # noqa: E402
 from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
 
 FIXTURE = json.loads((ROOT / "tests" / "fixtures" / "maintest.json").read_text(encoding="utf-8"))
@@ -28,7 +28,15 @@ IMAGE = SAMPLES / "maintest.png"
 @pytest.fixture(scope="module")
 def result():
     t = build(exclude=("maintest.png",))
-    return parse(IMAGE, Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"])))
+    header = HD.HeaderModels(HD.GlyphReader(*t["letters"]), HD.GlyphReader(*t["time_digits"]),
+                             HD.DivisionReader(*t["division"]),
+                             HD.TierReader(list(zip(t["rank_emblems"][1], t["rank_emblems"][0]))))
+    return parse(IMAGE, Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), header=header))
+
+
+@pytest.mark.parametrize("field", ["mode", "map", "time", "bans", "rank_range"])
+def test_header(result, field):
+    assert result["header"][field] == FIXTURE["header"][field]
 
 
 def test_layout_geometry():
