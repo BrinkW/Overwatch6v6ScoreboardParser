@@ -1,7 +1,7 @@
 {
  "image": "test2.jpg",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Formerly test4.jpg (a different match from test4.png). JPEG compression. BLACK! is in a non-display font. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Formerly test4.jpg (a different match from test4.png). JPEG compression. BLACK! is in a non-display font. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Moira's 'Phantom Step|Uprush': the two share one icon, and paired with Ethical Nourishment (both tiers over time) either reading gives one major + one minor; either answer is accepted.",
  "header": {
   "mode": "Flashpoint",
   "map": "Suravasa",
@@ -195,7 +195,7 @@
    "hero": "moira",
    "role": "support",
    "perks": [
-    "Phantom Step",
+    "Phantom Step|Uprush",
     "Ethical Nourishment"
    ],
    "E": 13,

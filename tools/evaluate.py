@@ -4,7 +4,7 @@ Score the parser against every answer-key fixture.
     python tools/evaluate.py              # leave-one-image-out (honest)
     python tools/evaluate.py --in-sample
     python tools/evaluate.py --overlays   # also write debug/<image>_layout.png
-    python tools/evaluate.py --tier-gaps  # perks whose slot proves a tier perks.json lacks
+    python tools/evaluate.py --tier-gaps  # rows whose perks contradict perks.json's tier history
 
 Leave-one-image-out: learned templates (digits, roles) used for an image never
 include samples from that image. Portrait and perk libraries come from the
@@ -36,7 +36,7 @@ def main(argv=None):
     ap.add_argument("--in-sample", action="store_true", help="templates include the scored image")
     ap.add_argument("--overlays", action="store_true")
     ap.add_argument("--tier-gaps", action="store_true",
-                    help="list perks whose scoreboard slot proves a tier perks.json has no record of")
+                    help="list rows whose perks can't be one major + one minor under perks.json's tier history")
     args = ap.parse_args(argv)
 
     portraits, perk_lib = I.PortraitLibrary(), I.PerkLibrary()
@@ -73,7 +73,9 @@ def main(argv=None):
                     continue
                 key = "perk (empty)" if w == "none" else "perk (name)"
                 per_field[key][1] += 1
-                if got["perks"][k] == w:
+                # "A|B": either name is correct (two perks drawn with the identical icon
+                # whose tiers don't settle which one it is)
+                if got["perks"][k] in w.split("|"):
                     per_field[key][0] += 1
                 else:
                     mismatches.append(f"{where} perk{side} want {w!r:>14} got {got['perks'][k]!r:>14}")

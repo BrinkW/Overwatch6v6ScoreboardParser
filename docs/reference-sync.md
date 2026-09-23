@@ -108,10 +108,9 @@ A full run takes about a minute, mostly waiting on network requests.
   real lobbies. Once we compute rates from our own parsed screenshots, set
   `pick_rate_source` to `"local"`: the sync then never adds, changes or
   removes `pick_rate`. It still retires perks and tracks tiers.
-- **Slot order is a hard rule; tier history is the fallible part.** On the
-  scoreboard, with two perks the left is major and the right minor; a lone perk
-  is minor. So each slot proves a perk's tier *at capture time*. When a
-  screenshot proves a tier `tier_history` never recorded,
+- **Tier history can be incomplete.** On the scoreboard, a two-perk row is always
+  one major + one minor (in either slot order), and a lone perk is minor. When a
+  screenshot's perks can't satisfy that under `tier_history`,
   `python tools/evaluate.py --tier-gaps` lists it. The sync can't fill those
   gaps (the wiki change logs don't record them): add the move to the perk's
   `tier_history` by hand once its patch date is known. See

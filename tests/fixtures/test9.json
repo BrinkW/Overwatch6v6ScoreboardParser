@@ -1,7 +1,7 @@
 {
  "image": "test9.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. SPEEDSPORT! is rendered in a non-display font. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Reaper's left perk is Ravenous Wraith (legacy major, removed Season 19), not Lingering Wraith: the two share one icon, and the hard slot rule (left = major) decides.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. SPEEDSPORT! is rendered in a non-display font. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Reaper's first perk is 'Lingering Wraith|Ravenous Wraith': the two share one icon, and paired with Shadow Blink (which has been both minor and major) either reading gives one major + one minor, so the screenshot can't tell them apart; either answer is accepted.",
  "header": {
   "mode": "Flashpoint",
   "map": "Suravasa",
@@ -161,7 +161,7 @@
    "hero": "reaper",
    "role": "damage",
    "perks": [
-    "Ravenous Wraith",
+    "Lingering Wraith|Ravenous Wraith",
     "Shadow Blink"
    ],
    "E": 19,

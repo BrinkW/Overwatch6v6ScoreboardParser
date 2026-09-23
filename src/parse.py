@@ -90,7 +90,9 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
        independent hero vote, restricted to heroes of the detected role.
     4. Decide: a confident portrait wins; otherwise agreeing perk votes decide;
        otherwise fall back to the portrait. Any conflict is flagged, never hidden.
-    5. With the hero fixed, each glyph is identified among that hero's perks only.
+    5. With the hero fixed, each glyph is identified among that hero's perks only;
+       ties between identically drawn perks are settled by the tier rules
+       (two perks = one major + one minor; a lone perk = minor).
     """
     where = f"{r.team}{r.index}"
     role, role_m = models.roles.classify(L.crop(rgb, r.rois["role"]))
@@ -120,31 +122,27 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
     if roster_role and roster_role != role:
         flags.append(f"role icon {role} but {hero} is {roster_role} in heroes.json")
 
-    # Hard rule of the scoreboard: with two perks, left = major and right = minor;
-    # a lone perk is always minor. So each slot proves the perk's tier AT CAPTURE time.
-    two = all(v is not None for v in glyphs)
-    slot_tiers = ["major" if two else "minor", "minor"]
+    # Scoreboard rules: two perks are always one major + one minor (their left/right
+    # order is NOT reliable), and a lone perk is always minor. The glyph decides each
+    # perk; the rules only settle ties between perks drawn with the same icon.
+    resolved = I.resolve_perks([None if v is None else models.perks.candidates(v, hero) for v in glyphs])
     perks, detail, notes = [], [], []
-    for v, slot_tier in zip(glyphs, slot_tiers):
-        if v is None:
+    for res in resolved:
+        if res is None:
             perks.append("none")
             detail.append(None)
             continue
-        entry, m, dist = models.perks.identify(v, hero, slot_tier)
-        perks.append(entry["name"] if entry else None)   # None = a perk is there but unrecognised
-        if entry is None:
-            detail.append({"name": None, "unrecognised": True, "tier_at_capture": slot_tier,
-                           "distance": round(dist, 3)})
-        else:
-            detail.append({"name": entry["name"], "tier_at_capture": slot_tier, "tier_now": entry["tier"],
-                           "tier_swapped": entry["tier_swapped"], "patch_era": entry["patch_era"],
-                           "margin": round(m, 3), "distance": round(dist, 3)})
-            if slot_tier not in entry["tiers_ever"]:
-                # The glyph is unambiguous and the slot rule is hard, so it is our tier
-                # history that is incomplete (a patch the wiki change log doesn't record).
-                notes.append(f"{hero} / {entry['name']} was {slot_tier} when captured; "
-                             f"perks.json has no record of it ever being {slot_tier}")
-        if entry is None or m < REVIEW_MARGIN["perk"]:
+        e = res["entry"]
+        perks.append(e["name"] if e else None)   # None = a perk is there but unrecognised
+        detail.append({
+            "name": e["name"] if e else None, **({} if e else {"unrecognised": True}),
+            "tier_at_capture": res["tier_at_capture"], "tier_now": e["tier"] if e else None,
+            "tier_swapped": e["tier_swapped"] if e else None, "patch_era": e["patch_era"] if e else None,
+            "margin": round(min(res["margin"], 99.0), 3), "distance": round(res["distance"], 3),
+            "ambiguous_with": res["ambiguous_with"]})
+        if res["note"] and res["note"] not in notes:
+            notes.append(f"{hero}: {res['note']}")
+        if e is None or res["margin"] < REVIEW_MARGIN["perk"] or res["ambiguous_with"]:
             review.append(f"{where}.perk")
 
     out.update(role=role, hero=hero, perks=perks, perk_detail=detail)

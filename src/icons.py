@@ -34,7 +34,7 @@ PERK_SIZE, PERK_BLUR = 24, 1.0
 # Automated Healing) sits at 0.73. Beyond this, say "unrecognised", don't guess.
 UNKNOWN_GLYPH_DIST = 0.65
 # Two perks whose art is the same glyph (e.g. Lingering and Ravenous Wraith) match at
-# equal distance; within this tolerance the scoreboard slot's tier decides.
+# equal distance; within this tolerance the scoreboard's tier rules decide.
 TIE_DIST = 0.01
 
 
@@ -185,26 +185,93 @@ class PerkLibrary:
             return None, 0.0
         return hero, margin
 
-    def identify(self, v: np.ndarray, hero: str, slot_tier: str | None = None) -> tuple[dict | None, float, float]:
-        """(perk, margin, distance): the perk chosen among `hero`'s perks only; margin
-        to that hero's runner-up. perk is None when even the best match is further
-        than UNKNOWN_GLYPH_DIST: the game has drawn an icon we have no artwork for.
+    def candidates(self, v: np.ndarray, hero: str) -> list[tuple[dict, float]]:
+        """`hero`'s perks ranked by distance to the glyph, one entry per perk name
+        (its best-matching art version)."""
+        best: dict[str, tuple[dict, float]] = {}
+        for j, e in enumerate(self.entries):
+            if e["hero"] != hero:
+                continue
+            d = float(np.linalg.norm(self.M[j] - v))
+            if e["name"] not in best or d < best[e["name"]][1]:
+                best[e["name"]] = (e, d)
+        return sorted(best.values(), key=lambda c: c[1])
 
-        `slot_tier` is the tier the scoreboard slot proves (left = major, right = minor;
-        a lone perk = minor). It breaks ties between perks that share the same icon
-        (Lingering vs Ravenous Wraith, Phantom Step vs Uprush): among matches within
-        TIE_DIST of the best, one that has held `slot_tier` wins. It never overrides
-        a clearly better glyph match, because our tier history can be incomplete."""
-        allowed = np.array([h == hero for h in self.heroes])
-        if not allowed.any():
-            return None, 0.0, float("inf")
-        d = np.where(allowed, np.linalg.norm(self.M - v, axis=1), np.inf)
-        best = int(np.argmin(d))
-        if slot_tier:
-            ties = [j for j in np.where(d <= d[best] + TIE_DIST)[0] if slot_tier in self.entries[j]["tiers_ever"]]
-            if ties:
-                best = min(ties, key=lambda j: d[j])
-        others = d[[n != self.names[best] for n in self.names]]
-        margin = float(others.min() - d[best]) if np.isfinite(others).any() else float("inf")
-        dist = float(d[best])
-        return (self.entries[best] if dist <= UNKNOWN_GLYPH_DIST else None), max(margin, 0.0), dist
+
+def _tier_pairs(a: dict, b: dict) -> set[tuple[str, str]]:
+    """Tier assignments (a, b) under which the two perks are one major + one minor."""
+    return {(ta, tb) for ta in a["tiers_ever"] for tb in b["tiers_ever"] if ta != tb}
+
+
+def resolve_perks(cands: list[list[tuple[dict, float]] | None]) -> list[dict | None]:
+    """Choose the perk in each slot from its ranked candidates.
+
+    The glyph decides: only candidates within TIE_DIST of a slot's best match (i.e.
+    perks drawn with the same icon, like Lingering/Ravenous Wraith or Phantom
+    Step/Uprush) are ever in contention. Among those, the scoreboard's rules pick:
+      - two perks are always one major + one minor (in either slot: the game's
+        left/right order is not reliable for some heroes);
+      - a lone perk is always minor.
+    Remaining ties go to the current (live) perk, then the closer match; the losers
+    are reported in `ambiguous_with` so a human can review.
+
+    Returns, per slot, None for an empty slot or
+    {"entry", "distance", "margin", "ambiguous_with", "tier_at_capture", "note"}
+    ("entry" is None when even the best match is beyond UNKNOWN_GLYPH_DIST)."""
+    near = []
+    for c in cands:
+        if c is None:
+            near.append(None)
+            continue
+        near.append([x for x in c if x[1] <= c[0][1] + TIE_DIST])
+    present = [i for i, c in enumerate(cands) if c is not None]
+
+    def score(choice):  # lower is better
+        return tuple(sum(v) for v in zip(*[(0 if e["patch_era"] == "current" else 1, d) for e, d in choice]))
+
+    picks: dict[int, tuple[dict, float]] = {}
+    tier_at: dict[int, str | None] = {}
+    viable: dict[int, set[str]] = {}   # tied names the rules could NOT rule out, per slot
+    note = None
+    if len(present) == 2:
+        i, k = present
+        combos = [(a, b) for a in near[i] for b in near[k]]
+        legal = [(a, b) for a, b in combos if _tier_pairs(a[0], b[0])]
+        a, b = min(legal or combos, key=lambda ab: score(ab))
+        picks[i], picks[k] = a, b
+        viable[i] = {x[0]["name"] for x, _ in (legal or combos)}
+        viable[k] = {y[0]["name"] for _, y in (legal or combos)}
+        pairs = _tier_pairs(a[0], b[0])
+        if len(pairs) == 1:   # e.g. Locked On (has been both) + Lift Off (only ever major)
+            (tier_at[i], tier_at[k]), = pairs
+        else:                 # both perks have held both tiers: the screenshot can't tell
+            tier_at[i] = tier_at[k] = None
+        if not pairs:
+            note = (f"{a[0]['name']} and {b[0]['name']} were both only ever {sorted(a[0]['tiers_ever'])[0]}; "
+                    "a two-perk row must hold one major and one minor, so perks.json's tier history is incomplete")
+    elif len(present) == 1:
+        i = present[0]
+        minor = [x for x in near[i] if "minor" in x[0]["tiers_ever"]]
+        picks[i] = min(minor or near[i], key=lambda x: score([x]))
+        viable[i] = {x[0]["name"] for x in (minor or near[i])}
+        tier_at[i] = "minor"
+        if not minor:
+            note = (f"{picks[i][0]['name']} is a lone perk, which is always minor, but perks.json never records it "
+                    "as minor, so its tier history is incomplete")
+
+    out = []
+    for s, c in enumerate(cands):
+        if c is None:
+            out.append(None)
+            continue
+        e, d = picks[s]
+        rest = [x[1] for x in c if x[0]["name"] != e["name"] and x not in near[s]]
+        out.append({
+            "entry": e if d <= UNKNOWN_GLYPH_DIST else None,
+            "distance": d,
+            "margin": max((rest[0] - d) if rest else float("inf"), 0.0),
+            "ambiguous_with": sorted(viable.get(s, set()) - {e["name"]}),
+            "tier_at_capture": tier_at.get(s),
+            "note": note,
+        })
+    return out

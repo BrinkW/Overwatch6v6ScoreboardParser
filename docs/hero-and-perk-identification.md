@@ -94,27 +94,34 @@ hero's perks** (current and legacy, every art version). Restricting it to a
 handful of candidates removes cross-hero look-alikes (e.g. Kiriko's Fortune
 Teller vs Freja's Tracking Instinct).
 
-**The slot proves the tier.** This is a hard rule of the scoreboard: with two
-perks, left = major and right = minor; a lone perk is minor. So each perk's
-tier *at capture time* is known from its slot, even when the perk has since
-changed tier. The parser uses that in two ways:
+**Tier rules, not slot order.** A row with two perks always holds one major and
+one minor, and a lone perk is always minor. **Which side is which is not
+reliable**: most rows show the major on the left, but some heroes and perk
+combinations swap sides (e.g. Juno's Locked On + Lift Off). So the parser never
+reads a tier from a slot. It uses the rules in two ways:
 
-- **Tie-break between perks that share an icon.** Reaper's Lingering Wraith
-  (minor, added Season 19) reuses the icon of Ravenous Wraith (major, removed in
-  the same patch), and Moira's Phantom Step shares Uprush's. When matches are
-  within 0.01 of each other, the one that has held the slot's tier wins.
-  Example: a Wraith icon in the left slot is Ravenous Wraith, from a pre-Season-19
-  capture.
-- **Reference-data check.** A clear glyph in a slot whose tier `perks.json` has
-  never recorded for that perk means our tier history is incomplete (a patch the
-  wiki change log doesn't mention). The perk is *not* re-labelled; the row gets a
-  `reference_notes` entry, and `python tools/evaluate.py --tier-gaps` totals them.
+- **Tie-break between perks that share an icon.** Moira's Phantom Step and
+  Uprush share one icon, as do Reaper's Lingering Wraith (minor, added Season 19)
+  and Ravenous Wraith (major, removed in the same patch). Only candidates within
+  0.01 of a slot's best match are in contention, so the rules never override a
+  clearly better glyph. Among them, a combination that makes the row one major +
+  one minor (or keeps a lone perk minor) wins. If several still qualify, because
+  the row's other perk has held both tiers, the **live** perk is preferred. The
+  alternative is listed in `ambiguous_with` and the row goes to `review`. The
+  answer keys accept either name for these four rows (`"Phantom Step|Uprush"`).
+- **Reference-data check.** A row whose identified perks *can't* be one major +
+  one minor under `perks.json`'s tier history means that history is incomplete.
+  The row gets a `reference_notes` entry, and `python tools/evaluate.py
+  --tier-gaps` totals them. None occur on the reviewed screenshots.
 
 The reported perk has:
 
-- `name`, `tier_at_capture` (from the slot), `tier_now`, `tier_swapped` and
-  `patch_era` (from `reference/perks.json`);
-- `margin` against that hero's runner-up perk, and `distance` to the chosen art.
+- `name`, `tier_now`, `tier_swapped` and `patch_era` from `reference/perks.json`;
+- `tier_at_capture` when the pair determines it (e.g. Lift Off has only ever
+  been major, so its partner Locked On was minor), otherwise `null` (both perks
+  have held both tiers). It's determined for 282 of 292 perks;
+- `margin` against that hero's runner-up perk, `distance` to the chosen art, and
+  `ambiguous_with`.
 
 If the best match is further than **0.65**, the perk is reported as
 **unrecognised** (`None`) rather than forced onto the wrong name. On the reviewed
@@ -129,20 +136,21 @@ Actual output for test1.png, top row 1 (MUFFIN):
 ```json
 "role": "support", "hero": "juno",
 "perks": ["Locked On", "Lift Off"],
-"perk_detail": [{"name": "Locked On", "tier_at_capture": "major", "tier_now": "minor",
-                 "tier_swapped": true, "patch_era": "current", "margin": 0.605, "distance": 0.199},
-                {"name": "Lift Off", "tier_at_capture": "minor", "tier_now": "major",
-                 "tier_swapped": false, "patch_era": "current", "margin": 0.638, "distance": 0.118}],
+"perk_detail": [{"name": "Locked On", "tier_at_capture": "minor", "tier_now": "minor",
+                 "tier_swapped": true, "patch_era": "current", "margin": 0.605, "distance": 0.199,
+                 "ambiguous_with": []},
+                {"name": "Lift Off", "tier_at_capture": "major", "tier_now": "major",
+                 "tier_swapped": false, "patch_era": "current", "margin": 0.638, "distance": 0.118,
+                 "ambiguous_with": []}],
 "hero_evidence": {"decided_by": "portrait", "portrait": ["juno", 25.917],
                   "perk_votes": [["juno", 0.45], ["juno", 0.53]], "role_icon": "support"},
 "hero_flags": [],
-"reference_notes": ["juno / Lift Off was minor when captured; perks.json has no record of it ever being minor"],
+"reference_notes": [],
 "margin": {"role": 4.49, "portrait": 25.917, ...}
 ```
 
-This capture predates the Season 18 change that made Locked On minor, which the
-tier history knows about. It also shows Lift Off as minor at that time, which the
-wiki's change log never recorded, hence the reference note.
+Here the major (Lift Off) is on the *right*, one of the combinations that flips.
+Lift Off has only ever been major, so the pair determines both tiers.
 
 Fields below their review margin (role < 1.0, portrait < 1.5, perk < 0.05, any
 flag, any unrecognised perk) are listed in the result's `review` array.
@@ -163,8 +171,8 @@ is legal, so a third tank is flagged in `problems` and nothing else is.
   portrait and perk icons. Until then the portrait matches the closest existing
   hero with a low margin and is flagged for review.
 - **Perk-name answer keys** were produced by this matcher, checked by eye, and
-  reviewed by the user (corrections: Baptiste's Automated Healing; Ravenous
-  Wraith follows from the slot rule). Regenerate the review sheets with
-  `python tools/perk_review.py`.
-- **Tier history gaps** (`--tier-gaps`) are candidates for manual additions to
-  `perks.json`'s `tier_history` once their patch dates are known.
+  reviewed by the user (correction: Baptiste's Automated Healing). Regenerate the
+  review sheets with `python tools/perk_review.py`.
+- **Identical icons whose tiers can't settle them** (Phantom Step/Uprush with
+  Ethical Nourishment, Lingering/Ravenous Wraith with Shadow Blink) stay
+  ambiguous. Only a patch date for the screenshot could decide them.

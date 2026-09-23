@@ -98,7 +98,12 @@ from every artwork are still reported as unrecognised rather than forced
 
 **Some perks share one icon.** Reaper's Lingering Wraith (minor, added Season 19)
 reuses Ravenous Wraith's icon (major, removed Season 19), and Moira's Phantom
-Step shares Uprush's. The slot's tier (below) decides between them.
+Step shares Uprush's. The one-major-one-minor rule settles the tie when the row's
+other perk has only ever held one tier. Otherwise (Reaper with Shadow Blink,
+Moira with Ethical Nourishment, both of which have held both tiers) the
+screenshot can't tell them apart: the parser prefers the live perk, lists the
+alternative in `ambiguous_with`, and flags the row for review. Answer keys
+accept either name (`"Phantom Step|Uprush"`).
 
 ### Hero portraits
 **The scoreboard shows each hero's standard illustrated portrait, whatever skin
@@ -210,16 +215,14 @@ must not assume every row has two perks.
 
 ## 6. Open questions
 
-- **Settled: perk slot order is a hard rule** (confirmed by the user). With two
-  perks, left = major and right = minor; a lone perk is minor. The slot
-  therefore gives each perk's tier *at capture time*. Tier-swapped perks sit
-  where their pre-swap tier puts them (Vendetta's Raging Storm, Hanzo's Dragon
-  Fury, Tracer's Blink Packs, Reaper's Shadow Blink), dating those screenshots
-  before the swaps. **Open:** a few clear glyphs sit in slots whose tier our
-  history never recorded for them (`python tools/evaluate.py --tier-gaps`): Juno's
-  Lift Off as minor (7×), Moira's Reversal as minor, Reaper's Soul Reaving as
-  major, and Sojourn's Deceleration Field as major with Friction Generators as
-  minor. These are tier moves the wiki change logs don't record. The rule holds;
-  `tier_history` is incomplete.
+- **Settled: perk slot order is not reliable** (confirmed by the user). A row
+  with two perks always holds one major and one minor, and a lone perk is minor,
+  but left/right order can't be trusted. Most rows show major on the left, but
+  certain heroes and perk combinations consistently flip in screenshots from the
+  same era: Juno's Locked On + Lift Off (7 of 8 rows), Moira's Ethical
+  Nourishment + Reversal, Reaper's Soul Reaving + Shadow Blink, and Sojourn's
+  Deceleration Field + Friction Generators. No slot-based tier inference is made.
+  Under the one-major-one-minor rule, all 13 reviewed screenshots are consistent
+  with `perks.json`'s tier history.
 - Whether Emerald's badge art reuses a hue close to Master's.
 - Whether perk icons are ever rendered at a different size in 5v5 vs 6v6 layouts.
