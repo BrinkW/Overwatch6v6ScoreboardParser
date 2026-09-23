@@ -1,7 +1,7 @@
 {
  "image": "test10.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Escort",
   "map": "Dorado",
@@ -25,8 +25,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Fortune Teller"
    ],
    "E": 27,
    "A": 47,
@@ -42,8 +42,8 @@
    "hero": "wuyang",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Falling Rain",
+    "Balance"
    ],
    "E": 27,
    "A": 5,
@@ -59,8 +59,8 @@
    "hero": "roadhog",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Invigorate",
+    "Scrap Hook"
    ],
    "E": 32,
    "A": 7,
@@ -76,8 +76,8 @@
    "hero": "cassidy",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Silver Bullet",
+    "Bang Bang"
    ],
    "E": 37,
    "A": 3,
@@ -93,8 +93,8 @@
    "hero": "zarya",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Energy Lance",
+    "Jump-Ups"
    ],
    "E": 37,
    "A": 26,
@@ -110,8 +110,8 @@
    "hero": "vendetta",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Raging Storm",
+    "Siphoning Strike"
    ],
    "E": 32,
    "A": 3,
@@ -127,8 +127,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Locked On",
+    "Lift Off"
    ],
    "E": 24,
    "A": 16,
@@ -144,8 +144,8 @@
    "hero": "doomfist",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Power Matrix",
+    "One-Two"
    ],
    "E": 17,
    "A": 5,
@@ -161,8 +161,8 @@
    "hero": "wuyang",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Falling Rain",
+    "Balance"
    ],
    "E": 17,
    "A": 6,
@@ -178,8 +178,8 @@
    "hero": "vendetta",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Raging Storm",
+    "Siphoning Strike"
    ],
    "E": 25,
    "A": 5,
@@ -195,8 +195,8 @@
    "hero": "hanzo",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Dragon Fury",
+    "Swift Lunge"
    ],
    "E": 25,
    "A": 4,
@@ -212,8 +212,8 @@
    "hero": "winston",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Chain Lightning",
+    "Heavy Landing"
    ],
    "E": 24,
    "A": 4,

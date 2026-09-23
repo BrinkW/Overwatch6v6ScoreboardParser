@@ -1,7 +1,7 @@
 {
  "image": "test6.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (no corrections needed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (no corrections needed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Escort",
   "map": "Rialto",
@@ -25,8 +25,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Fortune Teller"
    ],
    "E": 20,
    "A": 21,
@@ -42,8 +42,8 @@
    "hero": "ana",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Biotic Bounce",
+    "Groggy"
    ],
    "E": 7,
    "A": 12,
@@ -59,8 +59,8 @@
    "hero": "soldier_76",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Stim Pack",
+    "Tactical Salvo"
    ],
    "E": 28,
    "A": 0,
@@ -76,8 +76,8 @@
    "hero": "ashe",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Viper's Sting",
+    "Remote Detonator"
    ],
    "E": 23,
    "A": 2,
@@ -93,8 +93,8 @@
    "hero": "roadhog",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Invigorate",
+    "Shrapnel Launcher"
    ],
    "E": 22,
    "A": 6,
@@ -110,8 +110,8 @@
    "hero": "sigma",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Levitation",
+    "Hyper Regeneration"
    ],
    "E": 18,
    "A": 3,
@@ -127,8 +127,8 @@
    "hero": "bastion",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Self-Repair",
+    "Configuration Reload"
    ],
    "E": 13,
    "A": 2,
@@ -144,8 +144,8 @@
    "hero": "sigma",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Levitation",
+    "Hyper Regeneration"
    ],
    "E": 14,
    "A": 0,
@@ -161,8 +161,8 @@
    "hero": "junkrat",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Frag Cannon",
+    "Nitro Boost"
    ],
    "E": 10,
    "A": 0,
@@ -178,7 +178,7 @@
    "hero": "baptiste",
    "role": "support",
    "perks": [
-    null,
+    "Assault Burst",
     null
    ],
    "E": 7,
@@ -195,8 +195,8 @@
    "hero": "zenyatta",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Dual Harmony",
+    "Transcendent Condemnation"
    ],
    "E": 9,
    "A": 16,
@@ -212,8 +212,8 @@
    "hero": "roadhog",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Invigorate",
+    "Scrap Hook"
    ],
    "E": 13,
    "A": 4,

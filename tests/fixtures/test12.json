@@ -1,7 +1,7 @@
 {
  "image": "test12.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Orange bottom-team colour.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Orange bottom-team colour. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Push",
   "map": "Colosseo",
@@ -25,8 +25,8 @@
    "hero": "doomfist",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Power Matrix",
+    "Survival of the Fittest"
    ],
    "E": 28,
    "A": 8,
@@ -42,8 +42,8 @@
    "hero": "ana",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Headhunter",
+    "Speed Serum"
    ],
    "E": 12,
    "A": 17,
@@ -59,8 +59,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Fortune Teller"
    ],
    "E": 9,
    "A": 15,
@@ -76,8 +76,8 @@
    "hero": "cassidy",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Silver Bullet",
+    "Bang Bang"
    ],
    "E": 21,
    "A": 3,
@@ -93,8 +93,8 @@
    "hero": "mei",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Deep Freeze",
+    "Skating Rink"
    ],
    "E": 11,
    "A": 0,
@@ -110,8 +110,8 @@
    "hero": "wrecking_ball",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Adaptive Barrier",
+    "Steamroller"
    ],
    "E": 16,
    "A": 4,
@@ -127,8 +127,8 @@
    "hero": "d_va",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Precision Fusion",
+    "Extended Boosters"
    ],
    "E": 5,
    "A": 2,
@@ -161,8 +161,8 @@
    "hero": "vendetta",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Raging Storm",
+    "Siphoning Strike"
    ],
    "E": 7,
    "A": 0,
@@ -178,8 +178,8 @@
    "hero": "ana",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Headhunter",
+    "Speed Serum"
    ],
    "E": 7,
    "A": 7,
@@ -195,8 +195,8 @@
    "hero": "reinhardt",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Shield Slam",
+    "Crusader's Fire"
    ],
    "E": 5,
    "A": 0,
@@ -212,8 +212,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Faster Blaster",
+    "Familiar Vitals"
    ],
    "E": 1,
    "A": 3,

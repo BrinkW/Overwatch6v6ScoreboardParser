@@ -1,7 +1,7 @@
 {
  "image": "test5.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Control",
   "map": "Oasis",
@@ -25,8 +25,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Fortune Teller"
    ],
    "E": 21,
    "A": 22,
@@ -42,8 +42,8 @@
    "hero": "junker_queen",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Savage Satiation",
+    "Rampant Charge"
    ],
    "E": 20,
    "A": 6,
@@ -59,8 +59,8 @@
    "hero": "wuyang",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Falling Rain",
+    "Balance"
    ],
    "E": 20,
    "A": 8,
@@ -76,8 +76,8 @@
    "hero": "doomfist",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Power Matrix",
+    "One-Two"
    ],
    "E": 19,
    "A": 5,
@@ -93,8 +93,8 @@
    "hero": "venture",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Smart Extender",
+    "Excavation Exhilaration"
    ],
    "E": 20,
    "A": 4,
@@ -110,8 +110,8 @@
    "hero": "pharah",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Fuel Stores",
+    "Drift Thrusters"
    ],
    "E": 22,
    "A": 0,
@@ -127,8 +127,8 @@
    "hero": "d_va",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Shield System",
+    "Extended Boosters"
    ],
    "E": 21,
    "A": 6,
@@ -144,8 +144,8 @@
    "hero": "brigitte",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Inspiring Strike",
+    "Combat Medic"
    ],
    "E": 17,
    "A": 22,
@@ -162,7 +162,7 @@
    "role": "tank",
    "perks": [
     "none",
-    null
+    "Steamroller"
    ],
    "E": 11,
    "A": 5,
@@ -178,8 +178,8 @@
    "hero": "ana",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Headhunter",
+    "Speed Serum"
    ],
    "E": 9,
    "A": 19,
@@ -195,8 +195,8 @@
    "hero": "junkrat",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Frag Cannon",
+    "Nitro Boost"
    ],
    "E": 19,
    "A": 4,
@@ -212,8 +212,8 @@
    "hero": "soldier_76",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Agility Training",
+    "Recycled Pulse Munitions"
    ],
    "E": 25,
    "A": 0,

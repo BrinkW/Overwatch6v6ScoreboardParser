@@ -1,7 +1,7 @@
 {
  "image": "test7.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Hybrid",
   "map": "King's Row",
@@ -25,8 +25,8 @@
    "hero": "lucio",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Accelerando",
+    "Beat Drop"
    ],
    "E": 36,
    "A": 22,
@@ -42,8 +42,8 @@
    "hero": "soldier_76",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Stim Pack",
+    "Tactical Salvo"
    ],
    "E": 40,
    "A": 5,
@@ -59,8 +59,8 @@
    "hero": "reinhardt",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Shield Slam",
+    "Barrier Re-charge"
    ],
    "E": 35,
    "A": 8,
@@ -76,8 +76,8 @@
    "hero": "mercy",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Flash Heal (old)",
+    "Divine Momentum"
    ],
    "E": 2,
    "A": 46,
@@ -93,8 +93,8 @@
    "hero": "orisa",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Protective Barrier",
+    "Mobile Fortification"
    ],
    "E": 30,
    "A": 14,
@@ -110,8 +110,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Faster Blaster",
+    "Familiar Vitals"
    ],
    "E": 27,
    "A": 45,
@@ -127,8 +127,8 @@
    "hero": "mei",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Cryo-Storm",
+    "Glacial Propulsion"
    ],
    "E": 22,
    "A": 3,
@@ -144,8 +144,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Locked On",
+    "Lift Off"
    ],
    "E": 28,
    "A": 19,
@@ -162,7 +162,7 @@
    "role": "damage",
    "perks": [
     "none",
-    null
+    "Overcharged"
    ],
    "E": 18,
    "A": 1,
@@ -178,8 +178,8 @@
    "hero": "zarya",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Energy Lance",
+    "Energy Converter"
    ],
    "E": 24,
    "A": 13,
@@ -195,8 +195,8 @@
    "hero": "orisa",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Protective Barrier",
+    "Mobile Fortification"
    ],
    "E": 26,
    "A": 7,
@@ -212,8 +212,8 @@
    "hero": "moira",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Phantom Step",
+    "Ethical Nourishment"
    ],
    "E": 20,
    "A": 26,

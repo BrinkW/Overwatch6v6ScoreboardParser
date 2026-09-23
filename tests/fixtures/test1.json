@@ -1,7 +1,7 @@
 {
  "image": "test1.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Top row 3 name ends in a character the game could not render (drawn as an empty box); stored as U+FFFD.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Top row 3 name ends in a character the game could not render (drawn as an empty box); stored as U+FFFD. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Escort",
   "map": "Shambali Monastery",
@@ -25,8 +25,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Locked On",
+    "Lift Off"
    ],
    "E": 11,
    "A": 19,
@@ -59,8 +59,8 @@
    "hero": "ashe",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Viper's Sting",
+    "Remote Detonator"
    ],
    "E": 21,
    "A": 7,
@@ -76,8 +76,8 @@
    "hero": "wuyang",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Falling Rain",
+    "Balance"
    ],
    "E": 12,
    "A": 6,
@@ -93,8 +93,8 @@
    "hero": "junkrat",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Frag Cannon",
+    "Nitro Boost"
    ],
    "E": 17,
    "A": 3,
@@ -110,8 +110,8 @@
    "hero": "sigma",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Levitation",
+    "Hyper Regeneration"
    ],
    "E": 17,
    "A": 4,
@@ -127,8 +127,8 @@
    "hero": "torbjorn",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Anchor Bolts",
+    "Hammer Time"
    ],
    "E": 25,
    "A": 0,
@@ -144,8 +144,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Faster Blaster",
+    "Locked On"
    ],
    "E": 19,
    "A": 10,
@@ -161,8 +161,8 @@
    "hero": "ashe",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Viper's Sting",
+    "Remote Detonator"
    ],
    "E": 28,
    "A": 5,
@@ -178,8 +178,8 @@
    "hero": "sigma",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Hyper Strike",
+    "Hyper Regeneration"
    ],
    "E": 21,
    "A": 5,
@@ -212,8 +212,8 @@
    "hero": "zenyatta",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Focused Destruction",
+    "Transcendent Condemnation"
    ],
    "E": 33,
    "A": 25,

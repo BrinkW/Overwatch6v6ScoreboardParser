@@ -1,7 +1,7 @@
 {
  "image": "maintest.png",
  "verified": true,
- "note": "From docs/extraction-notes.md section 4. Stats/names/titles/header verified; ban 3 (Freja) and KEXXAAR's hero (Wuyang) corrected by the user 2026-09-22; Sojourn was ~75% confident. DONKEYFARMER shows no perk icons.",
+ "note": "From docs/extraction-notes.md section 4. Stats/names/titles/header verified; ban 3 (Freja) and KEXXAAR's hero (Wuyang) corrected by the user 2026-09-22; Sojourn was ~75% confident. DONKEYFARMER shows no perk icons. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Hybrid",
   "map": "King's Row",
@@ -25,8 +25,8 @@
    "hero": "tracer",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Flashback",
+    "Blink Packs"
    ],
    "E": 15,
    "A": 0,
@@ -42,8 +42,8 @@
    "hero": "lucio",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Noise Violation",
+    "Beat Drop"
    ],
    "E": 17,
    "A": 20,
@@ -59,8 +59,8 @@
    "hero": "wrecking_ball",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Adaptive Barrier",
+    "Steamroller"
    ],
    "E": 21,
    "A": 5,
@@ -76,8 +76,8 @@
    "hero": "sombra",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Healthy Hacker",
+    "CTRL ALT ESC"
    ],
    "E": 18,
    "A": 2,
@@ -93,8 +93,8 @@
    "hero": "winston",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Chain Lightning",
+    "Heavy Landing"
    ],
    "E": 23,
    "A": 2,
@@ -110,8 +110,8 @@
    "hero": "moira",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Ethical Nourishment",
+    "Reversal"
    ],
    "E": 16,
    "A": 16,
@@ -127,8 +127,8 @@
    "hero": "sojourn",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Dual Thrusters",
+    "Overcharged"
    ],
    "E": 65,
    "A": 0,
@@ -161,8 +161,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Urgent Care"
    ],
    "E": 7,
    "A": 64,
@@ -178,8 +178,8 @@
    "hero": "wuyang",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Ebb and Flow",
+    "Balance"
    ],
    "E": 33,
    "A": 22,
@@ -195,8 +195,8 @@
    "hero": "d_va",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Precision Fusion",
+    "Bunny Power"
    ],
    "E": 45,
    "A": 24,
@@ -212,8 +212,8 @@
    "hero": "orisa",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Protective Barrier",
+    "Defense Protocol"
    ],
    "E": 50,
    "A": 7,

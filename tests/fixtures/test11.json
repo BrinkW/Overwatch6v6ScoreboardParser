@@ -1,7 +1,7 @@
 {
  "image": "test11.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. 4th ban slot is empty (no ban). Bottom row 6 name is in the fallback font; its first two glyphs (esh, R + combining circumflex) are Claude's best reading.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. 4th ban slot is empty (no ban). Bottom row 6 name is in the fallback font; its first two glyphs (esh, R + combining circumflex) are Claude's best reading. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
  "header": {
   "mode": "Control",
   "map": "Samoa",
@@ -25,8 +25,8 @@
    "hero": "zarya",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Spotter",
+    "Energy Converter"
    ],
    "E": 35,
    "A": 14,
@@ -42,8 +42,8 @@
    "hero": "hanzo",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Dragon Fury",
+    "Sonic Disruption"
    ],
    "E": 31,
    "A": 14,
@@ -59,8 +59,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Fortune Teller"
    ],
    "E": 16,
    "A": 28,
@@ -76,8 +76,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Faster Blaster",
+    "Familiar Vitals"
    ],
    "E": 14,
    "A": 22,
@@ -93,8 +93,8 @@
    "hero": "orisa",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Protective Barrier",
+    "Mobile Fortification"
    ],
    "E": 31,
    "A": 7,
@@ -110,8 +110,8 @@
    "hero": "torbjorn",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Anchor Bolts",
+    "Fully Loaded"
    ],
    "E": 32,
    "A": 2,
@@ -127,8 +127,8 @@
    "hero": "reaper",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Lingering Wraith",
+    "Shadow Blink"
    ],
    "E": 34,
    "A": 0,
@@ -144,8 +144,8 @@
    "hero": "juno",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Locked On",
+    "Lift Off"
    ],
    "E": 19,
    "A": 27,
@@ -161,8 +161,8 @@
    "hero": "zarya",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Energy Lance",
+    "Energy Converter"
    ],
    "E": 27,
    "A": 11,
@@ -178,8 +178,8 @@
    "hero": "orisa",
    "role": "tank",
    "perks": [
-    null,
-    null
+    "Protective Barrier",
+    "Mobile Fortification"
    ],
    "E": 24,
    "A": 3,
@@ -195,8 +195,8 @@
    "hero": "vendetta",
    "role": "damage",
    "perks": [
-    null,
-    null
+    "Raging Storm",
+    "Siphoning Strike"
    ],
    "E": 19,
    "A": 4,
@@ -212,8 +212,8 @@
    "hero": "kiriko",
    "role": "support",
    "perks": [
-    null,
-    null
+    "Foxtrot",
+    "Fortune Teller"
    ],
    "E": 13,
    "A": 30,
