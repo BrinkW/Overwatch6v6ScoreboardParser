@@ -1,0 +1,513 @@
+{
+  "_meta": {
+    "description": "Every perk that has an icon in assets/perks/, including removed (legacy) perks. Keyed by asset folder slug, so an entry's `icon` path is assets/perks/<icon>. Maintained by tools/sync_reference.py; see docs/reference-sync.md before editing by hand.",
+    "compiled": "2026-09-22",
+    "pick_rate_source": "owperks",
+    "sources": {
+      "perks, tiers, effects, removal notes, tier history": "https://overwatch.weirdgloop.org (hero pages: perk ability boxes + Balance Change Log)",
+      "pick_rate, and cross-check of which perks are live": "https://owperks.com/en"
+    },
+    "schema": {
+      "name": "perk name as displayed in game",
+      "icon": "path under assets/perks/",
+      "tier": "minor (level 2) | major (level 3). For current perks, the CURRENT tier; for legacy perks, the tier at removal. Do not trust this for slot validation when tier_swapped is true.",
+      "tier_swapped": "true if the perk has been both minor and major at different points in time",
+      "tier_history": "only when tier_swapped: chronological [{date, from, to}] moves, dates are patch dates from the wiki change log",
+      "ability": "the hero ability the perk modifies. Hand-written for the 11 reference-capture heroes, auto-derived from the effect text for the rest; null if none could be inferred. Informational only.",
+      "effect": "official in-game description (latest version on the wiki)",
+      "patch_era": "current = live as of `last_synced` | legacy = removed from the game (screenshots from older patches can still show it)",
+      "pick_rate": "only on live perks (exactly 4 per hero); the field is absent on legacy perks. See pick_rate_policy",
+      "history_note": "wiki note on removal / re-addition, or 'Retired (detected by sync <date>)'"
+    },
+    "slot_check_policy": "Scoreboard perk slots are assumed to be left = major, right = minor (CLAUDE.md, ~70% confidence). Validating a recognized perk against its slot is ONLY allowed when tier_swapped is false. A perk with tier_swapped = true has legally sat in either slot depending on the patch the screenshot came from, and screenshots can come from any patch, so skip the slot check for it (do not flag, do not use it as evidence about slot order).",
+    "pick_rate_policy": "Provisional. Values are owperks.com community-reported shares (each minor pair and each major pair sums to 1.0), known to be skewed relative to real lobbies. Use only as a weak tie-break prior. While pick_rate_source is \"owperks\", the sync keeps exactly the 4 live perks per hero carrying a pick_rate: a newly live perk gets its owperks rate and the perk it displaced loses the field. Set pick_rate_source to \"local\" once rates are computed from our own parsed screenshots; the sync then stops touching pick_rate entirely.",
+    "corrections": [
+      "Hanzo / Dragon Fury: the wiki ability box still says major, but the change log moved it to minor on 2026-02-10 and owperks lists it as minor. Recorded as minor.",
+      "Mercy / Flash Heal (old): the wiki does not flag it as removed, but its effect is now part of Mercy's base kit and it is not a live perk. Recorded as legacy.",
+      "jetpack_cat/ulterior_motive.png was previously a generic placeholder icon; replaced with the real 128px icon on 2026-09-22."
+    ],
+    "upcoming_changes": "Season 5 launches 2026-10-06: Doctrine releases, Sombra moves from Damage to Support with a reworked kit, and Roadhog is reworked. Several current perks for Sombra/Roadhog are expected to become legacy and new ones to appear. Run `python tools/sync_reference.py` after launch.",
+    "pending": {
+      "_note": "Perks the sync found but could not add to `heroes` yet, keyed by hero slug; `reason` says why (no icon on the wiki yet, or on the wiki but not live on owperks). Regenerated on every sync run, so do not hand-edit.",
+      "doctrine": [
+        {
+          "name": "Cost of Life",
+          "icon": null,
+          "tier": "major",
+          "effect": "Sacrifice 25 maximum health. Eternal Scepter healing is increased by 20%",
+          "pick_rate": 0.06,
+          "reason": "no icon on the wiki yet"
+        },
+        {
+          "name": "Sanguine Siphon",
+          "icon": null,
+          "tier": "minor",
+          "effect": "Heal for 50% of damage dealt with Infused Eternal Scepter",
+          "pick_rate": 0.28,
+          "reason": "no icon on the wiki yet"
+        },
+        {
+          "name": "Saving Grace",
+          "icon": null,
+          "tier": "minor",
+          "effect": "Invigorating Drones heal for 40 health when applied",
+          "pick_rate": 0.72,
+          "reason": "no icon on the wiki yet"
+        },
+        {
+          "name": "Transfusion",
+          "icon": null,
+          "tier": "major",
+          "effect": "Reduce Infuse's cooldown from damage and healing dealt.",
+          "pick_rate": 0.94,
+          "reason": "no icon on the wiki yet"
+        }
+      ],
+      "sombra": [
+        {
+          "name": "Cybersecurity",
+          "icon": null,
+          "tier": "major",
+          "effect": "Cyberspace's healing is double on allies below half health.",
+          "reason": "wiki lists it as current but owperks does not show it live"
+        },
+        {
+          "name": "Data Packet",
+          "icon": null,
+          "tier": "major",
+          "effect": "Hacking health packs with Hotfix reduces its main cooldown by 4 seconds.",
+          "reason": "wiki lists it as current but owperks does not show it live"
+        },
+        {
+          "name": "Life Hack",
+          "icon": null,
+          "tier": "minor",
+          "effect": "EMP applies Hotfix to all nearby allies.",
+          "reason": "wiki lists it as current but owperks does not show it live"
+        }
+      ]
+    },
+    "last_synced": "2026-09-22"
+  },
+  "heroes": {
+    "ana": {"name": "Ana", "perks": [
+      {"name": "Groggy", "icon": "ana/groggy.png", "tier": "minor", "tier_swapped": false, "ability": "Sleep Dart", "effect": "Enemies waking up from Sleep Dart are slowed and take 50 damage for 2 seconds.", "patch_era": "current", "pick_rate": 0.18},
+      {"name": "Speed Serum", "icon": "ana/speed_serum.png", "tier": "minor", "tier_swapped": false, "ability": "Nano Boost", "effect": "Nano Boost grants a 30% movement speed boost to both Ana and her target.", "patch_era": "current", "pick_rate": 0.82},
+      {"name": "Biotic Bounce", "icon": "ana/biotic_bounce.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "minor", "to": "major"}], "ability": "Biotic Grenade", "effect": "After exploding, Biotic Grenade bounces and explodes again for 60 damage and healing.", "patch_era": "current", "pick_rate": 0.24},
+      {"name": "Headhunter", "icon": "ana/headhunter.png", "tier": "major", "tier_swapped": false, "ability": "Biotic Rifle", "effect": "Biotic Rifle can crit enemies.", "patch_era": "current", "pick_rate": 0.76},
+      {"name": "Shrike", "icon": "ana/shrike.png", "tier": "major", "tier_swapped": false, "ability": "Nano Boost", "effect": "Using Nano Boost also casts it on Ana.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "anran": {"name": "Anran", "perks": [
+      {"name": "Heat Shield", "icon": "anran/heat_shield.png", "tier": "minor", "tier_swapped": false, "ability": "ultimate", "effect": "Gain 50 overhealth when you use your Ultimate and for each enemy ignited by it.", "patch_era": "current", "pick_rate": 0.32},
+      {"name": "Smoulder", "icon": "anran/smoulder.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Ignited enemies burn 1.5 seconds longer.", "patch_era": "current", "pick_rate": 0.68},
+      {"name": "Hungering Blaze", "icon": "anran/hungering_blaze.png", "tier": "major", "tier_swapped": false, "ability": "Dancing Blaze", "effect": "Increase the healing of Dancing Blaze's subsequent strikes by 25.", "patch_era": "current", "pick_rate": 0.62},
+      {"name": "Short Fuse", "icon": "anran/short_fuse.png", "tier": "major", "tier_swapped": false, "ability": "Inferno Rush", "effect": "Impacting an enemy with Inferno Rush reduces its cooldown by 1.5 seconds.", "patch_era": "current", "pick_rate": 0.38}
+    ]},
+    "ashe": {"name": "Ashe", "perks": [
+      {"name": "Double-Barreled", "icon": "ashe/double_barreled.png", "tier": "minor", "tier_swapped": false, "ability": "Coach Gun", "effect": "Knocking an enemy back with Coach Gun briefly allows you to use it one extra time within 2 seconds.", "patch_era": "current", "pick_rate": 0.13},
+      {"name": "Remote Detonator", "icon": "ashe/remote_detonator.png", "tier": "minor", "tier_swapped": false, "ability": "Dynamite", "effect": "After using Dynamite, pressing Ability 2 again causes it to explode after a 0.5 second delay.", "patch_era": "current", "pick_rate": 0.87},
+      {"name": "Airburst", "icon": "ashe/airburst.png", "tier": "major", "tier_swapped": false, "ability": "Dynamite", "effect": "Dynamite has a 40% increased detonation radius while airborne and refunds 6 ammo when thrown.", "patch_era": "current", "pick_rate": 0.2},
+      {"name": "Viper's Sting", "icon": "ashe/viper_s_sting.png", "tier": "major", "tier_swapped": false, "ability": "primary fire (scoped)", "effect": "Hitting 2 consecutive scoped shots on a target deals 25 extra damage.", "patch_era": "current", "pick_rate": 0.8},
+      {"name": "Rapid Fire", "icon": "ashe/rapid_fire.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire (scoped)", "effect": "Unscoped shots gain 30% increased attack speed, but deal 10% less damage.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Sidewinder", "icon": "ashe/sidewinder.png", "tier": "minor", "tier_swapped": false, "ability": "Coach Gun", "effect": "Coach Gun pushes Ashe and enemies 12% farther.", "patch_era": "legacy"}
+    ]},
+    "baptiste": {"name": "Baptiste", "perks": [
+      {"name": "Assault Burst", "icon": "baptiste/assault_burst.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "major", "to": "minor"}], "ability": "Regenerative Burst", "effect": "Regenerative Burst now provides Baptiste with 20% increased attack speed for 3 seconds.", "patch_era": "current", "pick_rate": 0.67},
+      {"name": "Expanded Field", "icon": "baptiste/expanded_field.png", "tier": "minor", "tier_swapped": false, "ability": "Immortality Field", "effect": "Immortality Field radius increased by 30%.", "patch_era": "current", "pick_rate": 0.33},
+      {"name": "Automated Healing", "icon": "baptiste/automated_healing.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "minor", "to": "major"}], "ability": null, "effect": "Using any ability triggers Baptiste's Shoulder Turret, periodically firing up to 3 shots at allies, each restoring 40 health.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Rocket Boots", "icon": "baptiste/rocket_boots.png", "tier": "major", "tier_swapped": false, "ability": "Exo Boots", "effect": "While airborne from Exo Boots, use (SPACE) to dash horizontally.", "patch_era": "current", "pick_rate": 0.3},
+      {"name": "Biotic Reloader", "icon": "baptiste/biotic_reloader.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire", "effect": "Hitting an entire three-round burst reloads a healing projectile. Healing projectile direct hits reloads 3 primary fire ammo.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"},
+      {"name": "Field Medicine", "icon": "baptiste/field_medicine.png", "tier": "minor", "tier_swapped": false, "ability": "Immortality Field", "effect": "Immortality Field restores 80 health to nearby allies and 40 health to Baptiste when destroyed.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "bastion": {"name": "Bastion", "perks": [
+      {"name": "Configuration Reload", "icon": "bastion/configuration_reload.png", "tier": "minor", "tier_swapped": false, "ability": "A-36 Tactical Grenade", "effect": "Reduce the cooldown of A-36 Tactical Grenade by 4 seconds when changing configurations.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Smart Bomb", "icon": "bastion/smart_bomb.png", "tier": "minor", "tier_swapped": false, "ability": "A-36 Tactical Grenade", "effect": "A-36 Tactical Grenade's self-knockback is increased by 25% and no longer damages you.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Lindholm Explosives", "icon": "bastion/lindholm_explosives.png", "tier": "major", "tier_swapped": false, "ability": "Configuration: Assault", "effect": "Configuration: Assault’s Weapon slowly fires explosive shells instead of a rotary cannon.", "patch_era": "current", "pick_rate": 0.26},
+      {"name": "Self-Repair", "icon": "bastion/self_repair.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Press E to rapidly heal yourself.", "patch_era": "current", "pick_rate": 0.74},
+      {"name": "Armored Artillery", "icon": "bastion/armored_artillery.png", "tier": "minor", "tier_swapped": false, "ability": "Configuration: Artillery", "effect": "Configuration: Artillery grants 300 temporary overhealth.", "patch_era": "legacy"}
+    ]},
+    "brigitte": {"name": "Brigitte", "perks": [
+      {"name": "Combat Medic", "icon": "brigitte/combat_medic.png", "tier": "minor", "tier_swapped": false, "ability": "Repair Pack", "effect": "Melee attacks reduce the cooldown of Repair Pack by 0.75 seconds.", "patch_era": "current", "pick_rate": 0.21},
+      {"name": "Morale Boost", "icon": "brigitte/morale_boost.png", "tier": "minor", "tier_swapped": false, "ability": "Inspire / Whip Shot", "effect": "Inspire lasts 3 seconds longer when activated by Whip Shot.", "patch_era": "current", "pick_rate": 0.79},
+      {"name": "Inspiring Strike", "icon": "brigitte/inspiring_strike.png", "tier": "major", "tier_swapped": false, "ability": "Shield Bash / Inspire", "effect": "Shield Bash grants 30% increased movement speed for 2 seconds. Inspire's healing is instant when activated by Shield Bash.", "patch_era": "current", "pick_rate": 0.87},
+      {"name": "Whiplash", "icon": "brigitte/whiplash.png", "tier": "major", "tier_swapped": false, "ability": "Whip Shot", "effect": "Whip Shot's knockback can slam enemies into walls, dealing 60 extra damage.", "patch_era": "current", "pick_rate": 0.13},
+      {"name": "Barrier Restoration", "icon": "brigitte/barrier_restoration.png", "tier": "minor", "tier_swapped": false, "ability": "Shield Bash", "effect": "Shield Bash grants 30% movement speed for 1.5 seconds and bashing an enemy restores 100 Barrier health.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Quick Fix", "icon": "brigitte/quick_fix.png", "tier": "major", "tier_swapped": false, "ability": "Repair Pack", "effect": "Repair Packs instantly heal an additional 35 health to critical health allies.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "cassidy": {"name": "Cassidy", "perks": [
+      {"name": "Bang Bang", "icon": "cassidy/bang_bang.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}], "ability": "Flashbang", "effect": "Cassidy throws a second Flashbang that travels farther, but both Flashbangs deal 40% reduced damage.", "patch_era": "current", "pick_rate": 0.68},
+      {"name": "Giddy Up", "icon": "cassidy/giddy_up.png", "tier": "minor", "tier_swapped": false, "ability": "Combat Roll", "effect": "After using Combat Roll, Cassidy gains a speed boost that decays over 1.5 seconds.", "patch_era": "current", "pick_rate": 0.32},
+      {"name": "Rollin' Round-Up", "icon": "cassidy/rollin_round_up.png", "tier": "major", "tier_swapped": false, "ability": "Combat Roll", "effect": "Combat Roll also heals 15 health for each bullet reloaded.", "patch_era": "current", "pick_rate": 0.1},
+      {"name": "Silver Bullet", "icon": "cassidy/silver_bullet.png", "tier": "major", "tier_swapped": false, "ability": "Peacekeeper / Combat Roll / Deadeye", "effect": "Peacekeeper's secondary fire is replaced with a piercing shot that inflicts bleeding. Combat Roll and Deadeye reset its cooldown.", "patch_era": "current", "pick_rate": 0.9},
+      {"name": "Even the Odds", "icon": "cassidy/even_the_odds.png", "tier": "minor", "tier_swapped": false, "ability": "Deadeye", "effect": "Regenerate 40 health per second for each enemy targeted by Deadeye.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 4."},
+      {"name": "Past Noon", "icon": "cassidy/past_noon.png", "tier": "minor", "tier_swapped": false, "ability": "Deadeye", "effect": "Deadeye refunds 40% Ultimate Charge if it fully expires.", "patch_era": "legacy"},
+      {"name": "Quick Draw", "icon": "cassidy/quick_draw.png", "tier": "minor", "tier_swapped": false, "ability": "Fan the Hammer", "effect": "Fan the Hammer shots are individually controlled and can crit for 50% more damage.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Gun Slingin'", "icon": "cassidy/gun_slingin.png", "tier": "major", "tier_swapped": false, "ability": "Combat Roll", "effect": "Critical hits with Primary Fire reduce the cooldown of Combat Roll by 3 seconds.", "patch_era": "legacy"}
+    ]},
+    "d_mon": {"name": "D.Mon", "perks": [
+      {"name": "Beast Within", "icon": "d_mon/beast_within.png", "tier": "minor", "tier_swapped": false, "ability": "Plasma Saber", "effect": "Plasma Saber hits heal Power Shield by 40 health.", "patch_era": "current", "pick_rate": 0.66},
+      {"name": "MEKA Mobility", "icon": "d_mon/meka_mobility.png", "tier": "minor", "tier_swapped": false, "ability": "Propulsors", "effect": "While holding Power Shield, Propulsors fuel cost is reduced by 30%.", "patch_era": "current", "pick_rate": 0.34},
+      {"name": "Focused Fusion", "icon": "d_mon/focused_fusion.png", "tier": "major", "tier_swapped": false, "ability": "Fusion Repeater", "effect": "Fusion Repeater fires stronger shots with no spread at a slower rate.", "patch_era": "current", "pick_rate": 0.54},
+      {"name": "Overstrike", "icon": "d_mon/overstrike.png", "tier": "major", "tier_swapped": false, "ability": "Surging Strike", "effect": "Surging Strike gains 150% lifesteal.", "patch_era": "current", "pick_rate": 0.46}
+    ]},
+    "d_va": {"name": "D.Va", "perks": [
+      {"name": "Bunny Power", "icon": "d_va/bunny_power.png", "tier": "minor", "tier_swapped": false, "ability": "Call Mech / Eject", "effect": "Eject grants 75 temporary overhealth and Call Mech's damage radius is increased by 50%.", "patch_era": "current", "pick_rate": 0.15},
+      {"name": "Extended Boosters", "icon": "d_va/extended_boosters.png", "tier": "minor", "tier_swapped": false, "ability": "Boosters", "effect": "Hitting an enemy with Boosters deals 40% increased damage and extends the duration by 0.5 seconds.", "patch_era": "current", "pick_rate": 0.85},
+      {"name": "Precision Fusion", "icon": "d_va/precision_fusion.png", "tier": "major", "tier_swapped": false, "ability": "Fusion Cannons", "effect": "Press Reload to reduce Fusion Cannons' Spread by 75% for 3 seconds.", "patch_era": "current", "pick_rate": 0.28},
+      {"name": "Shield System", "icon": "d_va/shield_system.png", "tier": "major", "tier_swapped": false, "ability": "Defense Matrix", "effect": "Convert 100 health to shields. Defense Matrix restores shields based on 25% of its damage absorbed.", "patch_era": "current", "pick_rate": 0.72},
+      {"name": "Bunny Stomp", "icon": "d_va/bunny_stomp.png", "tier": "minor", "tier_swapped": false, "ability": "Call Mech", "effect": "Call Mech’s damage radius is increased by 50%.", "patch_era": "legacy"},
+      {"name": "Ejection Suit", "icon": "d_va/ejection_suit.png", "tier": "minor", "tier_swapped": false, "ability": "Eject", "effect": "Eject grants 75 temporary overhealth.", "patch_era": "legacy"},
+      {"name": "Heavy Rockets", "icon": "d_va/heavy_rockets.png", "tier": "major", "tier_swapped": false, "ability": "Micro Missiles", "effect": "Micro Missiles are swapped for Heavy Rockets which fire fewer projectiles with increased damage and explosion size.", "patch_era": "legacy"}
+    ]},
+    "domina": {"name": "Domina", "perks": [
+      {"name": "Efficient Design", "icon": "domina/efficient_design.png", "tier": "minor", "tier_swapped": false, "ability": "Barrier Array", "effect": "After using Barrier Array, restore 50 shields and activate passive health regeneration.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Extended Power", "icon": "domina/extended_power.png", "tier": "minor", "tier_swapped": false, "ability": "Photon Magnum", "effect": "Increase the range of Photon Magnum by 20%.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Corporate Retreat", "icon": "domina/corporate_retreat.png", "tier": "major", "tier_swapped": false, "ability": "Barrier Array", "effect": "While Barrier Array is active, it can be moved one time to another location.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Disruptive Detonation", "icon": "domina/disruptive_detonation.png", "tier": "major", "tier_swapped": false, "ability": "Crystal Charge", "effect": "Enemies hit by Crystal Charge's explosion are slowed by 30% for 2 seconds.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Power Move", "icon": "domina/power_move.png", "tier": "major", "tier_swapped": false, "ability": "Barrier Array / Sonic Repulsors", "effect": "Barrier Array can be used as a wall to stun enemies with Sonic Repulsors with a 100% damage increase.", "patch_era": "legacy"}
+    ]},
+    "doomfist": {"name": "Doomfist", "perks": [
+      {"name": "One-Two", "icon": "doomfist/one_two.png", "tier": "minor", "tier_swapped": false, "ability": "Rocket Punch / Hand Cannon", "effect": "Hitting an enemy into a wall with Rocket Punch reloads all Hand Cannon and overfills ammo by 2.", "patch_era": "current", "pick_rate": 0.41},
+      {"name": "Survival of the Fittest", "icon": "doomfist/survival_of_the_fittest.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "The Best Defense grants 25 overhealth from eliminations and its max overhealth is increased by 50.", "patch_era": "current", "pick_rate": 0.59},
+      {"name": "Aftershock", "icon": "doomfist/aftershock.png", "tier": "major", "tier_swapped": false, "ability": "Seismic Slam", "effect": "Enemies hit by Seismic Slam are slowed by 40% for 2 seconds.", "patch_era": "current", "pick_rate": 0.12},
+      {"name": "Power Matrix", "icon": "doomfist/power_matrix.png", "tier": "major", "tier_swapped": false, "ability": "Power Block", "effect": "Power Block absorbs projectiles for the first 0.8 seconds of its duration.", "patch_era": "current", "pick_rate": 0.88},
+      {"name": "Seismic Empowerment", "icon": "doomfist/seismic_empowerment.png", "tier": "major", "tier_swapped": false, "ability": "Seismic Slam / Rocket Punch", "effect": "Hitting 3 or more enemies with Seismic Slam empowers Rocket Punch.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "echo": {"name": "Echo", "perks": [
+      {"name": "Aerial Munitions", "icon": "echo/aerial_munitions.png", "tier": "minor", "tier_swapped": false, "ability": "Flight", "effect": "Echo has infinite ammo during Flight.", "patch_era": "current", "pick_rate": 0.08},
+      {"name": "Partial Scan", "icon": "echo/partial_scan.png", "tier": "minor", "tier_swapped": false, "ability": "Duplicate", "effect": "Duplicate starts with 30% of its ultimate charge.", "patch_era": "current", "pick_rate": 0.92},
+      {"name": "Focused Rush", "icon": "echo/focused_rush.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-08-11", "from": "minor", "to": "major"}], "ability": null, "effect": "Focused Beam's range is increase by 8 meters and movement speed is increase by 25% when active.", "patch_era": "current", "pick_rate": 0.55},
+      {"name": "Full Salvo", "icon": "echo/full_salvo.png", "tier": "major", "tier_swapped": false, "ability": "Sticky Bombs", "effect": "Sticky Bombs fires 2 additional projectiles.", "patch_era": "current", "pick_rate": 0.45},
+      {"name": "Enhanced Duplication", "icon": "echo/enhanced_duplication.png", "tier": "minor", "tier_swapped": false, "ability": "Duplicate", "effect": "During Duplicate, your clone's first ultimate extends Duplicate's duration by 3 seconds.", "patch_era": "legacy", "history_note": "Removed in season 18."},
+      {"name": "Friendly Imaging", "icon": "echo/friendly_imaging.png", "tier": "minor", "tier_swapped": false, "ability": "Duplicate", "effect": "Duplicate can also target allies.", "patch_era": "legacy", "history_note": "Removed in season 18, integrated into base kit in Reign of Talon Season 2."},
+      {"name": "High Beams", "icon": "echo/high_beams.png", "tier": "major", "tier_swapped": false, "ability": "Focusing Beam / Flight", "effect": "Focusing Beam eliminations reset Flight's cooldown.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 4."}
+    ]},
+    "emre": {"name": "Emre", "perks": [
+      {"name": "Enhanced Agility", "icon": "emre/enhanced_agility.png", "tier": "minor", "tier_swapped": false, "ability": "Siphon Blaster", "effect": "Siphon Blaster's movement speed bonus is increased by 20% while not firing.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Suppressive Security", "icon": "emre/suppressive_security.png", "tier": "minor", "tier_swapped": false, "ability": "Override Protocol", "effect": "Override Protocol's light rounds slow enemies by 30% for 1.5 seconds.", "patch_era": "current", "pick_rate": 0.3},
+      {"name": "Cyber Adhesion", "icon": "emre/cyber_adhesion.png", "tier": "major", "tier_swapped": false, "ability": "Cyber Frag", "effect": "Cyber Frag now sticks on contact, dealing 40 extra damage to stuck enemies.", "patch_era": "current", "pick_rate": 0.17},
+      {"name": "Heat Sink", "icon": "emre/heat_sink.png", "tier": "major", "tier_swapped": false, "ability": "Siphon Blaster", "effect": "Direct hits with Siphon Blaster refunds 60% heat and increase its duration by 0.1 seconds.", "patch_era": "current", "pick_rate": 0.83}
+    ]},
+    "freja": {"name": "Freja", "perks": [
+      {"name": "Momentum Boost", "icon": "freja/momentum_boost.png", "tier": "minor", "tier_swapped": false, "ability": "Quick Dash", "effect": "Quick Dash distance is increased by 20%.", "patch_era": "current", "pick_rate": 0.21},
+      {"name": "Relentless Barrage", "icon": "freja/relentless_barrage.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "major", "to": "minor"}], "ability": "Take Aim", "effect": "Direct hits with Take Aim refund 5 automatic bolt ammo.", "patch_era": "current", "pick_rate": 0.79},
+      {"name": "Aerial Recovery", "icon": "freja/aerial_recovery.png", "tier": "major", "tier_swapped": false, "ability": "Updraft", "effect": "After using Updraft, heal for 30 health per second until Freja touches the ground.", "patch_era": "current", "pick_rate": 0.73},
+      {"name": "Rising Winds", "icon": "freja/rising_winds.png", "tier": "major", "tier_swapped": false, "ability": "Updraft", "effect": "Updraft gains an additional charge.", "patch_era": "current", "pick_rate": 0.27},
+      {"name": "Frost Bolts", "icon": "freja/frost_bolts.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Enemies hit by 3 regular bolts in quick succession are slowed by 20% for 2 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Hunters Instinct", "icon": "freja/hunters_instinct.png", "tier": "minor", "tier_swapped": false, "ability": "Take Aim", "effect": "Direct hits with Take Aim reveal enemies to Freja for 3 seconds.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1: Conquest."},
+      {"name": "Tracking Instinct", "icon": "freja/tracking_instinct.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Critical health enemies are revealed to you.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Ready to Hunt", "icon": "freja/ready_to_hunt.png", "tier": "major", "tier_swapped": false, "ability": "Updraft / Quick Dash", "effect": "Updraft grants a temporary free use of Quick Dash.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "genji": {"name": "Genji", "perks": [
+      {"name": "Dragon's Thirst", "icon": "genji/dragon_s_thirst.png", "tier": "minor", "tier_swapped": false, "ability": "Dragonblade", "effect": "Dragonblade swings gain 30% lifesteal.", "patch_era": "current", "pick_rate": 0.73},
+      {"name": "Swift Cuts", "icon": "genji/swift_cuts.png", "tier": "minor", "tier_swapped": false, "ability": "Swift Strike", "effect": "Quick Melee reduces the cooldown of Swift Strike by 3 seconds.", "patch_era": "current", "pick_rate": 0.27},
+      {"name": "Blade Twisting", "icon": "genji/blade_twisting.png", "tier": "major", "tier_swapped": false, "ability": "Swift Strike", "effect": "Swift Strike deals 25 additional damage over time if the enemy is below half health.", "patch_era": "current", "pick_rate": 0.62},
+      {"name": "Meditation", "icon": "genji/meditation.png", "tier": "major", "tier_swapped": false, "ability": "Deflect", "effect": "Regenerate 50 health per second while Deflect is active.", "patch_era": "current", "pick_rate": 0.38},
+      {"name": "Acrobatics", "icon": "genji/acrobatics.png", "tier": "minor", "tier_swapped": false, "ability": "Swift Strike", "effect": "Swift Strike and Wall Climb resets double jump.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "hanzo": {"name": "Hanzo", "perks": [
+      {"name": "Dragon Fury", "icon": "hanzo/dragon_fury.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "major", "to": "minor"}], "ability": "primary fire", "effect": "After hitting an enemy with Primary Fire, gain 20% attack speed for 1.5 seconds.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Sonic Disruption", "icon": "hanzo/sonic_disruption.png", "tier": "minor", "tier_swapped": false, "ability": "Sonic Arrow / health pack", "effect": "Sonic Arrow hacks nearby Health Packs for 30 seconds.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Frost Arrow", "icon": "hanzo/frost_arrow.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Press Reload to ready an explosive frost arrow that slows enemies by 35% for 2 seconds.", "patch_era": "current", "pick_rate": 0.65},
+      {"name": "Scatter Arrows", "icon": "hanzo/scatter_arrows.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "minor", "to": "major"}], "ability": "Storm Arrows", "effect": "On first ricochet, Storm Arrows split into 5 shots dealing 33% damage and bounce 1 extra time.", "patch_era": "current", "pick_rate": 0.35},
+      {"name": "Swift Lunge", "icon": "hanzo/swift_lunge.png", "tier": "minor", "tier_swapped": false, "ability": "Lunge", "effect": "Arrow hits reduce the cooldown of Lunge by up to 1 second, based on charge.", "patch_era": "legacy"},
+      {"name": "Yamagami Technique", "icon": "hanzo/yamagami_technique.png", "tier": "major", "tier_swapped": false, "ability": "Wall Climb / Lunge", "effect": "Wall Climb accelerates your Lunge cooldown by 300%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "hazard": {"name": "Hazard", "perks": [
+      {"name": "Anarchic Zeal", "icon": "hazard/anarchic_zeal.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}], "ability": "Spike Guard", "effect": "Spike Guard’s spikes gain 30% Lifesteal.", "patch_era": "current", "pick_rate": 0.91},
+      {"name": "Reconstitution", "icon": "hazard/reconstitution.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "minor", "to": "major"}, {"date": "2026-06-16", "from": "major", "to": "minor"}], "ability": "Jagged Wall / Spike Guard", "effect": "Jagged Wall hits overfill Spike Guard with 25% additional energy.", "patch_era": "current", "pick_rate": 0.09},
+      {"name": "Deep Leap", "icon": "hazard/deep_leap.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}, {"date": "2026-06-16", "from": "minor", "to": "major"}], "ability": "Violent Leap", "effect": "Violent Leap’s range is increased by 20%.", "patch_era": "current", "pick_rate": 0.77},
+      {"name": "Explosive Impalements", "icon": "hazard/explosive_impalements.png", "tier": "major", "tier_swapped": false, "ability": "Bonespur / Violent Leap", "effect": "Bonespur hits mark targets with spikes. Quick Melee and Violent Leap's slash detonate them for 30 explosive damage.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Off The Top", "icon": "hazard/off_the_top.png", "tier": "minor", "tier_swapped": false, "ability": "Violent Leap", "effect": "Violent Leap’s Slash deals 50% more damage to enemies above 250 health.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "illari": {"name": "Illari", "perks": [
+      {"name": "Rapid Construction", "icon": "illari/rapid_construction.png", "tier": "minor", "tier_swapped": false, "ability": "Healing Pylon", "effect": "Healing Pylon builds 300% faster and its cooldown is reduced by 2 seconds.", "patch_era": "current", "pick_rate": 0.28},
+      {"name": "Summer Solstice", "icon": "illari/summer_solstice.png", "tier": "minor", "tier_swapped": false, "ability": "Captive Sun", "effect": "Activating Captive Sun grants Illari 3 extra seconds of flight, 20% increased flight speed, and 20% increased attack speed.", "patch_era": "current", "pick_rate": 0.72},
+      {"name": "Solar Flare", "icon": "illari/solar_flare.png", "tier": "major", "tier_swapped": false, "ability": "Solar Rifle", "effect": "Press Primary Fire while using Solar Rifle's healing beam to heal all allies in front of Illari for 100 healing.", "patch_era": "current", "pick_rate": 0.12},
+      {"name": "Sunburn", "icon": "illari/sunburn.png", "tier": "major", "tier_swapped": false, "ability": "Outburst", "effect": "Outburst ignites enemies, dealing an additional 50 damage over 3 seconds.", "patch_era": "current", "pick_rate": 0.88},
+      {"name": "Solar Power", "icon": "illari/solar_power.png", "tier": "major", "tier_swapped": false, "ability": "Solar Rifle", "effect": "Fully charged Solar Rifle hits grant 12.5% of your maximum solar energy, overfilling up to 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "jetpack_cat": {"name": "Jetpack Cat", "perks": [
+      {"name": "Transport Shielding", "icon": "jetpack_cat/transport_shielding.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Gain up to 50 shield health while carrying another hero.", "patch_era": "current", "pick_rate": 0.08},
+      {"name": "Ulterior Motive", "icon": "jetpack_cat/ulterior_motive.png", "tier": "minor", "tier_swapped": false, "ability": "Biotic Pawjectiles", "effect": "15% of Biotic Pawjectiles healing is converted into fuel.", "patch_era": "current", "pick_rate": 0.92},
+      {"name": "Claws Out", "icon": "jetpack_cat/claws_out.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-03-10", "from": "minor", "to": "major"}], "ability": "quick melee", "effect": "Quick Melee becomes empowered every 6 seconds, wounding enemies for 40 damage and slowing them by 30% for 1 second.", "patch_era": "current", "pick_rate": 0.69},
+      {"name": "Purrfect Form", "icon": "jetpack_cat/purrfect_form.png", "tier": "major", "tier_swapped": false, "ability": "Purr", "effect": "Each pulse of Purr contains 3 waves.", "patch_era": "current", "pick_rate": 0.31},
+      {"name": "Headbutt", "icon": "jetpack_cat/headbutt.png", "tier": "major", "tier_swapped": false, "ability": "Frenetic Flight", "effect": "Frenetic Flight can knockback an enemy on impact when flying fast enough, dealing 50 damage on impact.", "patch_era": "legacy"},
+      {"name": "Territorial", "icon": "jetpack_cat/territorial.png", "tier": "major", "tier_swapped": false, "ability": "Purr", "effect": "Purr now also damages nearby enemies for 33% of the healing amount. Knockback is removed", "patch_era": "legacy"}
+    ]},
+    "junker_queen": {"name": "Junker Queen", "perks": [
+      {"name": "Battle Shout", "icon": "junker_queen/battle_shout.png", "tier": "minor", "tier_swapped": false, "ability": "Commanding Shout", "effect": "Commanding Shout fully reloads Scatter Gun and increases allied reload speed by 50%.", "patch_era": "current", "pick_rate": 0.2},
+      {"name": "Rampant Charge", "icon": "junker_queen/rampant_charge.png", "tier": "minor", "tier_swapped": false, "ability": "Rampage", "effect": "Gain Unstoppable and refreshes all cooldowns by 6 seconds when using Rampage.", "patch_era": "current", "pick_rate": 0.8},
+      {"name": "Savage Satiation", "icon": "junker_queen/savage_satiation.png", "tier": "major", "tier_swapped": false, "ability": "Carnage", "effect": "Carnage's impact damage gains 100% lifesteal.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Willy-Willy", "icon": "junker_queen/willy_willy.png", "tier": "major", "tier_swapped": false, "ability": "Jagged Blade", "effect": "When recalling Jagged Blade its radius is increased by 100% and it deals 30 additional impact damage.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Rending Recall", "icon": "junker_queen/rending_recall.png", "tier": "minor", "tier_swapped": false, "ability": "Jagged Blade", "effect": "Recalling Jagged Blade from a stuck target refreshes its wound.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Deep Wounds", "icon": "junker_queen/deep_wounds.png", "tier": "major", "tier_swapped": false, "ability": "Scattergun", "effect": "Scattergun hits extend your wound durations on those enemies by 0.5 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "junkrat": {"name": "Junkrat", "perks": [
+      {"name": "Bomb Voyage", "icon": "junkrat/bomb_voyage.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-04-14", "from": "major", "to": "minor"}], "ability": "Concussion Mine", "effect": "After launching with Concussion Mine, Junkrat gains 35% increased attack speed for 3 seconds.", "patch_era": "current", "pick_rate": 0.44},
+      {"name": "Nitro Boost", "icon": "junkrat/nitro_boost.png", "tier": "minor", "tier_swapped": false, "ability": "RIP-Tire", "effect": "During RIP-Tire, use (LSHIFT) to gain a quick boost of speed. Doing so reduces RIP-Tire’s damage by 50%.", "patch_era": "current", "pick_rate": 0.56},
+      {"name": "Frag Cannon", "icon": "junkrat/frag_cannon.png", "tier": "major", "tier_swapped": false, "ability": "Frag Launcher", "effect": "Frag Launcher’s projectile speed is increased by 25%", "patch_era": "current", "pick_rate": 0.86},
+      {"name": "Mine Recycling", "icon": "junkrat/mine_recycling.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-04-14", "from": "minor", "to": "major"}], "ability": "Concussion Mine", "effect": "Eliminations with Concussion Mine restore one charge.", "patch_era": "current", "pick_rate": 0.14},
+      {"name": "Aluminium Frame", "icon": "junkrat/aluminium_frame.png", "tier": "minor", "tier_swapped": false, "ability": "Steel Trap", "effect": "Steel Trap's throw range is increased by 50% and trapped enemies cannot be healed.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Tick Tock", "icon": "junkrat/tick_tock.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Concussive Mine strengthens 0.25 second after landing, increasing damage by 50%, explosion radius by 50%, and health by 200%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "juno": {"name": "Juno", "perks": [
+      {"name": "Familiar Vitals", "icon": "juno/familiar_vitals.png", "tier": "minor", "tier_swapped": false, "ability": "Pulsar Torpedoes", "effect": "Pulsar Torpedoes lock onto allies 35% faster.", "patch_era": "current", "pick_rate": 0.2},
+      {"name": "Locked On", "icon": "juno/locked_on.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}], "ability": "Pulsar Torpedoes", "effect": "Reduce the cooldown of Pulsar Torpedoes by 1 second for each enemy hit.", "patch_era": "current", "pick_rate": 0.8},
+      {"name": "Faster Blaster", "icon": "juno/faster_blaster.png", "tier": "major", "tier_swapped": false, "ability": "Mediblaster / Glide Boost", "effect": "While using Glide Boost, Mediblaster fires continuously.", "patch_era": "current", "pick_rate": 0.4},
+      {"name": "Lift Off", "icon": "juno/lift_off.png", "tier": "major", "tier_swapped": false, "ability": "Martian Overboots", "effect": "Martian Overboots can now triple jump.", "patch_era": "current", "pick_rate": 0.6},
+      {"name": "Hyper Boost", "icon": "juno/hyper_boost.png", "tier": "minor", "tier_swapped": false, "ability": "Glide Boost / Hyper Ring", "effect": "While using Glide Boost, passing through Hyper Ring pushes you forward.", "patch_era": "legacy", "note": "the reference King's Row capture appears to show this icon — useful as a patch-dating signal"},
+      {"name": "Re-Boots", "icon": "juno/re_boots.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-04-22", "from": "major", "to": "minor"}], "ability": "Glide Boost", "effect": "Activating Glide Boost resets Double Jump.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Master Blaster", "icon": "juno/master_blaster.png", "tier": "major", "tier_swapped": false, "ability": "Mediblaster", "effect": "Mediblaster can crit enemies.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "kiriko": {"name": "Kiriko", "perks": [
+      {"name": "Fortune Teller", "icon": "kiriko/fortune_teller.png", "tier": "minor", "tier_swapped": false, "ability": "Kunai / Healing Ofuda", "effect": "Kunai hits launch 2 Healing Ofuda to an ally in front of you.", "patch_era": "current", "pick_rate": 0.78},
+      {"name": "Urgent Care", "icon": "kiriko/urgent_care.png", "tier": "minor", "tier_swapped": false, "ability": "Healing Ofuda", "effect": "Healing Ofuda projectile speed is increased by 50% when seeking critical health allies.", "patch_era": "current", "pick_rate": 0.22},
+      {"name": "Foxtrot", "icon": "kiriko/foxtrot.png", "tier": "major", "tier_swapped": false, "ability": "Protection Suzu", "effect": "Protection Suzu grants allies 30% increased movement speed for 4 seconds.", "patch_era": "current", "pick_rate": 0.81},
+      {"name": "Ready Step", "icon": "kiriko/ready_step.png", "tier": "major", "tier_swapped": false, "ability": "Swift Step", "effect": "Swift Step grants Kiriko 40% increased attack and reload speed for 3 seconds.", "patch_era": "current", "pick_rate": 0.19},
+      {"name": "Shuffling", "icon": "kiriko/shuffling.png", "tier": "major", "tier_swapped": false, "ability": "Swift Step", "effect": "Swift Step can be used again within 4 seconds of its initial cast.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "lifeweaver": {"name": "Lifeweaver", "perks": [
+      {"name": "Dashing Escape", "icon": "lifeweaver/dashing_escape.png", "tier": "minor", "tier_swapped": false, "ability": "Rejuvenating Dash", "effect": "Rejuvenating Dash distance increased by 30%.", "patch_era": "current", "pick_rate": 0.75},
+      {"name": "Petal Protection", "icon": "lifeweaver/petal_protection.png", "tier": "minor", "tier_swapped": false, "ability": "Petal Platform", "effect": "Allies heal 20 health per second while standing on Petal Platform.", "patch_era": "current", "pick_rate": 0.25},
+      {"name": "Sow the Seed", "icon": "lifeweaver/sow_the_seed.png", "tier": "major", "tier_swapped": false, "ability": "Healing Blossom", "effect": "Quick Melee with Healing Blossom equipped tosses a seed forward. Allies who pick up a seed gain 75 overhealth and 25% movement speed for 5 seconds.", "patch_era": "current", "pick_rate": 0.15},
+      {"name": "Superbloom", "icon": "lifeweaver/superbloom.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Thorns detonate for 40 extra damage when enough stick within 2.5 seconds.", "patch_era": "current", "pick_rate": 0.85},
+      {"name": "Cleansing Grasp", "icon": "lifeweaver/cleansing_grasp.png", "tier": "minor", "tier_swapped": false, "ability": "Life Grip", "effect": "Life Grip cleanses negative effects. Cleansing a negative effect reduces Life Grip cooldown by 4 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 1: Conquest (Reign of Talon)."},
+      {"name": "Life Cycle", "icon": "lifeweaver/life_cycle.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "While alive, regenerate 10 health per second. Upon death, drop a healing seed that heals allies for 250 health.", "patch_era": "legacy", "history_note": "Removed in Season 18: Stadium Quickplay."},
+      {"name": "Lifeweaving", "icon": "lifeweaver/lifeweaving.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}], "ability": "Rejuvenating Dash / Healing Blossom", "effect": "Rejuvenating Dash adds 30 healing to your next Healing Blossom within 3 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 1: Conquest (Reign of Talon)."},
+      {"name": "Petal Power", "icon": "lifeweaver/petal_power.png", "tier": "major", "tier_swapped": false, "ability": "Petal Platform", "effect": "Allies gain 30% attack speed while standing on a raised Petal Platform.", "patch_era": "legacy", "history_note": "Removed in Season 1: Conquest (Reign of Talon)."}
+    ]},
+    "lucio": {"name": "Lúcio", "perks": [
+      {"name": "Beat Drop", "icon": "lucio/beat_drop.png", "tier": "minor", "tier_swapped": false, "ability": "Sound Barrier", "effect": "Amp It Up is active during Sound Barrier.", "patch_era": "current", "pick_rate": 0.54},
+      {"name": "Soundwave Rider", "icon": "lucio/soundwave_rider.png", "tier": "minor", "tier_swapped": false, "ability": "Soundwave / Wall Ride", "effect": "Wall Riding empowers your next Soundwave, increasing its knockback by 25% and damage by 50%.", "patch_era": "current", "pick_rate": 0.46},
+      {"name": "Accelerando", "icon": "lucio/accelerando.png", "tier": "major", "tier_swapped": false, "ability": "Speed Song", "effect": "Gain 15% attack speed while Lucio's Speed Song is active, tripled during Amp It Up.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Noise Violation", "icon": "lucio/noise_violation.png", "tier": "major", "tier_swapped": false, "ability": "Crossfade", "effect": "Crossfade's range is increased by 150% while Amp It Up is active.", "patch_era": "current", "pick_rate": 0.77},
+      {"name": "Bass Blowout", "icon": "lucio/bass_blowout.png", "tier": "minor", "tier_swapped": false, "ability": "Soundwave", "effect": "Soundwave's knockback is increased by 15%.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Groovin'", "icon": "lucio/groovin.png", "tier": "minor", "tier_swapped": false, "ability": "wall ride", "effect": "Regenerate 4 ammo per second while wall riding.", "patch_era": "legacy"}
+    ]},
+    "mauga": {"name": "Mauga", "perks": [
+      {"name": "Kinetic Bandolier", "icon": "mauga/kinetic_bandolier.png", "tier": "minor", "tier_swapped": false, "ability": "Overrun", "effect": "Overrun reloads up to 150 ammo during the first second of charging.", "patch_era": "current", "pick_rate": 0.18},
+      {"name": "Pyromaniac", "icon": "mauga/pyromaniac.png", "tier": "minor", "tier_swapped": false, "ability": "Incendiary Chaingun", "effect": "Igniting enemies with Incendiary Chaingun grants 50 overhealth.", "patch_era": "current", "pick_rate": 0.82},
+      {"name": "Combat Fuel", "icon": "mauga/combat_fuel.png", "tier": "major", "tier_swapped": false, "ability": "Cardiac Overdrive", "effect": "Critical hits grant Mauga 4 temporary overhealth on Cardiac Overdrive's next use, up to 150 overhealth.", "patch_era": "current", "pick_rate": 0.3},
+      {"name": "Firewalker", "icon": "mauga/firewalker.png", "tier": "major", "tier_swapped": false, "ability": "Overrun", "effect": "Overrun ignites enemies hit.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Two Hearts", "icon": "mauga/two_hearts.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "While on an objective, Mauga counts as 2 heroes and regenerates 20 health per second.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "mei": {"name": "Mei", "perks": [
+      {"name": "Glacial Propulsion", "icon": "mei/glacial_propulsion.png", "tier": "minor", "tier_swapped": false, "ability": "double jump", "effect": "Double jumping creates a small ice pillar that launches Mei into the air.", "patch_era": "current", "pick_rate": 0.78},
+      {"name": "Skating Rink", "icon": "mei/skating_rink.png", "tier": "minor", "tier_swapped": false, "ability": "Blizzard", "effect": "Allies within Blizzard gain 25% increased movement speed and heal for 50 health per second.", "patch_era": "current", "pick_rate": 0.22},
+      {"name": "Cryo-Storm", "icon": "mei/cryo_storm.png", "tier": "major", "tier_swapped": false, "ability": "Cryo-Freeze", "effect": "Cryo-Freeze slows and deals 70 damage per second to nearby enemies.", "patch_era": "current", "pick_rate": 0.32},
+      {"name": "Deep Freeze", "icon": "mei/deep_freeze.png", "tier": "major", "tier_swapped": false, "ability": "primary fire", "effect": "Continuously hitting enemies with primary fire freezes them for a short time.", "patch_era": "current", "pick_rate": 0.68},
+      {"name": "Biting Cold", "icon": "mei/biting_cold.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-04-22", "from": "major", "to": "minor"}], "ability": "secondary fire", "effect": "Secondary fire hits slow enemies by 20% for 1.5 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Chilling Reach", "icon": "mei/chilling_reach.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire", "effect": "Primary fire’s range is increased by 30%.", "patch_era": "legacy"},
+      {"name": "Permafrost", "icon": "mei/permafrost.png", "tier": "minor", "tier_swapped": false, "ability": "Ice Wall", "effect": "Ice Wall's duration is increased by 2 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "mercy": {"name": "Mercy", "perks": [
+      {"name": "Angelic Resurrection", "icon": "mercy/angelic_resurrection.png", "tier": "minor", "tier_swapped": false, "ability": "Resurrect", "effect": "Mercy gains 100 overhealth after casting Resurrect.", "patch_era": "current", "pick_rate": 0.4},
+      {"name": "Winged Reach", "icon": "mercy/winged_reach.png", "tier": "minor", "tier_swapped": false, "ability": "Guardian Angel", "effect": "Guardian Angel's range is increased by 30%.", "patch_era": "current", "pick_rate": 0.6, "history_note": "Removed in Season 18, reintroduced in Reign of Talon: Season 2 midseason."},
+      {"name": "Chain Boost", "icon": "mercy/chain_boost.png", "tier": "major", "tier_swapped": false, "ability": "Caduceus Staff", "effect": "Caduceus Staff's damage boost is increased by 5% and links to a second nearby ally.", "patch_era": "current", "pick_rate": 0.66},
+      {"name": "Double Dose", "icon": "mercy/double_dose.png", "tier": "major", "tier_swapped": false, "ability": "Flash Heal", "effect": "Flash Heal gains an additional charge but its base healing is reduced by 10.", "patch_era": "current", "pick_rate": 0.34},
+      {"name": "Angelic Recovery", "icon": "mercy/angelic_recovery.png", "tier": "minor", "tier_swapped": false, "ability": "Caduceus Staff", "effect": "Mercy receives 15 health per second while Caduceus Staff is attached to a full health ally.", "patch_era": "legacy"},
+      {"name": "Divine Momentum", "icon": "mercy/divine_momentum.png", "tier": "minor", "tier_swapped": false, "ability": "Guardian Angel", "effect": "Increases Mercy's travel speed by 15% after cancelling Guardian Angel.", "patch_era": "legacy"},
+      {"name": "Flash Heal (old)", "icon": "mercy/flash_heal_old.png", "tier": "major", "tier_swapped": false, "ability": "Flash Heal / Caduceus Staff", "effect": "Flash heal can be used on Caduceus Staff's active target to restore 50 health, tripled on allies below half health.", "patch_era": "legacy"}
+    ]},
+    "mizuki": {"name": "Mizuki", "perks": [
+      {"name": "Exposed Soul", "icon": "mizuki/exposed_soul.png", "tier": "minor", "tier_swapped": false, "ability": "Binding Chain", "effect": "Hitting an enemy with Binding Chain increases your damage dealt to them by 30% for 2 seconds.", "patch_era": "current", "pick_rate": 0.73},
+      {"name": "Wellspring", "icon": "mizuki/wellspring.png", "tier": "minor", "tier_swapped": false, "ability": "Remedy Aura", "effect": "Remedy Aura resource generation increased by 25%.", "patch_era": "current", "pick_rate": 0.27},
+      {"name": "Quickstep", "icon": "mizuki/quickstep.png", "tier": "major", "tier_swapped": false, "ability": "Katashiro Return / Remedy Aura", "effect": "While Katashiro Return is active, allies within Remedy Aura gain 20% increased movement speed.", "patch_era": "current", "pick_rate": 0.44},
+      {"name": "Resonant Return", "icon": "mizuki/resonant_return.png", "tier": "major", "tier_swapped": false, "ability": "Healing Kasa", "effect": "Healing Kasa bounces one additional time. Each bounce increases its healing by 10.", "patch_era": "current", "pick_rate": 0.56}
+    ]},
+    "moira": {"name": "Moira", "perks": [
+      {"name": "Destruction's Divide", "icon": "moira/destruction_s_divide.png", "tier": "minor", "tier_swapped": false, "ability": "Coalescence", "effect": "Coalescence can be toggled between pure healing or pure damage, with 30% greater effect.", "patch_era": "current", "pick_rate": 0.17},
+      {"name": "Ethical Nourishment", "icon": "moira/ethical_nourishment.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}], "ability": "Biotic Orb", "effect": "Biotic Orb’s first 30 healing is instant on each ally it encounters.", "patch_era": "current", "pick_rate": 0.83},
+      {"name": "Phantom Step", "icon": "moira/phantom_step.png", "tier": "major", "tier_swapped": false, "ability": "Fade", "effect": "Fade lasts 0.5 seconds longer and boosts jump height by 50%.", "patch_era": "current", "pick_rate": 0.77},
+      {"name": "Reversal", "icon": "moira/reversal.png", "tier": "major", "tier_swapped": false, "ability": "Biotic Orb", "effect": "Reactivating Biotic Orb reverses its direction.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Uprush", "icon": "moira/uprush.png", "tier": "minor", "tier_swapped": false, "ability": "Fade", "effect": "Fade’s jump height is increased by 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Vanish", "icon": "moira/vanish.png", "tier": "minor", "tier_swapped": false, "ability": "Fade", "effect": "Fade’s duration is increased by 0.5 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Contamination", "icon": "moira/contamination.png", "tier": "major", "tier_swapped": false, "ability": "Biotic Orb", "effect": "Enemies being damaged by Biotic Orb receive 25% reduced healing.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "orisa": {"name": "Orisa", "perks": [
+      {"name": "Defense Protocol", "icon": "orisa/defense_protocol.png", "tier": "minor", "tier_swapped": false, "ability": "Terra Surge", "effect": "Regenerate 100 health per second while charging Terra Surge.", "patch_era": "current", "pick_rate": 0.21},
+      {"name": "Mobile Fortification", "icon": "orisa/mobile_fortification.png", "tier": "minor", "tier_swapped": false, "ability": "Fortify", "effect": "While Fortify is active, Orisa has no movement speed reduction and no heat generation.", "patch_era": "current", "pick_rate": 0.79},
+      {"name": "Heavy Javelin", "icon": "orisa/heavy_javelin.png", "tier": "major", "tier_swapped": false, "ability": "Energy Javelin", "effect": "Energy Javelin's knockback is increased by 25% and its wall impact damage is increased by 15.", "patch_era": "current", "pick_rate": 0.84},
+      {"name": "Protective Barrier", "icon": "orisa/protective_barrier.png", "tier": "major", "tier_swapped": false, "ability": "Javelin Spin", "effect": "Javelin Spin is replaced with a barrier.", "patch_era": "current", "pick_rate": 0.16},
+      {"name": "Fleeting Bulwark", "icon": "orisa/fleeting_bulwark.png", "tier": "minor", "tier_swapped": false, "ability": "Fortify", "effect": "Fortify briefly grants an additional 100% decaying overhealth when activated.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Heat Dissipator", "icon": "orisa/heat_dissipator.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire", "effect": "Critical hits from your primary fire refund heat.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Charged Javelin", "icon": "orisa/charged_javelin.png", "tier": "major", "tier_swapped": false, "ability": "Energy Javelin", "effect": "Energy Javelin can be charged to increase projectile speed and knockback. Pierces enemies at full power.", "patch_era": "legacy"}
+    ]},
+    "pharah": {"name": "Pharah", "perks": [
+      {"name": "Concussive Force", "icon": "pharah/concussive_force.png", "tier": "minor", "tier_swapped": false, "ability": "Concussive Blast", "effect": "Concussive Blast deals up to 30 explosion damage.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Helix Shields", "icon": "pharah/helix_shields.png", "tier": "minor", "tier_swapped": false, "ability": "Rocket Launcher", "effect": "Convert 125 health to shields. Direct hits with the Rocket Launcher triggers passive shield regeneration.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Fuel Stores", "icon": "pharah/fuel_stores.png", "tier": "major", "tier_swapped": false, "ability": "Jet Dash", "effect": "Jet Dash grants 50% fuel. Maximum overfuel is increased by 100%.", "patch_era": "current", "pick_rate": 0.11},
+      {"name": "Rocket Salvo", "icon": "pharah/rocket_salvo.png", "tier": "major", "tier_swapped": false, "ability": "primary fire", "effect": "After using a movement ability, the next primary fire shoots two spiraling mini-rockets, each dealing 30 damage.", "patch_era": "current", "pick_rate": 0.89},
+      {"name": "Drift Thrusters", "icon": "pharah/drift_thrusters.png", "tier": "minor", "tier_swapped": false, "ability": "Barrage", "effect": "Pharah can move while Barrage is active.", "patch_era": "legacy"},
+      {"name": "Concussive Implosion", "icon": "pharah/concussive_implosion.png", "tier": "major", "tier_swapped": false, "ability": "Concussive Blast", "effect": "Concussive Blast’s knockback is inverted to a pull in.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Sky Spy", "icon": "pharah/sky_spy.png", "tier": "major", "tier_swapped": false, "ability": "Concussive Blast / Rocket Launcher", "effect": "Concussive Blast reveals targets to Pharah for 3 seconds. During this, the next direct Rocket Launcher hit per target deals 30% extra damage.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"}
+    ]},
+    "ramattra": {"name": "Ramattra", "perks": [
+      {"name": "Prolonged Barrier", "icon": "ramattra/prolonged_barrier.png", "tier": "minor", "tier_swapped": false, "ability": "Void Barrier", "effect": "Void Barrier's duration and size is increased by 25%.", "patch_era": "current", "pick_rate": 0.77, "history_note": "Removed in Season 18, re-added in Reign of Ralon Season 2: Summit"},
+      {"name": "Relentless Form", "icon": "ramattra/relentless_form.png", "tier": "minor", "tier_swapped": false, "ability": "Nemesis Form / Annihilation", "effect": "While Nemesis Form is active, eliminations extend the duration by 2 seconds. Half duration gained during Annihilation.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Nanite Repair", "icon": "ramattra/nanite_repair.png", "tier": "major", "tier_swapped": false, "ability": "Ravenous Vortex", "effect": "Ramattra is healed for 75 health per second while within Ravenous Vortex.", "patch_era": "current", "pick_rate": 0.25},
+      {"name": "Void Surge", "icon": "ramattra/void_surge.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-04-14", "from": "minor", "to": "major"}], "ability": "Void Accelerator", "effect": "Void Accelerator periodically releases a burst of 6 additional projectiles during continuous fire.", "patch_era": "current", "pick_rate": 0.75},
+      {"name": "Vengeful Vortex", "icon": "ramattra/vengeful_vortex.png", "tier": "major", "tier_swapped": false, "ability": "Ravenous Vortex", "effect": "While Ravenous Vortex is airborne, use E again to detonate it, dealing 50 damage and pulling enemies downward.", "patch_era": "legacy"}
+    ]},
+    "reaper": {"name": "Reaper", "perks": [
+      {"name": "Lingering Wraith", "icon": "reaper/lingering_wraith.png", "tier": "minor", "tier_swapped": false, "ability": "Wraith Form", "effect": "Leaving Wraith Form grants 30% movement speed for 2 seconds.", "patch_era": "current", "pick_rate": 0.68},
+      {"name": "Soul Reaving", "icon": "reaper/soul_reaving.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Collect Soul Globes from dead enemies to restore 50 health.", "patch_era": "current", "pick_rate": 0.32},
+      {"name": "Shadow Blink", "icon": "reaper/shadow_blink.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2025-10-14", "from": "minor", "to": "major"}], "ability": "Shadow Step", "effect": "Shadow Step's cast time and cooldown are 25% faster, but the range is reduced by 25%.", "patch_era": "current", "pick_rate": 0.41},
+      {"name": "Trigger Finger", "icon": "reaper/trigger_finger.png", "tier": "major", "tier_swapped": false, "ability": "Dire Triggers", "effect": "Refresh Dire Triggers' cooldown whenever using an ability or reloading.", "patch_era": "current", "pick_rate": 0.59},
+      {"name": "Death's Shadow", "icon": "reaper/death_s_shadow.png", "tier": "minor", "tier_swapped": false, "ability": "Shadow Step / Hellfire Shotguns", "effect": "Shadow Step reloads hellfire shotguns and has 25% increased range.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Ravenous Wraith", "icon": "reaper/ravenous_wraith.png", "tier": "major", "tier_swapped": false, "ability": "Wraith Form", "effect": "Leaving Wraith Form grants 40% additional lifesteal for 3 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 19."}
+    ]},
+    "reinhardt": {"name": "Reinhardt", "perks": [
+      {"name": "Crusader's Fire", "icon": "reinhardt/crusader_s_fire.png", "tier": "minor", "tier_swapped": false, "ability": "Charge / Fire Strike", "effect": "Refund a charge of Fire Strike When you stun an enemy, overfilling up to 3.", "patch_era": "current", "pick_rate": 0.22},
+      {"name": "Crusader's Resolve", "icon": "reinhardt/crusader_s_resolve.png", "tier": "minor", "tier_swapped": false, "ability": "Barrier Field", "effect": "While using Barrier Field, your passive health regeneration triggers 75% sooner.", "patch_era": "current", "pick_rate": 0.78, "history_note": "Removed in Season 18, Re-added Reign of Talon Season 1: Conquest"},
+      {"name": "Ignited Fury", "icon": "reinhardt/ignited_fury.png", "tier": "major", "tier_swapped": false, "ability": "Fire Strike", "effect": "For each enemy you hit with Fire Strike, gain 2 seconds of 25% increased attack speed.", "patch_era": "current", "pick_rate": 0.43},
+      {"name": "Shield Slam", "icon": "reinhardt/shield_slam.png", "tier": "major", "tier_swapped": false, "ability": "Barrier Field", "effect": "While Barrier Field is active, use Primary Fire to damage and knockback enemies.", "patch_era": "current", "pick_rate": 0.57},
+      {"name": "Barrier Re-charge", "icon": "reinhardt/barrier_re_charge.png", "tier": "minor", "tier_swapped": false, "ability": "Charge / Barrier Field", "effect": "Distance travelled while using Charge regenerates your Barrier Field by 200 per second.", "patch_era": "legacy"},
+      {"name": "Fiery Uptake", "icon": "reinhardt/fiery_uptake.png", "tier": "minor", "tier_swapped": false, "ability": "Barrier Field / Fire Strike", "effect": "Barrier Field is healed for 100% of Fire Strike's damage dealt.", "patch_era": "legacy"},
+      {"name": "Crushing Victory", "icon": "reinhardt/crushing_victory.png", "tier": "major", "tier_swapped": false, "ability": "Charge", "effect": "Charge damage grants temporary overhealth for 100% of the damage dealt.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "roadhog": {"name": "Roadhog", "perks": [
+      {"name": "Scrap Hook", "icon": "roadhog/scrap_hook.png", "tier": "minor", "tier_swapped": false, "ability": "Chain Hook", "effect": "Chain Hook hits reload 2 ammo.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Shrapnel Launcher", "icon": "roadhog/shrapnel_launcher.png", "tier": "minor", "tier_swapped": false, "ability": "Scrap Gun", "effect": "Extend the range of Scrap Gun's secondary fire by 50% and tighten its burst spread by 25%.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Hogdrogen Exposure", "icon": "roadhog/hogdrogen_exposure.png", "tier": "major", "tier_swapped": false, "ability": "Take a Breather", "effect": "Take A Breather also heals nearby allies for 50% of its healing.", "patch_era": "current", "pick_rate": 0.72, "history_note": "Removed in Season 18, re-added in Reign of Talon Season 2: Summit"},
+      {"name": "Pulled Pork", "icon": "roadhog/pulled_pork.png", "tier": "major", "tier_swapped": false, "ability": "Chain Hook", "effect": "Gain overhealth based on how far you pull enemies with Chain Hook, up to 300.", "patch_era": "current", "pick_rate": 0.28},
+      {"name": "Hog Toss", "icon": "roadhog/hog_toss.png", "tier": "minor", "tier_swapped": false, "ability": "Pig Pen", "effect": "Pig Pen's throw range is increased by 50% and damage is increased by 25%.", "patch_era": "legacy"},
+      {"name": "Pent Up", "icon": "roadhog/pent_up.png", "tier": "minor", "tier_swapped": false, "ability": "Pig Pen / Take a Breather", "effect": "When Pig Pen is triggered, refill 50% Take A Breather resource which can overfill.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Invigorate", "icon": "roadhog/invigorate.png", "tier": "major", "tier_swapped": false, "ability": "Take a Breather", "effect": "Take A Breather rapidly increases Roadhog's movement speed by 30%.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 2"}
+    ]},
+    "shion": {"name": "Shion", "perks": [
+      {"name": "Rapid Reload", "icon": "shion/rapid_reload.png", "tier": "minor", "tier_swapped": false, "ability": "Evade", "effect": "Evade reloads 9 ammo.", "patch_era": "current", "pick_rate": 0.11},
+      {"name": "X Machina", "icon": "shion/x_machina.png", "tier": "minor", "tier_swapped": false, "ability": "Execution", "effect": "Execution does 20% more damage to enemies below half health.", "patch_era": "current", "pick_rate": 0.89},
+      {"name": "Faces of Death", "icon": "shion/faces_of_death.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Gain all other Damage subrole passives (Recon, Specialist and Sharpshooter).", "patch_era": "current", "pick_rate": 0.68},
+      {"name": "Refuel", "icon": "shion/refuel.png", "tier": "major", "tier_swapped": false, "ability": "Joyride", "effect": "Joyride instantly restores 50 health and regenerates 20 health per second while active.", "patch_era": "current", "pick_rate": 0.32}
+    ]},
+    "sierra": {"name": "Sierra", "perks": [
+      {"name": "Full Flight", "icon": "sierra/full_flight.png", "tier": "minor", "tier_swapped": false, "ability": "Anchor Drone", "effect": "Increase Anchor Drone flight and grapple ranges by 25%.", "patch_era": "current", "pick_rate": 0.19},
+      {"name": "Tight Grip", "icon": "sierra/tight_grip.png", "tier": "minor", "tier_swapped": false, "ability": "Helix Rifle", "effect": "Helix Rifle's bullet spread tightens 70% faster and widens 30% slower.", "patch_era": "current", "pick_rate": 0.81},
+      {"name": "Locked In", "icon": "sierra/locked_in.png", "tier": "major", "tier_swapped": false, "ability": "Tracking Shot", "effect": "Hitting an enemy with Tracking Shot increases your attack speed by 20% for 2 seconds.", "patch_era": "current", "pick_rate": 0.9},
+      {"name": "Medi-Drone", "icon": "sierra/medi_drone.png", "tier": "major", "tier_swapped": false, "ability": "Anchor Drone", "effect": "Anchor Drones hold a small medkit that can heal Sierra.", "patch_era": "current", "pick_rate": 0.1}
+    ]},
+    "sigma": {"name": "Sigma", "perks": [
+      {"name": "Hyper Regeneration", "icon": "sigma/hyper_regeneration.png", "tier": "minor", "tier_swapped": false, "ability": "Hyperspheres / Experimental Barrier", "effect": "30% of Hyperspheres' damage restores Experimental Barrier's Health.", "patch_era": "current", "pick_rate": 0.84},
+      {"name": "Kinetic Cycle", "icon": "sigma/kinetic_cycle.png", "tier": "minor", "tier_swapped": false, "ability": "Kinetic Grasp / Accretion", "effect": "Absorbing projectiles with Kinetic Grasp also reduces Accretion's cooldown.", "patch_era": "current", "pick_rate": 0.16},
+      {"name": "Hyper Strike", "icon": "sigma/hyper_strike.png", "tier": "major", "tier_swapped": false, "ability": "Hyperspheres", "effect": "Every 5 direct hits with Hyperspheres, your next successful Quick Melee levitates and knocks away enemies.", "patch_era": "current", "pick_rate": 0.41},
+      {"name": "Levitation", "icon": "sigma/levitation.png", "tier": "major", "tier_swapped": false, "ability": "double jump", "effect": "Activate and hold Double Jump to briefly levitate upward.", "patch_era": "current", "pick_rate": 0.59},
+      {"name": "Massive Impact", "icon": "sigma/massive_impact.png", "tier": "minor", "tier_swapped": false, "ability": "Accretion", "effect": "Accretion's knockdown duration increases to up to 3 seconds based on travel distance.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "sojourn": {"name": "Sojourn", "perks": [
+      {"name": "Deceleration Field", "icon": "sojourn/deceleration_field.png", "tier": "minor", "tier_swapped": false, "ability": "Disruptor Shot", "effect": "Enemies hit by Disruptor Shot are slowed by 25%.", "patch_era": "current", "pick_rate": 0.4},
+      {"name": "Overcharged", "icon": "sojourn/overcharged.png", "tier": "minor", "tier_swapped": false, "ability": "Railgun / Overclock", "effect": "Railgun’s maximum energy is increased by 50 while Overclock is active.", "patch_era": "current", "pick_rate": 0.6},
+      {"name": "Dual Thrusters", "icon": "sojourn/dual_thrusters.png", "tier": "major", "tier_swapped": false, "ability": "Power Slide", "effect": "Power Slide gains an additional charge and its jump height shifts to lateral movement.", "patch_era": "current", "pick_rate": 0.75},
+      {"name": "Friction Generators", "icon": "sojourn/friction_generators.png", "tier": "major", "tier_swapped": false, "ability": "Power Slide", "effect": "While sliding, Power Slide generates up to 75 Energy.", "patch_era": "current", "pick_rate": 0.25},
+      {"name": "Extended Mag", "icon": "sojourn/extended_mag.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire", "effect": "Maximum ammo increased by 15.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Adhesive Siphon", "icon": "sojourn/adhesive_siphon.png", "tier": "major", "tier_swapped": false, "ability": "Disruptor Shot", "effect": "Disruptor Shot can stick to enemies and generates Railgun energy when dealing damage.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "soldier_76": {"name": "Soldier: 76", "perks": [
+      {"name": "Helix Propulsion", "icon": "soldier_76/helix_propulsion.png", "tier": "minor", "tier_swapped": false, "ability": "Helix Rockets", "effect": "Helix Rockets' projectile speed is increased by 50%.", "patch_era": "current", "pick_rate": 0.79},
+      {"name": "Tactical Salvo", "icon": "soldier_76/tactical_salvo.png", "tier": "minor", "tier_swapped": false, "ability": "Tactical Visor / Helix Rockets / Heavy Pulse Rifle", "effect": "During Tactical Visor, Helix Rockets' cooldown is reduced by 80% and no longer interrupts firing Heavy Pulse Rifle.", "patch_era": "current", "pick_rate": 0.21},
+      {"name": "Full Stride", "icon": "soldier_76/full_stride.png", "tier": "major", "tier_swapped": false, "ability": "Sprint", "effect": "Sprint's movement speed bonus gradually increases by an additional 25% over 2 seconds.", "patch_era": "current", "pick_rate": 0.2},
+      {"name": "Stim Pack", "icon": "soldier_76/stim_pack.png", "tier": "major", "tier_swapped": false, "ability": "Biotic Field", "effect": "Stim Pack replaces Biotic Field. On use, Soldier: 76 heals for 30 health per second and gains 20% increased attack speed for 5 seconds.", "patch_era": "current", "pick_rate": 0.8},
+      {"name": "Field Emergency", "icon": "soldier_76/field_emergency.png", "tier": "minor", "tier_swapped": false, "ability": "Biotic Field", "effect": "Biotic Field’s healing is increased by 100% on allies below half health.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Recycled Pulse Munitions", "icon": "soldier_76/recycled_pulse_munitions.png", "tier": "minor", "tier_swapped": false, "ability": "Helix Rockets", "effect": "Helix Rockets reload 15 ammo if they damage an enemy.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"},
+      {"name": "Agility Training", "icon": "soldier_76/agility_training.png", "tier": "major", "tier_swapped": false, "ability": "Sprint", "effect": "Sprint’s speed is increased by 20% and reload can be performed while sprint is active.", "patch_era": "legacy"}
+    ]},
+    "sombra": {"name": "Sombra", "perks": [
+      {"name": "CTRL ALT ESC", "icon": "sombra/ctrl_alt_esc.png", "tier": "minor", "tier_swapped": false, "ability": "Translocator", "effect": "Teleporting with Translocator while below half health initiates passive health regeneration.", "patch_era": "current", "pick_rate": 0.77},
+      {"name": "Encrypted Upload", "icon": "sombra/encrypted_upload.png", "tier": "minor", "tier_swapped": false, "ability": "Hack / Stealth", "effect": "Hack can be used while invisible, successful hacks increase the duration of stealth by 3 seconds.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "High-Speed Bandwidth", "icon": "sombra/high_speed_bandwidth.png", "tier": "major", "tier_swapped": false, "ability": "Hack / health pack", "effect": "Hacked health packs grant allies 25% movement speed and 50 overhealth for 4 seconds.", "patch_era": "current", "pick_rate": 0.14},
+      {"name": "Viral Replication", "icon": "sombra/viral_replication.png", "tier": "major", "tier_swapped": false, "ability": "Virus", "effect": "Hitting a hacked enemy with Virus spreads Virus to enemies within 8 meters.", "patch_era": "current", "pick_rate": 0.86},
+      {"name": "Viral Efficacy", "icon": "sombra/viral_efficacy.png", "tier": "minor", "tier_swapped": false, "ability": "Virus", "effect": "Virus' cooldown is reduced by 3 seconds when an enemy affected by Virus is eliminated.", "patch_era": "legacy"},
+      {"name": "Healthy Hacker", "icon": "sombra/healthy_hacker.png", "tier": "major", "tier_swapped": false, "ability": "Hack / health pack", "effect": "Hacked health packs provide up to 75 overhealth to Sombra.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"},
+      {"name": "Stack Overflow", "icon": "sombra/stack_overflow.png", "tier": "major", "tier_swapped": false, "ability": "Hack", "effect": "Hack's silence duration is increased by 100%, but its range is decreased by 15%.", "patch_era": "legacy"},
+      {"name": "White Hat", "icon": "sombra/white_hat.png", "tier": "major", "tier_swapped": false, "ability": "Hack", "effect": "Hack can be used on allies to restore 100 health over 2 seconds.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "symmetra": {"name": "Symmetra", "perks": [
+      {"name": "Perfect Alignment", "icon": "symmetra/perfect_alignment.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2025-08-26", "from": "major", "to": "minor"}], "ability": "Photon Projector", "effect": "Increase the range of Photon Projector's primary fire by 20%.", "patch_era": "current", "pick_rate": 0.81},
+      {"name": "Sentry Capacity", "icon": "symmetra/sentry_capacity.png", "tier": "minor", "tier_swapped": false, "ability": "Sentry Turret", "effect": "Sentry Turret gains an additional charge.", "patch_era": "current", "pick_rate": 0.19},
+      {"name": "Hovering Barrier", "icon": "symmetra/hovering_barrier.png", "tier": "major", "tier_swapped": false, "ability": "Teleporter", "effect": "Teleporter gains the option to create a forward moving barrier instead. Pressing Ability 2 again slows down the barrier's movement.", "patch_era": "current", "pick_rate": 0.17},
+      {"name": "Shield Battery", "icon": "symmetra/shield_battery.png", "tier": "major", "tier_swapped": false, "ability": "Teleporter", "effect": "Symmetra regenerates 20 shields per second while within 10 meters of her teleporter.", "patch_era": "current", "pick_rate": 0.83},
+      {"name": "Advanced Teleportation", "icon": "symmetra/advanced_teleportation.png", "tier": "minor", "tier_swapped": false, "ability": "Teleporter", "effect": "Teleporter’s range is increased by 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "torbjorn": {"name": "Torbjörn", "perks": [
+      {"name": "Hammer Time", "icon": "torbjorn/hammer_time.png", "tier": "minor", "tier_swapped": false, "ability": "Forge Hammer", "effect": "Move 20% faster while Forge Hammer is equipped.", "patch_era": "current", "pick_rate": 0.39},
+      {"name": "Pre-Heated", "icon": "torbjorn/pre_heated.png", "tier": "minor", "tier_swapped": false, "ability": "Molten Core / Overload", "effect": "Molten Core activates Overload.", "patch_era": "current", "pick_rate": 0.61},
+      {"name": "Anchor Bolts", "icon": "torbjorn/anchor_bolts.png", "tier": "major", "tier_swapped": false, "ability": "Deploy Turret", "effect": "Deploy Turret's throw range is increased by 25% and it can now attach to walls and ceilings.", "patch_era": "current", "pick_rate": 0.84},
+      {"name": "Overloaded Turret", "icon": "torbjorn/overloaded_turret.png", "tier": "major", "tier_swapped": false, "ability": "Overload", "effect": "Overload upgrades your Turret for 5 seconds, increasing its health and damage.", "patch_era": "current", "pick_rate": 0.16},
+      {"name": "Craftsman", "icon": "torbjorn/craftsman.png", "tier": "minor", "tier_swapped": false, "ability": "Forge Hammer", "effect": "Forge Hammer can restore armor health to allies. Turret gains 25 increased HP and Turret repair's heal is increased by 25%.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Fully Loaded", "icon": "torbjorn/fully_loaded.png", "tier": "minor", "tier_swapped": false, "ability": "Overload / Rivet Gun", "effect": "Activating Overload fully refills Rivet Gun's ammo.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"}
+    ]},
+    "tracer": {"name": "Tracer", "perks": [
+      {"name": "Kinetic Reload", "icon": "tracer/kinetic_reload.png", "tier": "minor", "tier_swapped": false, "ability": "Pulse Pistols / melee", "effect": "Melee hits grant 12 ammo.", "patch_era": "current", "pick_rate": 0.4},
+      {"name": "Temporal Regen", "icon": "tracer/temporal_regen.png", "tier": "minor", "tier_swapped": false, "ability": "passive", "effect": "Passive health regeneration triggers 100% faster.", "patch_era": "current", "pick_rate": 0.6},
+      {"name": "Blink Packs", "icon": "tracer/blink_packs.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "minor", "to": "major"}], "ability": "health pack", "effect": "Health Packs restore 1 Blink charge.", "patch_era": "current", "pick_rate": 0.3},
+      {"name": "Quantum Entanglement", "icon": "tracer/quantum_entanglement.png", "tier": "major", "tier_swapped": false, "ability": "Recall", "effect": "Recall grants 50 overhealth and 20 ammo that decays over time.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Blast from the Past", "icon": "tracer/blast_from_the_past.png", "tier": "minor", "tier_swapped": false, "ability": "Pulse Bomb", "effect": "Pulse Bomb's radius is increased by 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Chronal Dash", "icon": "tracer/chronal_dash.png", "tier": "minor", "tier_swapped": false, "ability": "Blink", "effect": "Blink distance increased by 20%.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 4"},
+      {"name": "Flashback", "icon": "tracer/flashback.png", "tier": "major", "tier_swapped": false, "ability": "Recall", "effect": "Recall increases Blink recovery rate by 150% for 3 seconds.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"}
+    ]},
+    "vendetta": {"name": "Vendetta", "perks": [
+      {"name": "Extra Edge", "icon": "vendetta/extra_edge.png", "tier": "minor", "tier_swapped": false, "ability": "Projected Edge", "effect": "Projected Edge costs 25% less energy.", "patch_era": "current", "pick_rate": 0.35},
+      {"name": "Raging Storm", "icon": "vendetta/raging_storm.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-03-10", "from": "major", "to": "minor"}], "ability": "Whirlwind Dash", "effect": "Whirlwind Dash continues to spin, hitting 3 more times for 30 damage in a wide area.", "patch_era": "current", "pick_rate": 0.65},
+      {"name": "Relentless", "icon": "vendetta/relentless.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "minor", "to": "major"}], "ability": "Onslaught", "effect": "Onslaught can stack 3 more times, increasing attack speed by 5% and movement speed by 3% per stack.", "patch_era": "current", "pick_rate": 0.3},
+      {"name": "Siphoning Strike", "icon": "vendetta/siphoning_strike.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-03-10", "from": "minor", "to": "major"}], "ability": null, "effect": "Overhead strikes gain 40% Lifesteal.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Swift Vengeance", "icon": "vendetta/swift_vengeance.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Last player to land a killing blow on you becomes a target. Eliminate the target to gain 150 overhealth and reset cooldowns.", "patch_era": "legacy", "history_note": "Removed in Season 1: Conquest"}
+    ]},
+    "venture": {"name": "Venture", "perks": [
+      {"name": "Deep Burrow", "icon": "venture/deep_burrow.png", "tier": "minor", "tier_swapped": false, "ability": "Drill Dash / Burrow", "effect": "Drill Dash distance is 75% longer while while burrowing.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Excavation Exhilaration", "icon": "venture/excavation_exhilaration.png", "tier": "minor", "tier_swapped": false, "ability": "Tectonic Shock", "effect": "While Tectonic Shock is active, cooldowns refresh 300% faster.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Covered in Dirt", "icon": "venture/covered_in_dirt.png", "tier": "major", "tier_swapped": false, "ability": "Clobber / Explorer's Resolve", "effect": "Dealing damage with Clobber grants up to 40 Explorer's Resolve shields.", "patch_era": "current", "pick_rate": 0.25},
+      {"name": "Smart Extender", "icon": "venture/smart_extender.png", "tier": "major", "tier_swapped": false, "ability": "Smart Excavator", "effect": "Empower SMART Excavator with E to increase its maximum projectile range by 100% for 4 seconds.", "patch_era": "current", "pick_rate": 0.75},
+      {"name": "Seismic Sense", "icon": "venture/seismic_sense.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "While underground, Venture can sense enemies within 25 meters.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "SMART-R Excavator", "icon": "venture/smart_r_excavator.png", "tier": "major", "tier_swapped": false, "ability": "Smart Excavator", "effect": "SMART Excavator's range is increased by 25%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "widowmaker": {"name": "Widowmaker", "perks": [
+      {"name": "Scoped Efficiency", "icon": "widowmaker/scoped_efficiency.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire (scoped)", "effect": "Scoped shots cost 3 ammo instead of 5.", "patch_era": "current", "pick_rate": 0.78},
+      {"name": "Sniper's Instinct", "icon": "widowmaker/sniper_s_instinct.png", "tier": "minor", "tier_swapped": false, "ability": "Grappling Hook", "effect": "Scoped shots charge 100% faster for 2 seconds after using Grappling Hook.", "patch_era": "current", "pick_rate": 0.22},
+      {"name": "Seeker Mine", "icon": "widowmaker/seeker_mine.png", "tier": "major", "tier_swapped": false, "ability": "Venom Mine", "effect": "Venom Mine now fires poison darts at enemies within 10 meters and remains active after triggered.", "patch_era": "current", "pick_rate": 0.09},
+      {"name": "Widow’s Bite", "icon": "widowmaker/widows_bite.png", "tier": "major", "tier_swapped": false, "ability": "primary fire (scoped)", "effect": "Scoped shots can charge up to 125%, piercing enemies when fully charged.", "patch_era": "current", "pick_rate": 0.91},
+      {"name": "Focused Aim", "icon": "widowmaker/focused_aim.png", "tier": "minor", "tier_swapped": false, "ability": "Infra-Sight", "effect": "Scoped shots charge 50% faster during Infra-Sight.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Deadly Deux", "icon": "widowmaker/deadly_deux.png", "tier": "major", "tier_swapped": false, "ability": "Venom Mine", "effect": "Venom Mine gains 100% increased damage and a second charge, enabling 2 active mines at a time.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Escape Plan", "icon": "widowmaker/escape_plan.png", "tier": "major", "tier_swapped": false, "ability": "Grappling Hook", "effect": "Scoped shot hits reduce Grappling Hook's cooldown by up to 4 seconds.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"}
+    ]},
+    "winston": {"name": "Winston", "perks": [
+      {"name": "Electric Charge", "icon": "winston/electric_charge.png", "tier": "minor", "tier_swapped": false, "ability": "Tesla Cannon", "effect": "Winston gains 10% movement speed for each enemy damaged by his primary fire, up to 30%.", "patch_era": "current", "pick_rate": 0.77},
+      {"name": "Heavy Landing", "icon": "winston/heavy_landing.png", "tier": "minor", "tier_swapped": false, "ability": "Jump Pack / Primal Rage", "effect": "During Primal Rage, Jump Pack's damage and area increase by up to 75% while airborne.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Chain Lightning", "icon": "winston/chain_lightning.png", "tier": "major", "tier_swapped": false, "ability": "Tesla Cannon (secondary)", "effect": "Fully charged Secondary Fire hits bounce to up to 2 additional targets.", "patch_era": "current", "pick_rate": 0.2, "icon_note": "icon shows exactly 3 linked nodes — 1 primary + 2 bounces"},
+      {"name": "Revitalizing Barrier", "icon": "winston/revitalizing_barrier.png", "tier": "major", "tier_swapped": false, "ability": "Barrier Projector", "effect": "Barrier Projector heals allies within it for 35 health per second.", "patch_era": "current", "pick_rate": 0.8},
+      {"name": "Barrier Toss", "icon": "winston/barrier_toss.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Winston now throws his barrier forward when used.", "patch_era": "legacy"},
+      {"name": "Short Circuit", "icon": "winston/short_circuit.png", "tier": "minor", "tier_swapped": false, "ability": "Tesla Cannon", "effect": "Tesla Cannon deals 100% more damage to deployable objects, such as turrets and barriers.", "patch_era": "legacy", "history_note": "Removed in Season 18, integrated into base kit in Reign of Talon Season 2."}
+    ]},
+    "wrecking_ball": {"name": "Wrecking Ball", "perks": [
+      {"name": "Multi-Ball", "icon": "wrecking_ball/multi_ball.png", "tier": "minor", "tier_swapped": false, "ability": "Minefield", "effect": "Press Ultimate within 5 seconds after using Minefield to deploy 7 additional mines.", "patch_era": "current", "pick_rate": 0.59},
+      {"name": "Steamroller", "icon": "wrecking_ball/steamroller.png", "tier": "minor", "tier_swapped": false, "ability": "Roll / Grappling Claw", "effect": "Roll impacts deal 100% more damage to Tanks.", "patch_era": "current", "pick_rate": 0.41},
+      {"name": "Adaptive Barrier", "icon": "wrecking_ball/adaptive_barrier.png", "tier": "major", "tier_swapped": false, "ability": "Adaptive Shield", "effect": "Adaptive Shield generates a 1 second barrier on activation.", "patch_era": "current", "pick_rate": 0.84},
+      {"name": "Hang Time", "icon": "wrecking_ball/hang_time.png", "tier": "major", "tier_swapped": false, "ability": "Piledriver", "effect": "Piledriver winds up longer, gaining air control and dealing up to 50% more damage.", "patch_era": "current", "pick_rate": 0.16},
+      {"name": "Pack Rat", "icon": "wrecking_ball/pack_rat.png", "tier": "minor", "tier_swapped": false, "ability": "health pack", "effect": "Health Packs heal an additional 100 health.", "patch_era": "legacy"},
+      {"name": "Transfer Efficiency", "icon": "wrecking_ball/transfer_efficiency.png", "tier": "major", "tier_swapped": false, "ability": "Adaptive Shield", "effect": "Reactivating Adaptive Shield reduces its cooldown by 1.5 seconds per ally affected and the transfer cost is reduced by 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "wuyang": {"name": "Wuyang", "perks": [
+      {"name": "Balance", "icon": "wuyang/balance.png", "tier": "minor", "tier_swapped": false, "ability": "Restorative Stream", "effect": "When you deal damage with water orbs, increase Restorative Stream's passive healing by 30% for 2 seconds.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Overflow", "icon": "wuyang/overflow.png", "tier": "minor", "tier_swapped": false, "ability": "Rushing Torrent", "effect": "Gain 10 ammo and 50% healing resource when Rushing Torrent is activated.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Ebb and Flow", "icon": "wuyang/ebb_and_flow.png", "tier": "major", "tier_swapped": false, "ability": "Guardian Wave", "effect": "Guardian Wave rewinds to its starting location.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Falling Rain", "icon": "wuyang/falling_rain.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Simultaneously control 3 water orbs that deal 60% decreased damage and have have 25% decreased empowered explosion radius.", "patch_era": "current", "pick_rate": 0.77}
+    ]},
+    "zarya": {"name": "Zarya", "perks": [
+      {"name": "Jump-Ups", "icon": "zarya/jump_ups.png", "tier": "minor", "tier_swapped": false, "ability": "secondary fire", "effect": "Secondary Fire's self-knockback is increased by 75%.", "patch_era": "current", "pick_rate": 0.24},
+      {"name": "Spotter", "icon": "zarya/spotter.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "major", "to": "minor"}], "ability": "Projected Barrier", "effect": "Projected Barrier activates ally health regeneration and increases their movement speed by 20%.", "patch_era": "current", "pick_rate": 0.76},
+      {"name": "Energy Lance", "icon": "zarya/energy_lance.png", "tier": "major", "tier_swapped": false, "ability": "Particle Cannon", "effect": "Particle Cannon's beam pierces enemies.", "patch_era": "current", "pick_rate": 0.15},
+      {"name": "Extra Oomph", "icon": "zarya/extra_oomph.png", "tier": "major", "tier_swapped": false, "ability": "Particle Cannon / Energy", "effect": "While a Barrier is active, dealing damage with Particle Cannon’s beam generates energy.", "patch_era": "current", "pick_rate": 0.85},
+      {"name": "Energy Converter", "icon": "zarya/energy_converter.png", "tier": "minor", "tier_swapped": false, "ability": "Particle Cannon / Energy", "effect": "Hits with Particle Cannon's secondary fire generate 2 energy.", "patch_era": "legacy"},
+      {"name": "Graviton Crush", "icon": "zarya/graviton_crush.png", "tier": "minor", "tier_swapped": false, "ability": "Graviton Surge", "effect": "Graviton Surge deals up to 40% of enemy max health as damage over time.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]},
+    "zenyatta": {"name": "Zenyatta", "perks": [
+      {"name": "Ascendance", "icon": "zenyatta/ascendance.png", "tier": "minor", "tier_swapped": false, "ability": "double jump", "effect": "Activate and hold Double Jump to hover for up to 3 seconds.", "patch_era": "current", "pick_rate": 0.61},
+      {"name": "Discordant Repair", "icon": "zenyatta/discordant_repair.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "Zenyatta gains 15% lifesteal against enemies affected by Discord Orb.", "patch_era": "current", "pick_rate": 0.39},
+      {"name": "Dual Harmony", "icon": "zenyatta/dual_harmony.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Gain a 2nd Harmony Orb but they both heal for 70% effectiveness.", "patch_era": "current", "pick_rate": 0.59},
+      {"name": "Focused Destruction", "icon": "zenyatta/focused_destruction.png", "tier": "major", "tier_swapped": false, "ability": "Orb of Destruction", "effect": "Secondary fire charges 20% faster and can store 1 extra Orb of Destruction.", "patch_era": "current", "pick_rate": 0.41},
+      {"name": "Transcendent Condemnation", "icon": "zenyatta/transcendent_condemnation.png", "tier": "minor", "tier_swapped": false, "ability": "Transcendence", "effect": "While using Transcendence, apply Discord Orb to all enemies within range.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"},
+      {"name": "Zenith Kick", "icon": "zenyatta/zenith_kick.png", "tier": "minor", "tier_swapped": false, "ability": "Snap Kick", "effect": "Snap Kick's knockback distance is increased by 30%.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
+      {"name": "Duality", "icon": "zenyatta/duality.png", "tier": "major", "tier_swapped": false, "ability": "Orb of Harmony / Orb of Discord", "effect": "Zenyatta heals Orb of Harmony targets for 40% of his damage dealt to Orb of Discord targets.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
+    ]}
+  }
+}
