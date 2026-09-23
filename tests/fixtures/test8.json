@@ -1,14 +1,14 @@
 {
  "image": "test8.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified.",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
  "header": {
   "mode": "Push",
   "map": "Esperança",
   "time": "9:27",
   "bans": [
    "roadhog",
-   null,
+   "wuyang",
    "freja",
    "wrecking_ball"
   ],
@@ -73,7 +73,7 @@
    "team": "top",
    "player": "KINGSOULS",
    "title": "Giant Troll",
-   "hero": null,
+   "hero": "hazard",
    "role": "tank",
    "perks": [
     null,
@@ -90,7 +90,7 @@
    "team": "top",
    "player": "SPICE",
    "title": "Divine Being",
-   "hero": "hazard",
+   "hero": "junker_queen",
    "role": "tank",
    "perks": [
     null,

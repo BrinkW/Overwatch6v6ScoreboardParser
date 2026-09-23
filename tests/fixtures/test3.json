@@ -1,14 +1,14 @@
 {
  "image": "test3.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified.",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
  "header": {
   "mode": "Control",
   "map": "Oasis",
   "time": "7:16",
   "bans": [
-   null,
-   null,
+   "vendetta",
+   "bastion",
    "d_va",
    "lucio"
   ],
@@ -192,7 +192,7 @@
    "team": "bottom",
    "player": "LIV",
    "title": "n00b",
-   "hero": "hazard",
+   "hero": "junker_queen",
    "role": "tank",
    "perks": [
     "none",

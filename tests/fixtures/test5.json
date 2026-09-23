@@ -1,14 +1,14 @@
 {
  "image": "test5.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Top row 6 player name is Korean ('바람'), left null.",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
  "header": {
   "mode": "Control",
   "map": "Oasis",
   "time": "12:46",
   "bans": [
-   null,
-   null,
+   "bastion",
+   "vendetta",
    "roadhog",
    "zarya"
   ],
@@ -39,7 +39,7 @@
    "team": "top",
    "player": "CRAZYHOBO",
    "title": "Monstrosity",
-   "hero": "hazard",
+   "hero": "junker_queen",
    "role": "tank",
    "perks": [
     null,
@@ -90,7 +90,7 @@
    "team": "top",
    "player": "YEAT",
    "title": "Paladin",
-   "hero": null,
+   "hero": "venture",
    "role": "damage",
    "perks": [
     null,
@@ -105,9 +105,9 @@
   },
   {
    "team": "top",
-   "player": null,
+   "player": "바람",
    "title": "Grandmaster Damage",
-   "hero": null,
+   "hero": "pharah",
    "role": "damage",
    "perks": [
     null,

@@ -1,7 +1,7 @@
 {
  "image": "test1.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Top row 3 player name uses non-Latin glyphs (reads like 'DĚXŦER'), left null.",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Top row 3 name ends in a character the game could not render (drawn as an empty box); stored as U+FFFD.",
  "header": {
   "mode": "Escort",
   "map": "Shambali Monastery",
@@ -9,8 +9,8 @@
   "bans": [
    "zarya",
    "kiriko",
-   null,
-   null
+   "bastion",
+   "orisa"
   ],
   "rank_range": [
    "Grandmaster 3",
@@ -54,7 +54,7 @@
   },
   {
    "team": "top",
-   "player": null,
+   "player": "DĔXŦER�",
    "title": null,
    "hero": "ashe",
    "role": "damage",

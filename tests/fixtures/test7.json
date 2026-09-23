@@ -1,16 +1,16 @@
 {
  "image": "test7.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified.",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
  "header": {
   "mode": "Hybrid",
   "map": "King's Row",
   "time": "14:29",
   "bans": [
    "roadhog",
-   null,
-   null,
-   null
+   "vendetta",
+   "ramattra",
+   "bastion"
   ],
   "rank_range": [
    "Master 1",

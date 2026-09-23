@@ -1,7 +1,7 @@
 {
  "image": "test10.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified.",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified.",
  "header": {
   "mode": "Escort",
   "map": "Dorado",
@@ -9,7 +9,7 @@
   "bans": [
    "orisa",
    "wrecking_ball",
-   null,
+   "bastion",
    "widowmaker"
   ],
   "rank_range": [
@@ -107,7 +107,7 @@
    "team": "top",
    "player": "WHYSOGENIUS",
    "title": null,
-   "hero": null,
+   "hero": "vendetta",
    "role": "damage",
    "perks": [
     null,
@@ -175,7 +175,7 @@
    "team": "bottom",
    "player": "JOYSTICKTTV",
    "title": "Champion Open Competitor",
-   "hero": null,
+   "hero": "vendetta",
    "role": "damage",
    "perks": [
     null,

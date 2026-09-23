@@ -1,175 +1,158 @@
 {
- "image": "test2.png",
- "verified": false,
- "note": "Transcribed by Claude from full-resolution crops; spot-check before trusting. null = not read confidently (never scored). perks: \"none\" = empty slot, null = present but unidentified. Rescaled, blurry capture; cyan/yellow team colours. Bottom row 3 name is non-Latin ('DəKǓ'), left null. Left rank division digit is blurry (read as 5).",
+ "image": "test2.jpg",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Formerly test4.jpg (a different match from test4.png). JPEG compression. BLACK! is in a non-display font.",
  "header": {
   "mode": "Flashpoint",
   "map": "Suravasa",
-  "time": "16:47",
+  "time": "12:13",
   "bans": [
-   null,
-   null,
-   null,
-   "wrecking_ball"
+   "vendetta",
+   "roadhog",
+   "bastion",
+   "orisa"
   ],
   "rank_range": [
-   "Grandmaster 5",
-   "Champion 2"
+   "Master 1",
+   "Grandmaster 1"
   ]
  },
  "rows": [
   {
    "team": "top",
-   "player": "DANCER",
+   "player": "BLACK!",
    "title": null,
-   "hero": "lucio",
-   "role": "support",
-   "perks": [
-    null,
-    null
-   ],
-   "E": 33,
-   "A": 26,
-   "D": 11,
-   "DMG": 10616,
-   "H": 11483,
-   "MIT": 4227
-  },
-  {
-   "team": "top",
-   "player": "1SHOT1KILL",
-   "title": "Nomad",
-   "hero": null,
-   "role": "damage",
-   "perks": [
-    null,
-    null
-   ],
-   "E": 26,
-   "A": 3,
-   "D": 13,
-   "DMG": 12640,
-   "H": 0,
-   "MIT": 3028
-  },
-  {
-   "team": "top",
-   "player": "FREDMASTER45",
-   "title": "Epic Gunslinger",
-   "hero": "reinhardt",
+   "hero": "wrecking_ball",
    "role": "tank",
-   "perks": [
-    null,
-    null
-   ],
-   "E": 24,
-   "A": 2,
-   "D": 15,
-   "DMG": 11190,
-   "H": 0,
-   "MIT": 39390
-  },
-  {
-   "team": "top",
-   "player": "GIBBA",
-   "title": null,
-   "hero": "d_va",
-   "role": "tank",
-   "perks": [
-    "none",
-    null
-   ],
-   "E": 38,
-   "A": 17,
-   "D": 11,
-   "DMG": 16108,
-   "H": 2104,
-   "MIT": 9066
-  },
-  {
-   "team": "top",
-   "player": "MUFFIN",
-   "title": null,
-   "hero": "juno",
-   "role": "support",
    "perks": [
     null,
     null
    ],
    "E": 29,
-   "A": 34,
-   "D": 6,
-   "DMG": 9213,
-   "H": 19002,
-   "MIT": 0
+   "A": 14,
+   "D": 9,
+   "DMG": 11393,
+   "H": 0,
+   "MIT": 4837
   },
   {
    "team": "top",
-   "player": "RONRON",
-   "title": null,
+   "player": "BLIP",
+   "title": "Headliner",
    "hero": "reaper",
    "role": "damage",
    "perks": [
     null,
     null
    ],
-   "E": 31,
-   "A": 0,
-   "D": 13,
-   "DMG": 11045,
-   "H": 1606,
-   "MIT": 0
+   "E": 29,
+   "A": 1,
+   "D": 8,
+   "DMG": 14396,
+   "H": 2085,
+   "MIT": 37
   },
   {
-   "team": "bottom",
-   "player": "ALUCARB",
-   "title": "Cozy Homebody",
-   "hero": "kiriko",
+   "team": "top",
+   "player": "BLUE",
+   "title": "Open Challenger",
+   "hero": "lucio",
    "role": "support",
    "perks": [
     null,
     null
    ],
-   "E": 18,
-   "A": 37,
-   "D": 15,
-   "DMG": 3651,
-   "H": 16437,
-   "MIT": 1383
+   "E": 20,
+   "A": 26,
+   "D": 7,
+   "DMG": 6180,
+   "H": 13727,
+   "MIT": 3618
   },
   {
-   "team": "bottom",
-   "player": "CODCODE904",
+   "team": "top",
+   "player": "ECLIPSE",
    "title": null,
-   "hero": "junkrat",
-   "role": "damage",
+   "hero": "moira",
+   "role": "support",
    "perks": [
     null,
     null
    ],
    "E": 32,
-   "A": 6,
-   "D": 15,
-   "DMG": 17799,
-   "H": 0,
+   "A": 24,
+   "D": 2,
+   "DMG": 12117,
+   "H": 14922,
    "MIT": 0
   },
   {
-   "team": "bottom",
-   "player": null,
-   "title": "Kitten of Discord",
-   "hero": "tracer",
+   "team": "top",
+   "player": "REDHUNTER",
+   "title": "6v6 Enthusiast",
+   "hero": "zarya",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 27,
+   "A": 12,
+   "D": 5,
+   "DMG": 12848,
+   "H": 0,
+   "MIT": 7202
+  },
+  {
+   "team": "top",
+   "player": "SEWERRAT",
+   "title": "Vulture",
+   "hero": "cassidy",
    "role": "damage",
    "perks": [
     null,
     null
    ],
-   "E": 36,
-   "A": 4,
+   "E": 29,
+   "A": 5,
+   "D": 10,
+   "DMG": 12969,
+   "H": 46,
+   "MIT": 89
+  },
+  {
+   "team": "bottom",
+   "player": "ANDYGDH",
+   "title": "Bottom 500",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 24,
+   "A": 6,
+   "D": 8,
+   "DMG": 12177,
+   "H": 264,
+   "MIT": 6716
+  },
+  {
+   "team": "bottom",
+   "player": "ANIMAFAN",
+   "title": "All-Star",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 12,
+   "A": 2,
    "D": 14,
-   "DMG": 14127,
-   "H": 0,
-   "MIT": 658
+   "DMG": 10506,
+   "H": 214,
+   "MIT": 862
   },
   {
    "team": "bottom",
@@ -181,46 +164,63 @@
     null,
     null
    ],
-   "E": 26,
-   "A": 41,
-   "D": 12,
-   "DMG": 5772,
-   "H": 15661,
-   "MIT": 4468
+   "E": 17,
+   "A": 17,
+   "D": 8,
+   "DMG": 5815,
+   "H": 13019,
+   "MIT": 3381
   },
   {
    "team": "bottom",
-   "player": "L3RNT",
-   "title": "6v6 Enthusiast",
-   "hero": "orisa",
+   "player": "KINGSOULS",
+   "title": "Giant Troll",
+   "hero": "mauga",
    "role": "tank",
    "perks": [
     null,
     null
    ],
-   "E": 50,
-   "A": 10,
-   "D": 11,
-   "DMG": 18991,
-   "H": 0,
-   "MIT": 27756
-  },
-  {
-   "team": "bottom",
-   "player": "SINKORSWIM",
-   "title": null,
-   "hero": "d_va",
-   "role": "tank",
-   "perks": [
-    null,
-    null
-   ],
-   "E": 43,
-   "A": 27,
+   "E": 22,
+   "A": 11,
    "D": 10,
-   "DMG": 12780,
-   "H": 0,
-   "MIT": 14519
+   "DMG": 15992,
+   "H": 1906,
+   "MIT": 6373
+  },
+  {
+   "team": "bottom",
+   "player": "KUDU",
+   "title": "Ant Overlord",
+   "hero": "moira",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 13,
+   "A": 22,
+   "D": 8,
+   "DMG": 7735,
+   "H": 11806,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "PURPZUKI",
+   "title": "GOAT of All Time",
+   "hero": "brigitte",
+   "role": "support",
+   "perks": [
+    null,
+    null
+   ],
+   "E": 13,
+   "A": 13,
+   "D": 11,
+   "DMG": 5626,
+   "H": 9070,
+   "MIT": 1250
   }
  ]
 }
