@@ -102,8 +102,8 @@ def main(argv=None):
         for f in flags:
             print("  " + f)
     if args.tier_gaps and gaps:
-        print(f"\nTier data gaps ({sum(gaps.values())} slots): the slot rule proves these tiers at capture time,")
-        print("but perks.json's tier history never records them (a patch the wiki change log misses):")
+        print(f"\nTier data gaps ({sum(gaps.values())}): these rows break the tier rules (two perks = one major +")
+        print("one minor; a lone perk = minor) under perks.json's tier history, so the history is incomplete:")
         for note, n in sorted(gaps.items()):
             print(f"  {n:2}x  {note}")
     return 0 if not mismatches else 1
