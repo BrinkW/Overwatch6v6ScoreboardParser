@@ -9,7 +9,7 @@ It maintains:
 
 | File | What |
 |---|---|
-| `reference/heroes.json` | Roster: every hero, their role/subrole, wiki page, owperks page, release status |
+| `reference/heroes.json` | Roster: every hero, their role/subrole, wiki page, owperks page, official page, release status |
 | `reference/perks.json` | Every perk that has an icon, live and removed, with tier, tier history and pick rate |
 | `assets/bans/<slug>.png` | 256×256 ban icon (3D render), wiki `File:Icon-<Name>.png` |
 | `assets/heroes/<slug>.png` | 256×256 illustrated portrait, wiki `File:<Name> Hero.png` |
@@ -80,9 +80,21 @@ A full run takes about a minute, mostly waiting on network requests.
    - A `current` perk that is no longer live is **retired**: it becomes
      `legacy`, loses its `pick_rate` field, and gets a `history_note`.
    - A perk whose owperks slot tier differs from the JSON gets its `tier`
-     updated, `tier_swapped: true`, and a dated `tier_history` entry. It is now
-     exempt from the slot check (see below).
-5. **Validate**, then write (with `--apply`) and print the report.
+     updated, `tier_swapped: true`, and a dated `tier_history` entry.
+5. **Official art.** For every hero with an official page on
+   overwatch.blizzard.com (`blizzard_path` in `heroes.json`), each live perk's
+   icon is compared with ours by alpha mask.
+   - The game sometimes redraws an icon after the wikis uploaded theirs (e.g.
+     Baptiste's Automated Healing and Soldier's Stim Pack, found 2026-09-23).
+   - Any official art that matches none of our versions is **added** as
+     `assets/perks/<hero>/<perk>__official_<sha1>.png` and listed under the
+     perk's `alt_icons`. The old art stays, because older screenshots show it.
+     The parser uses every version as a template.
+   - A live perk the official page shows that `perks.json` lacks, or an official
+     tier that disagrees with ours, is reported as a conflict. The official page
+     occasionally misspells a name ("MEKA Mobilitiy"), so names are matched
+     fuzzily.
+6. **Validate**, then write (with `--apply`) and print the report.
 
 ## Rules
 
@@ -96,10 +108,16 @@ A full run takes about a minute, mostly waiting on network requests.
   real lobbies. Once we compute rates from our own parsed screenshots, set
   `pick_rate_source` to `"local"`: the sync then never adds, changes or
   removes `pick_rate`. It still retires perks and tracks tiers.
-- **Tier-swapped perks skip the slot check.** A perk that has been both minor
-  and major can legally appear in either scoreboard slot, depending on the
-  patch the screenshot came from. See `_meta.slot_check_policy` in
-  `perks.json`.
+- **Slot order is a hard rule; tier history is the fallible part.** On the
+  scoreboard, with two perks the left is major and the right minor; a lone perk
+  is minor. So each slot proves a perk's tier *at capture time*. When a
+  screenshot proves a tier `tier_history` never recorded,
+  `python tools/evaluate.py --tier-gaps` lists it. The sync can't fill those
+  gaps (the wiki change logs don't record them): add the move to the perk's
+  `tier_history` by hand once its patch date is known. See
+  `_meta.slot_check_policy` in `perks.json`.
+- **Old perk art is never replaced.** New official art is added next to it
+  (`alt_icons`), because screenshots from older patches still show the old icon.
 - **Pending.** A perk that can't be added yet goes to `_meta.pending[<slug>]`
   with a `reason`: either no icon on the wiki yet, or the wiki calls it current
   but owperks doesn't show it live. Pending is regenerated every run, and
@@ -110,7 +128,7 @@ A full run takes about a minute, mostly waiting on network requests.
 
 | Section | Meaning / what to do |
 |---|---|
-| Roster, Hero icons, New perks, Retired perks, Reactivated perks, Tier changes, Pick-rate changes, Migrations | Changes. Check they look right, then `--apply`. |
+| Roster, Hero icons, New perks, Official art, Retired perks, Reactivated perks, Tier changes, Pick-rate changes, Migrations | Changes. Check they look right, then `--apply`. |
 | Pending | Normal for revealed or unreleased content (e.g. Doctrine before launch). Nothing to do. |
 | Warnings | Something unusual but not blocking, e.g. a wiki icon at the wrong size. Worth a look. |
 | **CONFLICTS** | The sources disagree; see below. The script held back instead of guessing. |
@@ -141,9 +159,9 @@ A full run takes about a minute, mostly waiting on network requests.
   are still non-128px because no other size has ever been uploaded:
   Lúcio / Beat Drop (96), Reinhardt / Ignited Fury (96),
   Roadhog / Shrapnel Launcher (212×128).
-- **Role changes** (e.g. Sombra → Support). The sync updates `heroes.json`,
-  but the parser's role checks (`src/extract.py::validate`) must still accept
-  the role a hero had at the screenshot's date.
+- **Role changes** (e.g. Sombra → Support). The sync updates `heroes.json`, and
+  the parser flags a row whose role icon disagrees with it. For screenshots
+  taken before the change, that flag is expected.
 
 ## Sources and download gotchas
 
@@ -161,6 +179,14 @@ A full run takes about a minute, mostly waiting on network requests.
 - **owperks.com.** Each hero page lists the 2 minor perks, then the 2 major
   perks; the tier comes from that order. The percentages are community-reported
   shares, not observed pick rates.
+- **overwatch.blizzard.com hero pages.** The official source for each live
+  perk's current art and tier. The Perks section lists each perk as
+  `<div class="perk-details … (minor|major) N">…<img alt="Name" src="…">`. The
+  icons are 128 px white-on-transparent PNGs, the same format as the wiki's.
+  There is no checksum to verify against, so a download is only accepted if it
+  decodes. Revealed-but-unreleased heroes (Doctrine) have no page yet. On
+  2026-09-23 all 212 live perks and tiers agreed with ours, and 9 icons had newer
+  art.
 - **Wiki quirks the parser handles:**
   - perks that were re-added stay in the "Removed Perks" section, with a
     "re-added in …" note;

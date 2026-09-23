@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import difflib
 import hashlib
 import json
 import os
@@ -28,7 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import owsources as src  # noqa: E402
 
 TODAY = datetime.date.today().isoformat()
-PERK_KEY_ORDER = ["name", "icon", "tier", "tier_swapped", "tier_history", "ability", "effect",
+PERK_KEY_ORDER = ["name", "icon", "alt_icons", "tier", "tier_swapped", "tier_history", "ability", "effect",
                   "patch_era", "pick_rate", "history_note", "icon_note", "note"]
 ROLE_FROM_PATH = {"tanks": "tank", "damages": "damage", "supports": "support"}
 
@@ -37,10 +38,10 @@ ROLE_FROM_PATH = {"tanks": "tank", "damages": "damage", "supports": "support"}
 # Report
 # ---------------------------------------------------------------------------
 class Report:
-    SECTIONS = ["Roster", "Hero icons", "New perks", "Pending (no icon / not live yet)", "Retired perks",
+    SECTIONS = ["Roster", "Hero icons", "New perks", "Official art", "Pending (no icon / not live yet)", "Retired perks",
                 "Reactivated perks", "Tier changes", "Pick-rate changes", "Migrations", "Warnings",
                 "CONFLICTS (need a human)", "VALIDATION ERRORS"]
-    CHANGE = {"Roster", "Hero icons", "New perks", "Retired perks", "Reactivated perks", "Tier changes",
+    CHANGE = {"Roster", "Hero icons", "New perks", "Official art", "Retired perks", "Reactivated perks", "Tier changes",
               "Pick-rate changes", "Migrations"}
 
     def __init__(self):
@@ -119,6 +120,7 @@ ROSTER_META = {
         "subrole": "wiki infobox sub-role",
         "released": "false for revealed-but-unreleased heroes (e.g. playtest-only)",
         "provisional_icons": "icons in assets/ that are stand-ins (e.g. resized fan art); the sync replaces them once an official 256x256 file exists",
+        "blizzard_path": "hero page slug on overwatch.blizzard.com/en-us/heroes/ (source of current official perk art), or null",
     },
 }
 
@@ -160,6 +162,10 @@ class Sync:
         self.staged[dest] = got[0]
         return True
 
+    def stage_bytes(self, dest: Path, data: bytes):
+        """Queue a download whose bytes are already in hand (official art has no SHA1 to verify against)."""
+        self.staged[dest] = data if self.apply else None
+
     def exists(self, dest: Path) -> bool:
         return dest.exists() or dest in self.staged
 
@@ -200,6 +206,15 @@ class Sync:
             if heroes[slug]["owperks_path"] != path:
                 heroes[slug]["owperks_path"] = path
                 self.report.add("Roster", f"{heroes[slug]['name']}: owperks page is /en/{path}")
+        # official hero pages (released heroes only)
+        for path in src.blizzard_hero_paths():
+            key = src.loose(path)
+            slug = next((s for s, h in heroes.items() if key in (src.loose(h["name"]), src.loose(s))), None)
+            if slug is None:
+                self.report.add("Warnings", f"overwatch.blizzard.com lists hero page '{path}' that matches no roster hero")
+            elif heroes[slug].get("blizzard_path") != path:
+                heroes[slug]["blizzard_path"] = path
+                self.report.add("Roster", f"{heroes[slug]['name']}: official page is /en-us/heroes/{path}/")
         # roles, from the wiki infobox
         for slug in self.selected():
             h = heroes[slug]
@@ -259,6 +274,7 @@ class Sync:
             del self.pending[key]  # legacy free-form keys; regenerated per slug below
         for slug in self.selected():
             self.sync_hero_perks(slug)
+            self.sync_official_art(slug)
 
     def sync_hero_perks(self, slug):
         h = self.roster["heroes"][slug]
@@ -391,6 +407,48 @@ class Sync:
         else:
             self.pending.pop(slug, None)
 
+    # -- step 3b: official art --------------------------------------------------
+    def sync_official_art(self, slug):
+        """Compare every live perk with the art on its official hero page. The game's
+        art is sometimes redrawn after the wikis uploaded theirs (Baptiste's Automated
+        Healing, Soldier's Stim Pack, ...). New official art is ADDED as an extra
+        reference (`alt_icons`); the old art stays, since screenshots from older
+        patches still show it."""
+        h = self.roster["heroes"][slug]
+        path = h.get("blizzard_path")
+        if not path:
+            return
+        official = src.blizzard_perks(path)
+        if not official:
+            self.report.add("Warnings", f"{h['name']}: no perks found on the official page /heroes/{path}/")
+            return
+        block = self.perks["heroes"].get(slug, {"perks": []})
+        by_key = {src.loose(e["name"]): e for e in block["perks"]}
+        for o in official:
+            key = src.loose(o["name"])
+            if key not in by_key:   # tolerate typos on the official page ("MEKA Mobilitiy")
+                close = difflib.get_close_matches(key, list(by_key), n=1, cutoff=0.85)
+                key = close[0] if close else key
+            e = by_key.get(key)
+            if e is None:
+                self.report.add("CONFLICTS (need a human)",
+                                f"{h['name']} / {o['name']}: live on the official site but not in perks.json")
+                continue
+            if e["patch_era"] == "current" and e["tier"] != o["tier"]:
+                self.report.add("CONFLICTS (need a human)",
+                                f"{h['name']} / {e['name']}: official site says {o['tier']}, perks.json says {e['tier']}")
+            data = src.fetch(o["url"])
+            refs = [e["icon"]] + [a["icon"] for a in e.get("alt_icons", [])]
+            known = [self.root / "assets" / "perks" / r for r in refs if (self.root / "assets" / "perks" / r).exists()]
+            if any(src.alpha_difference(data, p.read_bytes()) < 0.01 for p in known):
+                continue
+            sha = hashlib.sha1(data).hexdigest()[:8]
+            rel = f"{slug}/{src.snake(e['name'])}__official_{sha}.png"
+            self.stage_bytes(self.root / "assets" / "perks" / rel, data)
+            e.setdefault("alt_icons", []).append({"icon": rel, "source": "overwatch.blizzard.com", "added": TODAY})
+            self.report.add("Official art", f"{h['name']} / {e['name']}: official art differs from ours; "
+                                            f"added {rel} as an extra reference (old art kept)")
+
     # -- migrations ---------------------------------------------------------
     def migrate(self):
         n = 0
@@ -424,7 +482,8 @@ def validate(root: Path, perks: dict, roster: dict, staged=()) -> tuple[list[str
     pdir = root / "assets" / "perks"
     files = {f"{d.name}/{f.name}" for d in pdir.iterdir() if d.is_dir() for f in d.iterdir()}
     files |= {f"{p.parent.name}/{p.name}" for p in staged if p.parent.parent == pdir}
-    icons = [e["icon"] for h in perks["heroes"].values() for e in h["perks"]]
+    icons = [i for h in perks["heroes"].values() for e in h["perks"]
+             for i in [e["icon"]] + [a["icon"] for a in e.get("alt_icons", [])]]
     for f in sorted(files - set(icons)):
         errors.append(f"assets/perks/{f} has no perks.json entry")
     for f in sorted(set(icons) - files):

@@ -9,7 +9,8 @@
     },
     "schema": {
       "name": "perk name as displayed in game",
-      "icon": "path under assets/perks/",
+      "icon": "path under assets/perks/ (the wiki's art)",
+      "alt_icons": "optional: newer art for the same perk, e.g. from the official hero page when the game's icon was redrawn after the wiki's upload. [{icon, source, added}]. Every version is a matching template; old art is kept because screenshots from older patches still show it",
       "tier": "minor (level 2) | major (level 3). For current perks, the CURRENT tier; for legacy perks, the tier at removal. Do not trust this for slot validation when tier_swapped is true.",
       "tier_swapped": "true if the perk has been both minor and major at different points in time",
       "tier_history": "only when tier_swapped: chronological [{date, from, to}] moves, dates are patch dates from the wiki change log",
@@ -19,7 +20,7 @@
       "pick_rate": "only on live perks (exactly 4 per hero); the field is absent on legacy perks. See pick_rate_policy",
       "history_note": "wiki note on removal / re-addition, or 'Retired (detected by sync <date>)'"
     },
-    "slot_check_policy": "Scoreboard perk slots are assumed to be left = major, right = minor (CLAUDE.md, ~70% confidence). Validating a recognized perk against its slot is ONLY allowed when tier_swapped is false. A perk with tier_swapped = true has legally sat in either slot depending on the patch the screenshot came from, and screenshots can come from any patch, so skip the slot check for it (do not flag, do not use it as evidence about slot order).",
+    "slot_check_policy": "HARD RULE of the scoreboard: with two perks, left = major and right = minor; a lone perk is always minor. So the slot tells you each perk's tier AT CAPTURE time, which may differ from `tier` today (tier_history records known moves; screenshots can come from any patch). The parser uses the slot to break ties between perks that share an icon (Lingering/Ravenous Wraith, Phantom Step/Uprush), and reports it as tier_at_capture. When the slot proves a tier this file has no record of, the gap is in this file's tier_history (a patch the wiki change log misses), not in the rule; tools/evaluate.py --tier-gaps lists them.",
     "pick_rate_policy": "Provisional. Values are owperks.com community-reported shares (each minor pair and each major pair sums to 1.0), known to be skewed relative to real lobbies. Use only as a weak tie-break prior. While pick_rate_source is \"owperks\", the sync keeps exactly the 4 live perks per hero carrying a pick_rate: a newly live perk gets its owperks rate and the perk it displaced loses the field. Set pick_rate_source to \"local\" once rates are computed from our own parsed screenshots; the sync then stops touching pick_rate entirely.",
     "corrections": [
       "Hanzo / Dragon Fury: the wiki ability box still says major, but the change log moved it to minor on 2026-02-10 and owperks lists it as minor. Recorded as minor.",
@@ -87,7 +88,7 @@
         }
       ]
     },
-    "last_synced": "2026-09-22"
+    "last_synced": "2026-09-23"
   },
   "heroes": {
     "ana": {"name": "Ana", "perks": [
@@ -114,7 +115,7 @@
     "baptiste": {"name": "Baptiste", "perks": [
       {"name": "Assault Burst", "icon": "baptiste/assault_burst.png", "tier": "minor", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "major", "to": "minor"}], "ability": "Regenerative Burst", "effect": "Regenerative Burst now provides Baptiste with 20% increased attack speed for 3 seconds.", "patch_era": "current", "pick_rate": 0.67},
       {"name": "Expanded Field", "icon": "baptiste/expanded_field.png", "tier": "minor", "tier_swapped": false, "ability": "Immortality Field", "effect": "Immortality Field radius increased by 30%.", "patch_era": "current", "pick_rate": 0.33},
-      {"name": "Automated Healing", "icon": "baptiste/automated_healing.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "minor", "to": "major"}], "ability": null, "effect": "Using any ability triggers Baptiste's Shoulder Turret, periodically firing up to 3 shots at allies, each restoring 40 health.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Automated Healing", "icon": "baptiste/automated_healing.png", "alt_icons": [{"icon": "baptiste/automated_healing__official_6a4216a9.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "minor", "to": "major"}], "ability": null, "effect": "Using any ability triggers Baptiste's Shoulder Turret, periodically firing up to 3 shots at allies, each restoring 40 health.", "patch_era": "current", "pick_rate": 0.7},
       {"name": "Rocket Boots", "icon": "baptiste/rocket_boots.png", "tier": "major", "tier_swapped": false, "ability": "Exo Boots", "effect": "While airborne from Exo Boots, use (SPACE) to dash horizontally.", "patch_era": "current", "pick_rate": 0.3},
       {"name": "Biotic Reloader", "icon": "baptiste/biotic_reloader.png", "tier": "minor", "tier_swapped": false, "ability": "primary fire", "effect": "Hitting an entire three-round burst reloads a healing projectile. Healing projectile direct hits reloads 3 primary fire ammo.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"},
       {"name": "Field Medicine", "icon": "baptiste/field_medicine.png", "tier": "minor", "tier_swapped": false, "ability": "Immortality Field", "effect": "Immortality Field restores 80 health to nearby allies and 40 health to Baptiste when destroyed.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
@@ -167,7 +168,7 @@
       {"name": "Power Move", "icon": "domina/power_move.png", "tier": "major", "tier_swapped": false, "ability": "Barrier Array / Sonic Repulsors", "effect": "Barrier Array can be used as a wall to stun enemies with Sonic Repulsors with a 100% damage increase.", "patch_era": "legacy"}
     ]},
     "doomfist": {"name": "Doomfist", "perks": [
-      {"name": "One-Two", "icon": "doomfist/one_two.png", "tier": "minor", "tier_swapped": false, "ability": "Rocket Punch / Hand Cannon", "effect": "Hitting an enemy into a wall with Rocket Punch reloads all Hand Cannon and overfills ammo by 2.", "patch_era": "current", "pick_rate": 0.41},
+      {"name": "One-Two", "icon": "doomfist/one_two.png", "alt_icons": [{"icon": "doomfist/one_two__official_56f40ed1.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "minor", "tier_swapped": false, "ability": "Rocket Punch / Hand Cannon", "effect": "Hitting an enemy into a wall with Rocket Punch reloads all Hand Cannon and overfills ammo by 2.", "patch_era": "current", "pick_rate": 0.41},
       {"name": "Survival of the Fittest", "icon": "doomfist/survival_of_the_fittest.png", "tier": "minor", "tier_swapped": false, "ability": null, "effect": "The Best Defense grants 25 overhealth from eliminations and its max overhealth is increased by 50.", "patch_era": "current", "pick_rate": 0.59},
       {"name": "Aftershock", "icon": "doomfist/aftershock.png", "tier": "major", "tier_swapped": false, "ability": "Seismic Slam", "effect": "Enemies hit by Seismic Slam are slowed by 40% for 2 seconds.", "patch_era": "current", "pick_rate": 0.12},
       {"name": "Power Matrix", "icon": "doomfist/power_matrix.png", "tier": "major", "tier_swapped": false, "ability": "Power Block", "effect": "Power Block absorbs projectiles for the first 0.8 seconds of its duration.", "patch_era": "current", "pick_rate": 0.88},
@@ -201,7 +202,7 @@
     "genji": {"name": "Genji", "perks": [
       {"name": "Dragon's Thirst", "icon": "genji/dragon_s_thirst.png", "tier": "minor", "tier_swapped": false, "ability": "Dragonblade", "effect": "Dragonblade swings gain 30% lifesteal.", "patch_era": "current", "pick_rate": 0.73},
       {"name": "Swift Cuts", "icon": "genji/swift_cuts.png", "tier": "minor", "tier_swapped": false, "ability": "Swift Strike", "effect": "Quick Melee reduces the cooldown of Swift Strike by 3 seconds.", "patch_era": "current", "pick_rate": 0.27},
-      {"name": "Blade Twisting", "icon": "genji/blade_twisting.png", "tier": "major", "tier_swapped": false, "ability": "Swift Strike", "effect": "Swift Strike deals 25 additional damage over time if the enemy is below half health.", "patch_era": "current", "pick_rate": 0.62},
+      {"name": "Blade Twisting", "icon": "genji/blade_twisting.png", "alt_icons": [{"icon": "genji/blade_twisting__official_bb15a794.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "major", "tier_swapped": false, "ability": "Swift Strike", "effect": "Swift Strike deals 25 additional damage over time if the enemy is below half health.", "patch_era": "current", "pick_rate": 0.62},
       {"name": "Meditation", "icon": "genji/meditation.png", "tier": "major", "tier_swapped": false, "ability": "Deflect", "effect": "Regenerate 50 health per second while Deflect is active.", "patch_era": "current", "pick_rate": 0.38},
       {"name": "Acrobatics", "icon": "genji/acrobatics.png", "tier": "minor", "tier_swapped": false, "ability": "Swift Strike", "effect": "Swift Strike and Wall Climb resets double jump.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
     ]},
@@ -407,7 +408,7 @@
       {"name": "Helix Propulsion", "icon": "soldier_76/helix_propulsion.png", "tier": "minor", "tier_swapped": false, "ability": "Helix Rockets", "effect": "Helix Rockets' projectile speed is increased by 50%.", "patch_era": "current", "pick_rate": 0.79},
       {"name": "Tactical Salvo", "icon": "soldier_76/tactical_salvo.png", "tier": "minor", "tier_swapped": false, "ability": "Tactical Visor / Helix Rockets / Heavy Pulse Rifle", "effect": "During Tactical Visor, Helix Rockets' cooldown is reduced by 80% and no longer interrupts firing Heavy Pulse Rifle.", "patch_era": "current", "pick_rate": 0.21},
       {"name": "Full Stride", "icon": "soldier_76/full_stride.png", "tier": "major", "tier_swapped": false, "ability": "Sprint", "effect": "Sprint's movement speed bonus gradually increases by an additional 25% over 2 seconds.", "patch_era": "current", "pick_rate": 0.2},
-      {"name": "Stim Pack", "icon": "soldier_76/stim_pack.png", "tier": "major", "tier_swapped": false, "ability": "Biotic Field", "effect": "Stim Pack replaces Biotic Field. On use, Soldier: 76 heals for 30 health per second and gains 20% increased attack speed for 5 seconds.", "patch_era": "current", "pick_rate": 0.8},
+      {"name": "Stim Pack", "icon": "soldier_76/stim_pack.png", "alt_icons": [{"icon": "soldier_76/stim_pack__official_7c6da753.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "major", "tier_swapped": false, "ability": "Biotic Field", "effect": "Stim Pack replaces Biotic Field. On use, Soldier: 76 heals for 30 health per second and gains 20% increased attack speed for 5 seconds.", "patch_era": "current", "pick_rate": 0.8},
       {"name": "Field Emergency", "icon": "soldier_76/field_emergency.png", "tier": "minor", "tier_swapped": false, "ability": "Biotic Field", "effect": "Biotic Field’s healing is increased by 100% on allies below half health.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
       {"name": "Recycled Pulse Munitions", "icon": "soldier_76/recycled_pulse_munitions.png", "tier": "minor", "tier_swapped": false, "ability": "Helix Rockets", "effect": "Helix Rockets reload 15 ammo if they damage an enemy.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"},
       {"name": "Agility Training", "icon": "soldier_76/agility_training.png", "tier": "major", "tier_swapped": false, "ability": "Sprint", "effect": "Sprint’s speed is increased by 20% and reload can be performed while sprint is active.", "patch_era": "legacy"}
@@ -441,7 +442,7 @@
       {"name": "Kinetic Reload", "icon": "tracer/kinetic_reload.png", "tier": "minor", "tier_swapped": false, "ability": "Pulse Pistols / melee", "effect": "Melee hits grant 12 ammo.", "patch_era": "current", "pick_rate": 0.4},
       {"name": "Temporal Regen", "icon": "tracer/temporal_regen.png", "tier": "minor", "tier_swapped": false, "ability": "passive", "effect": "Passive health regeneration triggers 100% faster.", "patch_era": "current", "pick_rate": 0.6},
       {"name": "Blink Packs", "icon": "tracer/blink_packs.png", "tier": "major", "tier_swapped": true, "tier_history": [{"date": "2026-02-10", "from": "minor", "to": "major"}], "ability": "health pack", "effect": "Health Packs restore 1 Blink charge.", "patch_era": "current", "pick_rate": 0.3},
-      {"name": "Quantum Entanglement", "icon": "tracer/quantum_entanglement.png", "tier": "major", "tier_swapped": false, "ability": "Recall", "effect": "Recall grants 50 overhealth and 20 ammo that decays over time.", "patch_era": "current", "pick_rate": 0.7},
+      {"name": "Quantum Entanglement", "icon": "tracer/quantum_entanglement.png", "alt_icons": [{"icon": "tracer/quantum_entanglement__official_19d1b876.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "major", "tier_swapped": false, "ability": "Recall", "effect": "Recall grants 50 overhealth and 20 ammo that decays over time.", "patch_era": "current", "pick_rate": 0.7},
       {"name": "Blast from the Past", "icon": "tracer/blast_from_the_past.png", "tier": "minor", "tier_swapped": false, "ability": "Pulse Bomb", "effect": "Pulse Bomb's radius is increased by 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."},
       {"name": "Chronal Dash", "icon": "tracer/chronal_dash.png", "tier": "minor", "tier_swapped": false, "ability": "Blink", "effect": "Blink distance increased by 20%.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 4"},
       {"name": "Flashback", "icon": "tracer/flashback.png", "tier": "major", "tier_swapped": false, "ability": "Recall", "effect": "Recall increases Blink recovery rate by 150% for 3 seconds.", "patch_era": "legacy", "history_note": "Removed in Reign of Talon Season 1"}
@@ -487,10 +488,10 @@
       {"name": "Transfer Efficiency", "icon": "wrecking_ball/transfer_efficiency.png", "tier": "major", "tier_swapped": false, "ability": "Adaptive Shield", "effect": "Reactivating Adaptive Shield reduces its cooldown by 1.5 seconds per ally affected and the transfer cost is reduced by 50%.", "patch_era": "legacy", "history_note": "Removed in Season 18."}
     ]},
     "wuyang": {"name": "Wuyang", "perks": [
-      {"name": "Balance", "icon": "wuyang/balance.png", "tier": "minor", "tier_swapped": false, "ability": "Restorative Stream", "effect": "When you deal damage with water orbs, increase Restorative Stream's passive healing by 30% for 2 seconds.", "patch_era": "current", "pick_rate": 0.71},
-      {"name": "Overflow", "icon": "wuyang/overflow.png", "tier": "minor", "tier_swapped": false, "ability": "Rushing Torrent", "effect": "Gain 10 ammo and 50% healing resource when Rushing Torrent is activated.", "patch_era": "current", "pick_rate": 0.29},
-      {"name": "Ebb and Flow", "icon": "wuyang/ebb_and_flow.png", "tier": "major", "tier_swapped": false, "ability": "Guardian Wave", "effect": "Guardian Wave rewinds to its starting location.", "patch_era": "current", "pick_rate": 0.23},
-      {"name": "Falling Rain", "icon": "wuyang/falling_rain.png", "tier": "major", "tier_swapped": false, "ability": null, "effect": "Simultaneously control 3 water orbs that deal 60% decreased damage and have have 25% decreased empowered explosion radius.", "patch_era": "current", "pick_rate": 0.77}
+      {"name": "Balance", "icon": "wuyang/balance.png", "alt_icons": [{"icon": "wuyang/balance__official_431de0fd.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "minor", "tier_swapped": false, "ability": "Restorative Stream", "effect": "When you deal damage with water orbs, increase Restorative Stream's passive healing by 30% for 2 seconds.", "patch_era": "current", "pick_rate": 0.71},
+      {"name": "Overflow", "icon": "wuyang/overflow.png", "alt_icons": [{"icon": "wuyang/overflow__official_0aeb6d33.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "minor", "tier_swapped": false, "ability": "Rushing Torrent", "effect": "Gain 10 ammo and 50% healing resource when Rushing Torrent is activated.", "patch_era": "current", "pick_rate": 0.29},
+      {"name": "Ebb and Flow", "icon": "wuyang/ebb_and_flow.png", "alt_icons": [{"icon": "wuyang/ebb_and_flow__official_969e05bd.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "major", "tier_swapped": false, "ability": "Guardian Wave", "effect": "Guardian Wave rewinds to its starting location.", "patch_era": "current", "pick_rate": 0.23},
+      {"name": "Falling Rain", "icon": "wuyang/falling_rain.png", "alt_icons": [{"icon": "wuyang/falling_rain__official_7bc2f1ba.png", "source": "overwatch.blizzard.com", "added": "2026-09-23"}], "tier": "major", "tier_swapped": false, "ability": null, "effect": "Simultaneously control 3 water orbs that deal 60% decreased damage and have have 25% decreased empowered explosion radius.", "patch_era": "current", "pick_rate": 0.77}
     ]},
     "zarya": {"name": "Zarya", "perks": [
       {"name": "Jump-Ups", "icon": "zarya/jump_ups.png", "tier": "minor", "tier_swapped": false, "ability": "secondary fire", "effect": "Secondary Fire's self-knockback is increased by 75%.", "patch_era": "current", "pick_rate": 0.24},
