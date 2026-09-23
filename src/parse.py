@@ -7,8 +7,6 @@ Output follows the answer-key fixture schema (tests/fixtures/*.json), plus a
 `margin` per recognised field and a `review` list of low-margin fields: the
 margin between best and runner-up template is the confidence signal the rest
 of the system routes on (CLAUDE.md).
-
-Player names and titles are not implemented yet and are returned as None.
 """
 
 from __future__ import annotations
@@ -25,23 +23,24 @@ from . import digits as D
 from . import header as HD
 from . import icons as I
 from . import layout as L
+from . import text as T
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = ROOT / "reference" / "templates"
 STATS = ["E", "A", "D", "DMG", "H", "MIT"]
 # Below these margins a field is listed under `review`.
-REVIEW_MARGIN = {"stat": 0.5, "role": 1.0, "portrait": 1.5, "perk": 0.05}
+REVIEW_MARGIN = {"stat": 0.5, "role": 1.0, "portrait": 1.5, "perk": 0.05, "name": 0.5}
 PERK_VOTE_CONFIDENT = 0.1   # a perk's hero vote only counts as disagreement above this margin
 
 
 class Models:
-    """Templates learned from the answer keys (digits, roles; tools/build_templates.py)
-    plus libraries built from the synced reference assets (portraits, perks)."""
+    """Templates learned from the answer keys (tools/build_templates.py) plus
+    libraries built from the synced reference assets (portraits, perks, bans)."""
 
     def __init__(self, digit_clf: D.DigitClassifier, role_clf: I.RoleClassifier,
                  portraits: I.PortraitLibrary | None = None, perks: I.PerkLibrary | None = None,
-                 header: HD.HeaderModels | None = None):
-        self.digits, self.roles, self.header = digit_clf, role_clf, header
+                 header: HD.HeaderModels | None = None, text: T.TextModels | None = None):
+        self.digits, self.roles, self.header, self.text = digit_clf, role_clf, header, text
         self.portraits = portraits or I.PortraitLibrary()
         self.perks = perks or I.PerkLibrary()
         self.roster = json.loads((ROOT / "reference" / "heroes.json").read_text(encoding="utf-8"))["heroes"]
@@ -49,7 +48,7 @@ class Models:
     @classmethod
     def load(cls, folder: Path = TEMPLATES) -> "Models":
         return cls(D.DigitClassifier.load(folder / "digits.npz"), I.RoleClassifier.load(folder / "roles.npz"),
-                   header=HD.HeaderModels.load(folder))
+                   header=HD.HeaderModels.load(folder), text=T.TextModels.load(folder))
 
 
 def load_rgb(path) -> np.ndarray:
@@ -72,6 +71,8 @@ def parse(image, models: Models | None = None) -> dict:
             if value is None or margin < REVIEW_MARGIN["stat"]:
                 review.append(f"{where}.{c}")
         identify_hero(rgb, r, out, models, review)
+        if models.text is not None:
+            read_text(rgb, r, out, models, lay.scale, review)
         rows.append(out)
     header = {"mode": None, "map": None, "time": None, "bans": [None] * 4, "rank_range": [None, None]}
     header_margin, header_problems = {}, []
@@ -165,6 +166,24 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
         review.append(f"{where}.role")
     if p_m < REVIEW_MARGIN["portrait"] or flags:
         review.append(f"{where}.hero")
+
+
+def read_text(rgb, r: L.Row, out: dict, models: Models, scale: float, review: list):
+    """Player name and title (src/text.py)."""
+    where = f"{r.team}{r.index}"
+    name, title = T.read_text(rgb, r, models.text, scale)
+    out["player"], out["title"] = name["name"], title["title"]
+    out["margin"]["name"] = round(min(name["margin"], 99.0), 3)
+    out["text_evidence"] = {"name": {k: v for k, v in name.items() if k not in ("name", "band", "margin")},
+                            "title": {k: v for k, v in title.items() if k != "title"}}
+    if name["name"] is None or name["margin"] < REVIEW_MARGIN["name"] or "note" in name or name.get("snapped"):
+        review.append(f"{where}.player")
+    if title["title"] is not None:
+        out["margin"]["title"] = title.get("margin", 0.0)
+        sim = title.get("similarity", 0.0)
+        # an exact read of a listed title needs no margin; a close read does
+        if sim < T.TITLE_SIMILARITY or (sim < 1.0 and title.get("margin", 0.0) < T.TITLE_MARGIN):
+            review.append(f"{where}.title")
 
 
 def problems(rows: list[dict]) -> list[str]:

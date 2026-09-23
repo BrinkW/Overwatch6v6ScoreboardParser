@@ -7,9 +7,12 @@ Score the parser against every answer-key fixture.
     python tools/evaluate.py --tier-gaps  # rows whose perks contradict perks.json's tier history
 
 Leave-one-image-out: learned templates (stat digits, roles, header letters, time
-digits, division badges, rank emblems) used for an image never include samples
-from that image. Portrait, perk and ban libraries come from the reference
-assets, not the fixtures. Fields that are null in a fixture are not scored.
+digits, division badges, rank emblems, name and title glyphs, fallback-font
+names) and the known players and titles used for an image never include
+samples from that image, so a recurring player must be read, not remembered.
+Portrait, perk and ban libraries come from the reference assets, not the
+fixtures. Fields that are null in a fixture are not scored, except `title`,
+where null means the row has no title.
 """
 
 from __future__ import annotations
@@ -25,10 +28,10 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from build_templates import SAMPLES, build, fixtures  # noqa: E402
-from src import digits as D, header as HD, icons as I, layout as L  # noqa: E402
+from src import digits as D, header as HD, icons as I, layout as L, text as T  # noqa: E402
 from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
 
-ROW_FIELDS = STATS + ["role", "hero"]
+ROW_FIELDS = STATS + ["role", "hero", "player", "title"]
 
 
 def main(argv=None):
@@ -40,16 +43,20 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     portraits, perk_lib, bans = I.PortraitLibrary(), I.PerkLibrary(), HD.BanReader()
+    ref_titles = T.reference_titles()
 
     def models_for(excluded, cache):
         t = build(excluded, cache)
         header = HD.HeaderModels(HD.GlyphReader(*t["letters"]), HD.GlyphReader(*t["time_digits"]),
                                  HD.DivisionReader(*t["division"]),
                                  HD.TierReader(list(zip(t["rank_emblems"][1], t["rank_emblems"][0]))), bans)
-        return Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), portraits, perk_lib, header)
+        text = T.TextModels(T.GlyphSet(*t["name_glyphs"]), T.GlyphSet(*t["title_glyphs"]), t["players"],
+                            ref_titles + t["titles"], T.NameImages(*t["fallback_names"]) if "fallback_names" in t else None)
+        return Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), portraits, perk_lib, header, text)
 
     cache, per_field, mismatches, flags = {}, defaultdict(lambda: [0, 0]), [], []
     gaps = Counter()
+    snapped = []
     full = models_for((), cache) if args.in_sample else None
     for fx in fixtures():
         img = fx["image"]
@@ -61,13 +68,13 @@ def main(argv=None):
         for i, (got, want) in enumerate(zip(result["rows"], fx["rows"])):
             where = f"{img:12} {want['team']}{i % 6}"
             for f in ROW_FIELDS:
-                if want.get(f) is None:
+                if f not in want or (want[f] is None and f != "title"):   # a null title means "no title"
                     continue
                 per_field[f][1] += 1
                 if got.get(f) == want[f]:
                     per_field[f][0] += 1
                 else:
-                    m = got.get("margin", {}).get("portrait" if f == "hero" else f)
+                    m = got.get("margin", {}).get({"hero": "portrait", "player": "name"}.get(f, f))
                     mismatches.append(f"{where} {f:5} want {want[f]!r:>14} got {got.get(f)!r:>14}"
                                       + (f"  (margin {m})" if m is not None else ""))
             for k, side in enumerate(("L", "R")):
@@ -82,6 +89,10 @@ def main(argv=None):
                     per_field[key][0] += 1
                 else:
                     mismatches.append(f"{where} perk{side} want {w!r:>14} got {got['perks'][k]!r:>14}")
+            if got.get("text_evidence", {}).get("name", {}).get("snapped"):
+                raw = got["text_evidence"]["name"]["raw"]
+                snapped.append(f"{where} read {raw!r} -> known player {got['player']!r}"
+                               + ("" if got["player"] == want.get("player") else f" (WRONG, want {want.get('player')!r})"))
             for fl in got.get("hero_flags", []):
                 flags.append(f"{where} {got['hero']:13} {fl}")
             for note in got.get("reference_notes", []):
@@ -120,6 +131,10 @@ def main(argv=None):
         print(f"\nMismatches ({len(mismatches)}):")
         for m in mismatches:
             print("  " + m)
+    if snapped:
+        print(f"\nNames snapped to a known player ({len(snapped)}):")
+        for s in snapped:
+            print("  " + s)
     if flags:
         print(f"\nHero flags ({len(flags)}): signals that disagreed")
         for f in flags:

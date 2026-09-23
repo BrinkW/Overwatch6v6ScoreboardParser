@@ -9,8 +9,9 @@ summary; this file holds the numbers and the reasoning.
 ## 1. Chroma-based text isolation
 
 Scoreboard text is near-white with a dark outline. Backgrounds are strongly
-team-tinted, plus an animated pink/red prestige nameplate banner for some
-players. Chroma (`max(RGB) − min(RGB)`) separates them cleanly where luminance
+team-tinted, plus a blue prestige nameplate for some players (a chrome badge
+with a yellow Roman numeral at its left end, sometimes with white or orange light
+streaks). Chroma (`max(RGB) − min(RGB)`) separates them cleanly where luminance
 does not.
 
 | Region | Background median chroma | Text median chroma | Text pixel share |
@@ -51,29 +52,70 @@ class reaches ~99.9%. Runs in microseconds and cannot hallucinate `5` → `S`.
 Watch for: comma thousands separators, right alignment, and `0` rendered in
 columns that don't apply to the role (e.g. MIT for supports).
 
-### Player names
-The only genuinely free text. General OCR does poorly on OW2's condensed italic
-display font. Two viable routes:
+### Player names and titles (`src/text.py`)
+Both lines are segmented into **connected components**, not column
+projections. The italic display font's glyphs overlap in x, so projection
+splits only 101 of 150 names correctly (133 with width splitting). But the
+glyphs never touch, so components split all 150.
 
-- Fine-tune Tesseract on synthetic renders. You have the font — generate ~50k
-  names with the real styling (outline, glow, both team backgrounds, banner
-  variants). Cheap and effective.
-- Skip Tesseract entirely for PaddleOCR PP-OCRv4 or docTR, which handle
-  stylized fonts far better out of the box.
+**Names, display font** (italic, condensed, A–Z 0–9):
+- Mask `min(RGB) > 190`; the blue-grey title (~145) and the nameplate stay below.
+- The name's glyphs are the components sharing the most common full-height
+  extent: every uppercase glyph and digit spans the cap height (21–26 px at
+  native size). That also drops the prestige badge, its yellow numeral and the
+  nameplate streaks, which have other extents.
+- The line's height moves: it sits higher when the row has a title.
+- Each glyph is scaled to 24 rows (aspect kept, centred in 20 columns) and
+  blurred by 1 px, then read by NN over templates from the answer keys.
+- Result, leave-one-image-out: 146/150, with 2 glyph errors in about 1000:
+  - O↔D ×2 (margin 0.2, flagged);
+  - a lone 5 and a lone 8, which can't be learned leave-one-out.
+- Q, 6 and 7 have never appeared in a name. A glyph further than 2.5 from
+  every template (correct glyphs: ≤ 2.33) is flagged as an unseen character.
+- **Known-player snap.** A read one glyph away from a known player (any name in
+  the answer keys) is snapped to that player, and flagged, only if that glyph
+  is a near tie: its distance to the player's letter is within 1.0 of the
+  letter it was read as. This fixes both O/D misreads once the player is
+  known. Near-duplicate players are real (RUDO vs RUDOLPH), so a confident read
+  is never overridden.
 
-Constrain the decoder charset to BattleTag-legal characters. The discriminator
-(`#1234`) is not rendered on the scoreboard.
+**Names, fallback font** (any character outside A–Z 0–9: `SPEEDSPORT!`,
+`BLACK!`, `바람`, `ʃR̂ƐƐĿǾ`, `DĔXŦER□`; 6 of 156 rows):
+- Detected by slant: display-font glyphs lean 0.20–0.25 (x per y), the fallback
+  font about 0. The display-font glyph distance agrees: 7.9 or more vs at most 1.5.
+- No OCR: no engine reads `ʃR̂ƐƐĿǾ`, and players recur. The whole name image is
+  matched against the known fallback-font players:
+  - a soft mask, because the 1-px strokes make a hard mask shift with
+    sub-pixel alignment;
+  - cropped to its ink, scaled to 24 rows, blurred 1.5 px;
+  - NN allowing a 1-px shift.
+- The two SPEEDSPORT! crops are 5.0 apart; different names 14.7 or more; the
+  match cutoff is 9.0. Only one repeat pair exists so far, so this cutoff is
+  thinly validated.
+- An unknown fallback-font name is `None` and flagged. Once it is in an answer
+  key, it is recognised.
 
-### Titles, hero names, maps, modes
-Closed sets. Recognize, then snap:
-
-```python
-from rapidfuzz import process, fuzz
-best, score, _ = process.extractOne(raw, KNOWN_TITLES, scorer=fuzz.WRatio)
-value = best if score > 80 else None
-```
-
-Turns a hard recognition problem into an easy retrieval problem.
+**Titles** (mixed-case bold sans, blue-grey, below the name):
+- Mask `min(RGB) > 100` and chroma < 80, in the rows below the name line.
+- Nameplate streaks cross this line and touch letters, so every horizontal run
+  of 18 px or more is removed first; glyph strokes are shorter.
+- Components larger than a glyph are dropped, the baseline is the most common
+  component bottom, and i/j dots are merged into their stems.
+- A title needs at least 3 glyphs on the baseline; otherwise the row has none.
+  All 60 title-less rows read as none.
+- Bold letters sometimes touch ("ll", "ss"), so the raw read is imperfect (66
+  of 96 split exactly). It is only used to snap to the title list:
+  - `reference/titles.json`: the wiki's Titles page plus the competitive reward
+    pattern (`<Tier> <Tank|Damage|Support|Open Competitor|Open Challenger>`);
+    22 of our 55 titles are not on the wiki;
+  - plus every title in the answer keys (`known_text.json`).
+- Snapping uses difflib with case, spaces and lookalikes (0/O, 1/I/l, 5/S, 8/B)
+  folded. Result, leave-one-image-out: 152/156. All 4 misses are titles found
+  only in the screenshot being read and on no list (Mythic Rat, Bottom 500,
+  Wraith, Sharpshooter 77), and all 4 are flagged.
+- Correct snaps go as low as 0.67 similarity, so there is no clean acceptance
+  cutoff. Below 0.8 similarity, or a margin under 0.1 on an inexact read, the
+  title goes to review.
 
 ### Perk and role icons
 Pure black glyphs on a white disc, fixed size, no skin variation. The glyph is

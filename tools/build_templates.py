@@ -12,7 +12,12 @@ Every learned template comes from a screenshot whose answer is known:
   - time_digits:   the header's match-time digits, when the count matches;
   - division:      the rank badge, labelled with its division;
   - rank_emblems:  in-game emblem silhouettes, labelled with their tier (they
-                   complement the tier sheet, whose rendering differs slightly).
+                   complement the tier sheet, whose rendering differs slightly);
+  - name_glyphs:   display-font player-name glyphs, when the count matches;
+  - title_glyphs:  title glyphs (spaces excluded), when the count matches;
+  - fallback_names: whole-name images of fallback-font players;
+  - players, titles: the names and titles themselves (known_text.json), which
+                   names are snapped to and titles are matched against.
 --exclude supports leave-one-image-out evaluation (tools/evaluate.py).
 """
 
@@ -29,12 +34,14 @@ sys.path.insert(0, str(ROOT))
 
 import numpy as np  # noqa: E402
 
-from src import digits as D, header as HD, icons as I, layout as L  # noqa: E402
+from src import digits as D, header as HD, icons as I, layout as L, text as T  # noqa: E402
 from src.parse import STATS, load_rgb  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures"
 SAMPLES = ROOT / "sample_screenshots"
-KINDS = ["digits", "roles", "letters", "time_digits", "division", "rank_emblems"]
+KINDS = ["digits", "roles", "letters", "time_digits", "division", "rank_emblems",
+         "name_glyphs", "title_glyphs", "fallback_names"]
+STRING_KINDS = ["players", "titles"]
 
 
 def fixtures(exclude=()):
@@ -48,13 +55,14 @@ def harvest(fx: dict) -> dict[str, list]:
     """Labelled samples of every kind from one answer-key screenshot."""
     rgb = load_rgb(SAMPLES / fx["image"])
     lay = L.detect(rgb)
-    got = {k: [] for k in KINDS}
+    got = {k: [] for k in KINDS + STRING_KINDS}
     for row, truth in zip(lay.rows, fx["rows"]):
         for c in STATS:
             if truth.get(c) is not None:
                 got["digits"] += D.harvest(L.crop(rgb, row.rois[c]), truth[c])
         if truth.get("role"):
             got["roles"].append((I.role_descriptor(L.crop(rgb, row.rois["role"])), truth["role"]))
+        harvest_text(rgb, row, truth, lay.scale, got)
 
     h = fx.get("header", {})
     grey, orange = HD.split_strip(L.crop(rgb, lay.header["mode_map_time"]))
@@ -82,6 +90,26 @@ def harvest(fx: dict) -> dict[str, list]:
     return got
 
 
+def harvest_text(rgb, row, truth: dict, scale: float, got: dict):
+    name, title = truth.get("player"), truth.get("title")
+    block = T.text_block(rgb, row)
+    glyphs, band = T.name_line(block, scale)
+    if name:
+        got["players"].append(name)
+        if T.is_display_name(name):
+            if len(glyphs) == len(name):
+                got["name_glyphs"] += list(zip(T.name_vectors(glyphs), name))
+        elif glyphs:
+            got["fallback_names"].append((T.fallback_vector(block, glyphs, band, scale), name))
+    if title:
+        got["titles"].append(title)
+        if band is not None:
+            tg, base = T.title_line(block, band, scale)
+            chars = title.replace(" ", "")
+            if tg and len(tg) == len(chars):
+                got["title_glyphs"] += list(zip(T.title_vectors(tg, base, scale), chars))
+
+
 def build(exclude=(), cache: dict | None = None) -> dict:
     """{kind: (templates, labels)} for every kind. `cache` maps image -> harvested
     samples, so leave-one-image-out evaluation doesn't recompute them."""
@@ -90,9 +118,13 @@ def build(exclude=(), cache: dict | None = None) -> dict:
     for fx in fixtures(exclude):
         if fx["image"] not in cache:
             cache[fx["image"]] = harvest(fx)
-        for k in KINDS:
+        for k in KINDS + STRING_KINDS:
+            pooled.setdefault(k, [])
             pooled[k] += cache[fx["image"]][k]
-    return {k: (np.stack([x for x, _ in v]), np.array([y for _, y in v])) for k, v in pooled.items() if v}
+    out = {k: (np.stack([x for x, _ in v]), np.array([y for _, y in v])) for k, v in pooled.items()
+           if v and k in KINDS}
+    out.update({k: sorted(set(pooled.get(k, []))) for k in STRING_KINDS})
+    return out
 
 
 def main(argv=None):
@@ -111,6 +143,12 @@ def main(argv=None):
                         labels=t["division"][1].astype(np.uint8))
     np.savez_compressed(args.out / "rank_emblems.npz", profiles=t["rank_emblems"][0].astype(np.float32),
                         tiers=t["rank_emblems"][1])
+    for k in ("name_glyphs", "title_glyphs", "fallback_names"):
+        np.savez_compressed(args.out / f"{k}.npz", templates=u8(t[k][0]), labels=t[k][1])
+    (args.out / "known_text.json").write_text(
+        json.dumps({k: t[k] for k in STRING_KINDS}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    for k in STRING_KINDS:
+        print(f"{k:13} {len(t[k]):5} known")
     for k in KINDS:
         labels = t[k][1]
         print(f"{k:13} {len(labels):5} templates, classes: {sorted(set(labels.tolist()))}")

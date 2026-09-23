@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 sys.dont_write_bytecode = True
 
 from build_templates import SAMPLES, build  # noqa: E402
-from src import digits as D, header as HD, icons as I, layout as L  # noqa: E402
+from src import digits as D, header as HD, icons as I, layout as L, text as T  # noqa: E402
 from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
 
 FIXTURE = json.loads((ROOT / "tests" / "fixtures" / "maintest.json").read_text(encoding="utf-8"))
@@ -31,7 +31,10 @@ def result():
     header = HD.HeaderModels(HD.GlyphReader(*t["letters"]), HD.GlyphReader(*t["time_digits"]),
                              HD.DivisionReader(*t["division"]),
                              HD.TierReader(list(zip(t["rank_emblems"][1], t["rank_emblems"][0]))))
-    return parse(IMAGE, Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), header=header))
+    text = T.TextModels(T.GlyphSet(*t["name_glyphs"]), T.GlyphSet(*t["title_glyphs"]), t["players"],
+                        T.reference_titles() + t["titles"], T.NameImages(*t["fallback_names"]))
+    return parse(IMAGE, Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]),
+                               header=header, text=text))
 
 
 @pytest.mark.parametrize("field", ["mode", "map", "time", "bans", "rank_range"])
@@ -55,7 +58,7 @@ def test_stats(result, field):
     assert got == want
 
 
-@pytest.mark.parametrize("field", ["role", "hero", "perks"])
+@pytest.mark.parametrize("field", ["role", "hero", "perks", "player", "title"])
 def test_role_hero_perks(result, field):
     got = [r[field] for r in result["rows"]]
     want = [r[field] for r in FIXTURE["rows"]]
