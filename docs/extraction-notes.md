@@ -86,11 +86,19 @@ two comparable without any scale calibration. On the 13 reviewed screenshots:
 291/291 recognisable perks are identified; empty slots (no white disc) 20/20.
 Role icons: 156/156 with templates harvested from the answer keys.
 
-**The game's art can differ from the wiki's.** One Baptiste glyph (a turret with
-healing pluses, test6) matches none of his wiki icons: the in-game Automated
-Healing icon appears to have been redrawn after the wiki's 2025-03 upload.
-Matches further than 0.65 from every artwork are reported as unrecognised rather
-than forced (correct matches sit ≤ 0.59, median 0.16).
+**The game's art can differ from the wikis'.** Baptiste's Automated Healing (a
+turret with healing pluses in game) matched none of his wiki icons: both wikis
+still carry the 2025-03 art. Comparing every live perk against Blizzard's
+official hero pages (212 perks) found 9 redrawn icons: Automated Healing, Stim
+Pack, One-Two, Blade Twisting, Quantum Entanglement and Wuyang's four perks. The
+official art is kept alongside the old art as extra templates (`alt_icons` in
+`perks.json`); the reference sync repeats this check. Matches further than 0.65
+from every artwork are still reported as unrecognised rather than forced
+(correct matches sit ≤ 0.59, median 0.16).
+
+**Some perks share one icon.** Reaper's Lingering Wraith (minor, added Season 19)
+reuses Ravenous Wraith's icon (major, removed Season 19), and Moira's Phantom
+Step shares Uprush's. The slot's tier (below) decides between them.
 
 ### Hero portraits
 **The scoreboard shows each hero's standard illustrated portrait, whatever skin
@@ -101,8 +109,9 @@ margin of 2.7 (median 16.6). The 3D ban-screen art (`assets/bans`) gets only
 primary hero signal; perk glyphs and the role icon confirm it.
 
 ### Role composition
-6v6 allows 1–3 of each role per team: the reviewed screenshots include teams
-with 3 supports and 3 damage heroes. A 2/2/2 check would be wrong here.
+The only role limit is **at most two tanks per team**. Any damage/support mix is
+legal; the reviewed screenshots include teams with 3 supports and with 3 damage
+heroes. A 2/2/2 check would be wrong here.
 
 ---
 
@@ -201,20 +210,16 @@ must not assume every row has two perks.
 
 ## 6. Open questions
 
-- **Perk slot ordering: usually left = major, but not always.** Across 13
-  screenshots, perks whose tier never changed appear major/left 119 times and
-  minor/left 4; minor/right 123 and major/right 9. 110 of the 111 rows with two
-  such perks fit left=major, right=minor. Tier-swapped perks sit where their
-  *pre-swap* tier would put them (Vendetta's Raging Storm, Hanzo's Dragon Fury,
-  Tracer's Blink Packs), which fits screenshots taken before those patches.
-  **But some rows are reversed with no patch history to explain it:** Juno shows
-  Locked On (minor) left and Lift Off (major) right in 7 of 8 rows; Reaper,
-  Moira and Sojourn show the same pattern. Lift Off and Reversal only exist
-  since the patch that made their neighbours minor, so patch timing cannot
-  explain these rows. Working hypothesis: the scoreboard lists perks in **pick
-  order, most recent first**, so picking the major before the minor (holding
-  the minor pick, or competitive round resets that unlock both at once) swaps
-  them. Consequence: slot order is a soft prior, never a validation rule.
-  Confirm with a capture where the pick order is known.
+- **Settled: perk slot order is a hard rule** (confirmed by the user). With two
+  perks, left = major and right = minor; a lone perk is minor. The slot
+  therefore gives each perk's tier *at capture time*. Tier-swapped perks sit
+  where their pre-swap tier puts them (Vendetta's Raging Storm, Hanzo's Dragon
+  Fury, Tracer's Blink Packs, Reaper's Shadow Blink), dating those screenshots
+  before the swaps. **Open:** a few clear glyphs sit in slots whose tier our
+  history never recorded for them (`python tools/evaluate.py --tier-gaps`): Juno's
+  Lift Off as minor (7×), Moira's Reversal as minor, Reaper's Soul Reaving as
+  major, and Sojourn's Deceleration Field as major with Friction Generators as
+  minor. These are tier moves the wiki change logs don't record. The rule holds;
+  `tier_history` is incomplete.
 - Whether Emerald's badge art reuses a hue close to Master's.
 - Whether perk icons are ever rendered at a different size in 5v5 vs 6v6 layouts.

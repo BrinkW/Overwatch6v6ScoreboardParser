@@ -33,6 +33,9 @@ PERK_SIZE, PERK_BLUR = 24, 1.0
 # the one glyph whose in-game art differs from the wiki's (Baptiste, redrawn
 # Automated Healing) sits at 0.73. Beyond this, say "unrecognised", don't guess.
 UNKNOWN_GLYPH_DIST = 0.65
+# Two perks whose art is the same glyph (e.g. Lingering and Ravenous Wraith) match at
+# equal distance; within this tolerance the scoreboard slot's tier decides.
+TIE_DIST = 0.01
 
 
 # ---------------------------------------------------------------------------
@@ -137,6 +140,15 @@ def perk_glyph_descriptor(crop: np.ndarray) -> np.ndarray | None:
     return _normalise_glyph(dark)
 
 
+def _tiers_ever(e: dict) -> set[str]:
+    """Every tier this perk is known to have held: its current tier plus both ends
+    of each recorded move."""
+    tiers = {e["tier"]}
+    for m in e.get("tier_history", []):
+        tiers |= {m["from"], m["to"]}
+    return tiers
+
+
 class PerkLibrary:
     """Every perk with an icon in reference/perks.json (live and legacy)."""
 
@@ -147,14 +159,18 @@ class PerkLibrary:
         self.entries, vecs = [], []
         for slug, h in data.items():
             for e in h["perks"]:
-                alpha = np.asarray(Image.open(ROOT / "assets" / "perks" / e["icon"]).convert("RGBA"))[..., 3]
-                v = _normalise_glyph(alpha.astype(np.float32) / 255)
-                if v is None:
-                    continue
-                self.entries.append({"hero": slug, "role": heroes.get(slug, {}).get("role"), "name": e["name"],
-                                     "tier": e["tier"], "tier_swapped": e["tier_swapped"],
-                                     "patch_era": e["patch_era"]})
-                vecs.append(v)
+                # One template per art version: the wiki icon plus any newer official art
+                # (alt_icons). They share the perk's name, so margins are measured against
+                # OTHER perks, never between two versions of the same one.
+                for icon in [e["icon"]] + [a["icon"] for a in e.get("alt_icons", [])]:
+                    alpha = np.asarray(Image.open(ROOT / "assets" / "perks" / icon).convert("RGBA"))[..., 3]
+                    v = _normalise_glyph(alpha.astype(np.float32) / 255)
+                    if v is None:
+                        continue
+                    self.entries.append({"hero": slug, "role": heroes.get(slug, {}).get("role"), "name": e["name"],
+                                         "tier": e["tier"], "tier_swapped": e["tier_swapped"],
+                                         "tiers_ever": _tiers_ever(e), "patch_era": e["patch_era"], "icon": icon})
+                    vecs.append(v)
         self.M = np.stack(vecs)
         self.heroes = [e["hero"] for e in self.entries]
         self.names = [f'{e["hero"]}/{e["name"]}' for e in self.entries]
@@ -169,13 +185,26 @@ class PerkLibrary:
             return None, 0.0
         return hero, margin
 
-    def identify(self, v: np.ndarray, hero: str) -> tuple[dict | None, float, float]:
+    def identify(self, v: np.ndarray, hero: str, slot_tier: str | None = None) -> tuple[dict | None, float, float]:
         """(perk, margin, distance): the perk chosen among `hero`'s perks only; margin
         to that hero's runner-up. perk is None when even the best match is further
-        than UNKNOWN_GLYPH_DIST: the game has drawn an icon we have no artwork for."""
+        than UNKNOWN_GLYPH_DIST: the game has drawn an icon we have no artwork for.
+
+        `slot_tier` is the tier the scoreboard slot proves (left = major, right = minor;
+        a lone perk = minor). It breaks ties between perks that share the same icon
+        (Lingering vs Ravenous Wraith, Phantom Step vs Uprush): among matches within
+        TIE_DIST of the best, one that has held `slot_tier` wins. It never overrides
+        a clearly better glyph match, because our tier history can be incomplete."""
         allowed = np.array([h == hero for h in self.heroes])
         if not allowed.any():
             return None, 0.0, float("inf")
-        _, margin, best = nearest(self.M, self.names, v, allowed)
-        dist = float(np.linalg.norm(self.M[best] - v))
-        return (self.entries[best] if dist <= UNKNOWN_GLYPH_DIST else None), margin, dist
+        d = np.where(allowed, np.linalg.norm(self.M - v, axis=1), np.inf)
+        best = int(np.argmin(d))
+        if slot_tier:
+            ties = [j for j in np.where(d <= d[best] + TIE_DIST)[0] if slot_tier in self.entries[j]["tiers_ever"]]
+            if ties:
+                best = min(ties, key=lambda j: d[j])
+        others = d[[n != self.names[best] for n in self.names]]
+        margin = float(others.min() - d[best]) if np.isfinite(others).any() else float("inf")
+        dist = float(d[best])
+        return (self.entries[best] if dist <= UNKNOWN_GLYPH_DIST else None), max(margin, 0.0), dist

@@ -1,7 +1,7 @@
 {
  "image": "test6.png",
  "verified": true,
- "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (no corrections needed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (no corrections needed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Bottom row 4's right perk is Automated Healing in its newer art (confirmed by the user; the wiki icon is older).",
  "header": {
   "mode": "Escort",
   "map": "Rialto",
@@ -179,7 +179,7 @@
    "role": "support",
    "perks": [
     "Assault Burst",
-    null
+    "Automated Healing"
    ],
    "E": 7,
    "A": 12,

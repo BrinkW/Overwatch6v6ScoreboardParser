@@ -4,7 +4,7 @@ Score the parser against every answer-key fixture.
     python tools/evaluate.py              # leave-one-image-out (honest)
     python tools/evaluate.py --in-sample
     python tools/evaluate.py --overlays   # also write debug/<image>_layout.png
-    python tools/evaluate.py --perk-slots # tally perk tier by scoreboard slot
+    python tools/evaluate.py --tier-gaps  # perks whose slot proves a tier perks.json lacks
 
 Leave-one-image-out: learned templates (digits, roles) used for an image never
 include samples from that image. Portrait and perk libraries come from the
@@ -35,7 +35,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--in-sample", action="store_true", help="templates include the scored image")
     ap.add_argument("--overlays", action="store_true")
-    ap.add_argument("--perk-slots", action="store_true", help="tally perk tiers by slot (left/right)")
+    ap.add_argument("--tier-gaps", action="store_true",
+                    help="list perks whose scoreboard slot proves a tier perks.json has no record of")
     args = ap.parse_args(argv)
 
     portraits, perk_lib = I.PortraitLibrary(), I.PerkLibrary()
@@ -45,7 +46,7 @@ def main(argv=None):
         return Models(D.DigitClassifier(*t["digits"]), I.RoleClassifier(*t["roles"]), portraits, perk_lib)
 
     cache, per_field, mismatches, flags = {}, defaultdict(lambda: [0, 0]), [], []
-    slot_tally, slot_rows = Counter(), []
+    gaps = Counter()
     full = models_for((), cache) if args.in_sample else None
     for fx in fixtures():
         img = fx["image"]
@@ -78,14 +79,8 @@ def main(argv=None):
                     mismatches.append(f"{where} perk{side} want {w!r:>14} got {got['perks'][k]!r:>14}")
             for fl in got.get("hero_flags", []):
                 flags.append(f"{where} {got['hero']:13} {fl}")
-            if args.perk_slots:
-                for k, side in enumerate(("left", "right")):
-                    d = got["perk_detail"][k]
-                    if d and d["name"] and not d["tier_swapped"]:
-                        slot_tally[(side, d["tier"])] += 1
-                    elif d and d["name"]:
-                        slot_tally[(side, "swapped (not counted)")] += 1
-                slot_rows.append(got)
+            for note in got.get("reference_notes", []):
+                gaps[note] += 1
         for p in result["problems"]:
             mismatches.append(f"{img:12} STRUCTURE {p}")
 
@@ -104,16 +99,11 @@ def main(argv=None):
         print(f"\nHero flags ({len(flags)}): signals that disagreed")
         for f in flags:
             print("  " + f)
-    if args.perk_slots:
-        print("\nPerk tier by slot (perks whose tier never changed):")
-        for side in ("left", "right"):
-            print(f"  {side:5}  major {slot_tally[(side, 'major')]:3}   minor {slot_tally[(side, 'minor')]:3}"
-                  f"   tier-swapped, not counted {slot_tally[(side, 'swapped (not counted)')]:3}")
-        pure = [r["perk_detail"] for r in slot_rows
-                if all(d and d["name"] and not d["tier_swapped"] for d in r["perk_detail"])]
-        both = len(pure)
-        fits = sum(1 for L_, R_ in pure if L_["tier"] == "major" and R_["tier"] == "minor")
-        print(f"  rows with two non-swapped perks: {both}; of those, left=major & right=minor: {fits}")
+    if args.tier_gaps and gaps:
+        print(f"\nTier data gaps ({sum(gaps.values())} slots): the slot rule proves these tiers at capture time,")
+        print("but perks.json's tier history never records them (a patch the wiki change log misses):")
+        for note, n in sorted(gaps.items()):
+            print(f"  {n:2}x  {note}")
     return 0 if not mismatches else 1
 
 

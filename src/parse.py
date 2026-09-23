@@ -120,17 +120,30 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
     if roster_role and roster_role != role:
         flags.append(f"role icon {role} but {hero} is {roster_role} in heroes.json")
 
-    perks, detail = [], []
-    for v in glyphs:
+    # Hard rule of the scoreboard: with two perks, left = major and right = minor;
+    # a lone perk is always minor. So each slot proves the perk's tier AT CAPTURE time.
+    two = all(v is not None for v in glyphs)
+    slot_tiers = ["major" if two else "minor", "minor"]
+    perks, detail, notes = [], [], []
+    for v, slot_tier in zip(glyphs, slot_tiers):
         if v is None:
             perks.append("none")
             detail.append(None)
             continue
-        entry, m, dist = models.perks.identify(v, hero)
+        entry, m, dist = models.perks.identify(v, hero, slot_tier)
         perks.append(entry["name"] if entry else None)   # None = a perk is there but unrecognised
-        detail.append({"name": None, "unrecognised": True, "distance": round(dist, 3)} if entry is None else {
-            "name": entry["name"], "tier": entry["tier"], "tier_swapped": entry["tier_swapped"],
-            "patch_era": entry["patch_era"], "margin": round(m, 3), "distance": round(dist, 3)})
+        if entry is None:
+            detail.append({"name": None, "unrecognised": True, "tier_at_capture": slot_tier,
+                           "distance": round(dist, 3)})
+        else:
+            detail.append({"name": entry["name"], "tier_at_capture": slot_tier, "tier_now": entry["tier"],
+                           "tier_swapped": entry["tier_swapped"], "patch_era": entry["patch_era"],
+                           "margin": round(m, 3), "distance": round(dist, 3)})
+            if slot_tier not in entry["tiers_ever"]:
+                # The glyph is unambiguous and the slot rule is hard, so it is our tier
+                # history that is incomplete (a patch the wiki change log doesn't record).
+                notes.append(f"{hero} / {entry['name']} was {slot_tier} when captured; "
+                             f"perks.json has no record of it ever being {slot_tier}")
         if entry is None or m < REVIEW_MARGIN["perk"]:
             review.append(f"{where}.perk")
 
@@ -140,6 +153,7 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
                             "perk_votes": [None if x is None else [x[0], round(x[1], 3)] for x in votes],
                             "role_icon": role}
     out["hero_flags"] = flags
+    out["reference_notes"] = notes
     if role_m < REVIEW_MARGIN["role"]:
         review.append(f"{where}.role")
     if p_m < REVIEW_MARGIN["portrait"] or flags:
@@ -151,12 +165,11 @@ def problems(rows: list[dict]) -> list[str]:
     out = []
     if len(rows) not in (10, 12):
         out.append(f"expected 10 (5v5) or 12 (6v6) rows, got {len(rows)}")
-    # 6v6 allows 1-3 of each role per team (the reviewed screenshots include 3-support
-    # and 3-damage teams), so only a role count outside that range is suspicious.
+    # The only role limit is at most two tanks per team; any damage/support mix is legal.
     for team in ("top", "bottom"):
-        roles = [r["role"] for r in rows if r["team"] == team]
-        if len(roles) == 6 and any(not 1 <= roles.count(k) <= 3 for k in I.ROLES):
-            out.append(f"{team} team roles {sorted(roles)} fall outside the 6v6 limit of 1-3 per role")
+        tanks = sum(1 for r in rows if r["team"] == team and r["role"] == "tank")
+        if tanks > 2:
+            out.append(f"{team} team has {tanks} tanks; at most 2 are allowed")
     for r in rows:
         where = f"{r['team']} row {rows.index(r)}"
         if (r["D"] or 0) > 60 or (r["E"] or 0) > 120:
