@@ -38,10 +38,10 @@ ROLE_FROM_PATH = {"tanks": "tank", "damages": "damage", "supports": "support"}
 # Report
 # ---------------------------------------------------------------------------
 class Report:
-    SECTIONS = ["Roster", "Hero icons", "New perks", "Official art", "Pending (no icon / not live yet)", "Retired perks",
+    SECTIONS = ["Roster", "Hero icons", "Maps", "New perks", "Official art", "Pending (no icon / not live yet)", "Retired perks",
                 "Reactivated perks", "Tier changes", "Pick-rate changes", "Migrations", "Warnings",
                 "CONFLICTS (need a human)", "VALIDATION ERRORS"]
-    CHANGE = {"Roster", "Hero icons", "New perks", "Official art", "Retired perks", "Reactivated perks", "Tier changes",
+    CHANGE = {"Roster", "Hero icons", "Maps", "New perks", "Official art", "Retired perks", "Reactivated perks", "Tier changes",
               "Pick-rate changes", "Migrations"}
 
     def __init__(self):
@@ -133,6 +133,8 @@ class Sync:
         self.root, self.apply, self.only, self.refresh_rates = root, apply, only, refresh_rates
         self.perks_path = root / "reference" / "perks.json"
         self.roster_path = root / "reference" / "heroes.json"
+        self.maps_path = root / "reference" / "maps.json"
+        self.maps = load_json(self.maps_path, None)
         self.perks = load_json(self.perks_path, None)
         if self.perks is None:
             raise SystemExit(f"{self.perks_path} not found")
@@ -449,6 +451,26 @@ class Sync:
             self.report.add("Official art", f"{h['name']} / {e['name']}: official art differs from ours; "
                                             f"added {rel} as an extra reference (old art kept)")
 
+    # -- maps ---------------------------------------------------------------
+    def sync_maps(self):
+        """reference/maps.json: every Standard Play map with its mode (plus former
+        Assault/Clash maps), the closed list the header's map name is snapped to."""
+        found = src.wiki_maps()
+        if len(found) < 20:
+            self.report.add("Warnings", f"the wiki Maps page yielded only {len(found)} maps; maps.json not updated")
+            return
+        old = {(m["name"], m["mode"], m["current"]) for m in (self.maps or {}).get("maps", [])}
+        new = {(m["name"], m["mode"], m["current"]) for m in found}
+        for name, mode, cur in sorted(new - old):
+            self.report.add("Maps", f"add {name} ({mode}{'' if cur else ', former'})")
+        for name, mode, cur in sorted(old - new):
+            self.report.add("Maps", f"remove {name} ({mode}) - no longer on the wiki's Maps page")
+        if new != old:
+            self.maps = {"_meta": {"description": "Maps and their modes, for snapping the scoreboard header's map name. "
+                                                  "Maintained by tools/sync_reference.py from the wiki's Maps page.",
+                                   "current": "true = in the Standard Play pool; false = a former mode (Assault, Clash)"},
+                         "maps": sorted(found, key=lambda m: (not m["current"], m["mode"], m["name"]))}
+
     # -- migrations ---------------------------------------------------------
     def migrate(self):
         n = 0
@@ -471,6 +493,8 @@ class Sync:
         self.meta["last_synced"] = TODAY
         write_atomic(self.perks_path, dump_perks(self.perks))
         write_atomic(self.roster_path, dump_roster(self.roster))
+        if self.maps is not None:
+            write_atomic(self.maps_path, json.dumps(self.maps, ensure_ascii=False, indent=1) + "\n")
 
 
 # ---------------------------------------------------------------------------
@@ -552,6 +576,7 @@ def main(argv=None):
     s.migrate()
     s.sync_roster()
     s.sync_hero_icons()
+    s.sync_maps()
     s.sync_perks()
     # validation warnings are only missing icons of unreleased heroes, already reported by sync_hero_icons
     errors, _ = validate(root, s.perks, s.roster, s.staged)

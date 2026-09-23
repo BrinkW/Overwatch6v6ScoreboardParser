@@ -261,6 +261,27 @@ def owperks_hero(path: str) -> dict | None:
     return {"name": html.unescape(title.group(1)) if title else None, "live": live}
 
 
+def wiki_maps() -> list[dict]:
+    """[{name, mode, current}] from the wiki's Maps page: the galleries under
+    "Standard Play" (current) and "Former Standard Play" (Assault, Clash: older
+    screenshots can show them)."""
+    text = wiki_page("Maps") or ""
+    out = []
+    for heading, current in (("Standard Play", True), ("Former Standard Play", False)):
+        i = text.find(f"== {heading} ==")
+        if i < 0:
+            continue
+        j = text.find("\n== ", i + 5)
+        section = text[i:j if j > 0 else None]
+        for m in re.finditer(r"=== ([^=\n]+?) ===\n(.*?)(?=\n===|\Z)", section, re.S):
+            gallery = re.search(r"<gallery[^>]*>(.*?)</gallery>", m.group(2), re.S)
+            if not gallery:
+                continue
+            for link in re.findall(r"\[\[([^\]]+)\]\]", gallery.group(1)):
+                out.append({"name": link.split("|")[-1].strip(), "mode": m.group(1).strip(), "current": current})
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Blizzard's official hero pages: current perk art and tiers
 # ---------------------------------------------------------------------------

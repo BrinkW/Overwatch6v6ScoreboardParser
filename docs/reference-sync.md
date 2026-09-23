@@ -10,6 +10,7 @@ It maintains:
 | File | What |
 |---|---|
 | `reference/heroes.json` | Roster: every hero, their role/subrole, wiki page, owperks page, official page, release status |
+| `reference/maps.json` | Every Standard Play map with its mode, plus former Assault/Clash maps: the list the header's map name is snapped to |
 | `reference/perks.json` | Every perk that has an icon, live and removed, with tier, tier history and pick rate |
 | `assets/bans/<slug>.png` | 256×256 ban icon (3D render), wiki `File:Icon-<Name>.png` |
 | `assets/heroes/<slug>.png` | 256×256 illustrated portrait, wiki `File:<Name> Hero.png` |
@@ -62,11 +63,17 @@ A full run takes about a minute, mostly waiting on network requests.
    - it gets `released: false` if it is not in `Category:Heroes` yet.
 
    Role changes on existing heroes are updated and reported.
-2. **Hero icons.** For any hero missing a ban or hero icon, or whose icon is
+2. **Maps.** Parses the galleries on the wiki's Maps page into
+   `reference/maps.json`: the "Standard Play" sections (Control, Escort,
+   Flashpoint, Hybrid, Push) as `current: true`, and "Former Standard Play"
+   (Assault, Clash) as `current: false`, since older screenshots can show them.
+   Added or removed maps are reported. The file isn't touched if the page yields
+   fewer than 20 maps.
+3. **Hero icons.** For any hero missing a ban or hero icon, or whose icon is
    listed in `provisional_icons`, it fetches the wiki files. Only exact
    256×256 PNGs are accepted, and it never resizes. A provisional icon is
    replaced (and delisted) as soon as a proper one exists.
-3. **Perks.** For each hero it compares three things:
+4. **Perks.** For each hero it compares three things:
    - every perk box on the wiki page, live and removed;
    - the 4 live perks on owperks;
    - `perks.json`.
@@ -75,13 +82,13 @@ A full run takes about a minute, mostly waiting on network requests.
    (the file the wiki box names, then `Perk <Name>.png` variants), downloads
    and verifies it, and adds a full entry: tier, tier history, effect,
    ability, era and pick rate.
-4. **Live set.** owperks is the source of truth for which 4 perks are live.
+5. **Live set.** owperks is the source of truth for which 4 perks are live.
    - A perk that became live is marked `current`.
    - A `current` perk that is no longer live is **retired**: it becomes
      `legacy`, loses its `pick_rate` field, and gets a `history_note`.
    - A perk whose owperks slot tier differs from the JSON gets its `tier`
      updated, `tier_swapped: true`, and a dated `tier_history` entry.
-5. **Official art.** For every hero with an official page on
+6. **Official art.** For every hero with an official page on
    overwatch.blizzard.com (`blizzard_path` in `heroes.json`), each live perk's
    icon is compared with ours by alpha mask.
    - The game sometimes redraws an icon after the wikis uploaded theirs (e.g.
@@ -94,7 +101,7 @@ A full run takes about a minute, mostly waiting on network requests.
      tier that disagrees with ours, is reported as a conflict. The official page
      occasionally misspells a name ("MEKA Mobilitiy"), so names are matched
      fuzzily.
-6. **Validate**, then write (with `--apply`) and print the report.
+7. **Validate**, then write (with `--apply`) and print the report.
 
 ## Rules
 
