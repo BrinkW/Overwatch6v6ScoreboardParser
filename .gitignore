@@ -1,1 +1,4 @@
 CLAUDE.md
+capture/build/
+capture/dist/
+capture/*.spec
