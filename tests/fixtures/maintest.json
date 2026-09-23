@@ -1,7 +1,7 @@
 {
  "image": "maintest.png",
  "verified": true,
- "note": "From docs/extraction-notes.md section 4. Stats/names/titles/header verified; heroes for Juno and Sojourn were ~75% confident there. DONKEYFARMER shows no perk icons.",
+ "note": "From docs/extraction-notes.md section 4. Stats/names/titles/header verified; ban 3 (Freja) and KEXXAAR's hero (Wuyang) corrected by the user 2026-09-22; Sojourn was ~75% confident. DONKEYFARMER shows no perk icons.",
  "header": {
   "mode": "Hybrid",
   "map": "King's Row",
@@ -9,7 +9,7 @@
   "bans": [
    "zenyatta",
    "roadhog",
-   "brigitte",
+   "freja",
    "zarya"
   ],
   "rank_range": [
@@ -175,7 +175,7 @@
    "team": "bottom",
    "player": "KEXXAAR",
    "title": "Grandmaster Open Challenger",
-   "hero": "juno",
+   "hero": "wuyang",
    "role": "support",
    "perks": [
     null,
