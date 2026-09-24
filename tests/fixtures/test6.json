@@ -1,0 +1,226 @@
+{
+ "image": "test6.png",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (no corrections needed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Bottom row 4's right perk is Automated Healing in its newer art (confirmed by the user; the wiki icon is older).",
+ "header": {
+  "mode": "Escort",
+  "map": "Rialto",
+  "time": "12:24",
+  "bans": [
+   "d_va",
+   "widowmaker",
+   "zarya",
+   "echo"
+  ],
+  "rank_range": [
+   "Grandmaster 3",
+   "Champion 4"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    "Foxtrot",
+    "Fortune Teller"
+   ],
+   "E": 20,
+   "A": 21,
+   "D": 4,
+   "DMG": 6077,
+   "H": 12906,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "AKENOSKYE",
+   "title": "Eldritch Nightmare",
+   "hero": "ana",
+   "role": "support",
+   "perks": [
+    "Biotic Bounce",
+    "Groggy"
+   ],
+   "E": 7,
+   "A": 12,
+   "D": 4,
+   "DMG": 2393,
+   "H": 8518,
+   "MIT": 776
+  },
+  {
+   "team": "top",
+   "player": "BLASTER",
+   "title": "Challenger Damage",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    "Stim Pack",
+    "Tactical Salvo"
+   ],
+   "E": 28,
+   "A": 0,
+   "D": 5,
+   "DMG": 13028,
+   "H": 1281,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "KDN",
+   "title": null,
+   "hero": "ashe",
+   "role": "damage",
+   "perks": [
+    "Viper's Sting",
+    "Remote Detonator"
+   ],
+   "E": 23,
+   "A": 2,
+   "D": 6,
+   "DMG": 16436,
+   "H": 0,
+   "MIT": 35
+  },
+  {
+   "team": "top",
+   "player": "MUSH",
+   "title": null,
+   "hero": "roadhog",
+   "role": "tank",
+   "perks": [
+    "Invigorate",
+    "Shrapnel Launcher"
+   ],
+   "E": 22,
+   "A": 6,
+   "D": 6,
+   "DMG": 7399,
+   "H": 7492,
+   "MIT": 841
+  },
+  {
+   "team": "top",
+   "player": "NOCYN",
+   "title": "Champion Open Competitor",
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    "Levitation",
+    "Hyper Regeneration"
+   ],
+   "E": 18,
+   "A": 3,
+   "D": 5,
+   "DMG": 14093,
+   "H": 0,
+   "MIT": 29348
+  },
+  {
+   "team": "bottom",
+   "player": "DUDEOW",
+   "title": null,
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    "Self-Repair",
+    "Configuration Reload"
+   ],
+   "E": 13,
+   "A": 2,
+   "D": 11,
+   "DMG": 7787,
+   "H": 782,
+   "MIT": 907
+  },
+  {
+   "team": "bottom",
+   "player": "ORANGE",
+   "title": null,
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    "Levitation",
+    "Hyper Regeneration"
+   ],
+   "E": 14,
+   "A": 0,
+   "D": 8,
+   "DMG": 13044,
+   "H": 0,
+   "MIT": 23355
+  },
+  {
+   "team": "bottom",
+   "player": "PAVID",
+   "title": "Epic Rat",
+   "hero": "junkrat",
+   "role": "damage",
+   "perks": [
+    "Frag Cannon",
+    "Nitro Boost"
+   ],
+   "E": 10,
+   "A": 0,
+   "D": 10,
+   "DMG": 9440,
+   "H": 0,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "SCAREDOFGIRL",
+   "title": null,
+   "hero": "baptiste",
+   "role": "support",
+   "perks": [
+    "Assault Burst",
+    "Automated Healing"
+   ],
+   "E": 7,
+   "A": 12,
+   "D": 6,
+   "DMG": 4066,
+   "H": 14190,
+   "MIT": 775
+  },
+  {
+   "team": "bottom",
+   "player": "SEXYGAMERX",
+   "title": "Champion Open Competitor",
+   "hero": "zenyatta",
+   "role": "support",
+   "perks": [
+    "Dual Harmony",
+    "Transcendent Condemnation"
+   ],
+   "E": 9,
+   "A": 16,
+   "D": 9,
+   "DMG": 6861,
+   "H": 9955,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "TTVMCIGUANAA",
+   "title": "Grandmaster Open Competitor",
+   "hero": "roadhog",
+   "role": "tank",
+   "perks": [
+    "Invigorate",
+    "Scrap Hook"
+   ],
+   "E": 13,
+   "A": 4,
+   "D": 8,
+   "DMG": 8493,
+   "H": 6865,
+   "MIT": 1122
+  }
+ ]
+}

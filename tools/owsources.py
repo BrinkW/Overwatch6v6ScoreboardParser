@@ -5,7 +5,9 @@ reference/heroes.json:
   - the Overwatch wiki at overwatch.weirdgloop.org (heroes, perks, tiers, change
     logs, icon files), with overwatch.fandom.com as a fallback for files only;
   - owperks.com (which 4 perks are live per hero, their slot order, and the
-    community pick shares).
+    community pick shares);
+  - overwatch.blizzard.com hero pages (the official, current art and tier of
+    every live perk).
 
 Standard library only, apart from Pillow for checking image dimensions.
 See docs/reference-sync.md for why each rule below exists.
@@ -23,6 +25,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import numpy as np
 from PIL import Image
 
 WIKI_API = "https://overwatch.weirdgloop.org/api.php"
@@ -68,8 +71,10 @@ def _api(base: str, **params) -> dict:
 # Names
 # ---------------------------------------------------------------------------
 def loose(s: str) -> str:
-    """Normalised key for matching names across sources ("Widow’s Bite" == "widows_bite")."""
-    return re.sub(r"[^a-z0-9]", "", s.lower())
+    """Normalised key for matching names across sources ("Widow’s Bite" == "widows_bite",
+    "Lúcio" == "lucio")."""
+    import unicodedata
+    return re.sub(r"[^a-z0-9]", "", unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower())
 
 
 def snake(s: str) -> str:
@@ -254,6 +259,84 @@ def owperks_hero(path: str) -> dict | None:
                      round(float(v.group(1)) / 100, 2) if v else None,
                      html.unescape(d.group(1)) if d else None))
     return {"name": html.unescape(title.group(1)) if title else None, "live": live}
+
+
+def wiki_maps() -> list[dict]:
+    """[{name, mode, current}] from the wiki's Maps page: the galleries under
+    "Standard Play" (current) and "Former Standard Play" (Assault, Clash: older
+    screenshots can show them)."""
+    text = wiki_page("Maps") or ""
+    out = []
+    for heading, current in (("Standard Play", True), ("Former Standard Play", False)):
+        i = text.find(f"== {heading} ==")
+        if i < 0:
+            continue
+        j = text.find("\n== ", i + 5)
+        section = text[i:j if j > 0 else None]
+        for m in re.finditer(r"=== ([^=\n]+?) ===\n(.*?)(?=\n===|\Z)", section, re.S):
+            gallery = re.search(r"<gallery[^>]*>(.*?)</gallery>", m.group(2), re.S)
+            if not gallery:
+                continue
+            for link in re.findall(r"\[\[([^\]]+)\]\]", gallery.group(1)):
+                out.append({"name": link.split("|")[-1].strip(), "mode": m.group(1).strip(), "current": current})
+    return out
+
+
+def wiki_titles() -> list[dict]:
+    """[{title, section}] from the wiki's Titles page: the first cell of every
+    table row, with the "== Section ==" it is listed under."""
+    text = wiki_page("Titles") or ""
+    out, seen = [], set()
+    for sec in re.finditer(r"^== *([^=\n]+?) *==\s*$(.*?)(?=^== |\Z)", text, re.M | re.S):
+        for row in re.split(r"\n\|-", sec.group(2))[1:]:
+            m = re.match(r"\s*\n?\|(?!\})([^\n|][^\n]*)", row)
+            title = clean(m.group(1).split("||")[0]) if m else ""
+            if title and title not in seen:
+                seen.add(title)
+                out.append({"title": title, "section": sec.group(1).strip()})
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Blizzard's official hero pages: current perk art and tiers
+# ---------------------------------------------------------------------------
+BLIZZARD = "https://overwatch.blizzard.com/en-us/heroes/"
+
+
+def blizzard_hero_paths() -> list[str]:
+    """Hero page slugs on overwatch.blizzard.com (released heroes only)."""
+    h = _get(BLIZZARD).decode("utf-8")
+    return sorted(set(re.findall(r'href="/heroes/([a-z0-9-]+)"', h)))
+
+
+def blizzard_perks(path: str) -> list[dict] | None:
+    """[{name, tier, url}] for the live perks on a hero's official page.
+
+    The page's "Perks" section lists each perk as
+    <div class="perk-details (left|right) (minor|major) N">...<img alt="Name" src="...">.
+    The icons are 128 px white-on-transparent PNGs, the same format as the wiki's,
+    and they carry the game's CURRENT art, which the wikis sometimes lack."""
+    try:
+        h = _get(BLIZZARD + path + "/").decode("utf-8")
+    except urllib.error.HTTPError:
+        return None
+    found = re.findall(r'<div class="perk-details (?:left|right) (minor|major) \d+">'
+                       r'<div class="perk-icon-wrapper[^"]*"><div class="perk-icon perk-details-icon">'
+                       r'<img alt="([^"]+)" src="([^"]+)"', h)
+    return [{"name": html.unescape(n), "tier": t, "url": u} for t, n, u in found]
+
+
+def fetch(url: str) -> bytes:
+    return _get(url)
+
+
+def alpha_difference(a: bytes, b: bytes) -> float:
+    """Mean absolute difference of two icons' alpha masks at 128x128, in [0, 1].
+    Re-encodes of the same art score < 0.01; redrawn art scores > 0.03."""
+    def mask(data):
+        im = Image.open(io.BytesIO(data)).convert("RGBA").getchannel("A").resize((128, 128), Image.BILINEAR)
+        return np.asarray(im, np.float32) / 255
+    return float(np.abs(mask(a) - mask(b)).mean())
 
 
 # ---------------------------------------------------------------------------

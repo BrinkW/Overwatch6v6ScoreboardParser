@@ -1,0 +1,226 @@
+{
+ "image": "test10.png",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
+ "header": {
+  "mode": "Escort",
+  "map": "Dorado",
+  "time": "17:10",
+  "bans": [
+   "orisa",
+   "wrecking_ball",
+   "bastion",
+   "widowmaker"
+  ],
+  "rank_range": [
+   "Grandmaster 1",
+   "Champion 3"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    "Foxtrot",
+    "Fortune Teller"
+   ],
+   "E": 27,
+   "A": 47,
+   "D": 5,
+   "DMG": 6173,
+   "H": 26363,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "BLITZEN",
+   "title": null,
+   "hero": "wuyang",
+   "role": "support",
+   "perks": [
+    "Falling Rain",
+    "Balance"
+   ],
+   "E": 27,
+   "A": 5,
+   "D": 6,
+   "DMG": 10363,
+   "H": 18620,
+   "MIT": 1391
+  },
+  {
+   "team": "top",
+   "player": "INEEDPEELING",
+   "title": "Champion Open Competitor",
+   "hero": "roadhog",
+   "role": "tank",
+   "perks": [
+    "Invigorate",
+    "Scrap Hook"
+   ],
+   "E": 32,
+   "A": 7,
+   "D": 8,
+   "DMG": 14202,
+   "H": 9307,
+   "MIT": 1031
+  },
+  {
+   "team": "top",
+   "player": "RUDO",
+   "title": "Justice Execution",
+   "hero": "cassidy",
+   "role": "damage",
+   "perks": [
+    "Silver Bullet",
+    "Bang Bang"
+   ],
+   "E": 37,
+   "A": 3,
+   "D": 12,
+   "DMG": 18586,
+   "H": 196,
+   "MIT": 169
+  },
+  {
+   "team": "top",
+   "player": "SPEEDSPORT!",
+   "title": "Titan",
+   "hero": "zarya",
+   "role": "tank",
+   "perks": [
+    "Energy Lance",
+    "Jump-Ups"
+   ],
+   "E": 37,
+   "A": 26,
+   "D": 8,
+   "DMG": 14702,
+   "H": 0,
+   "MIT": 12697
+  },
+  {
+   "team": "top",
+   "player": "WHYSOGENIUS",
+   "title": null,
+   "hero": "vendetta",
+   "role": "damage",
+   "perks": [
+    "Raging Storm",
+    "Siphoning Strike"
+   ],
+   "E": 32,
+   "A": 3,
+   "D": 14,
+   "DMG": 11621,
+   "H": 734,
+   "MIT": 1271
+  },
+  {
+   "team": "bottom",
+   "player": "ASPEN",
+   "title": "Wildflower",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Locked On",
+    "Lift Off"
+   ],
+   "E": 24,
+   "A": 16,
+   "D": 9,
+   "DMG": 14480,
+   "H": 20824,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "DILLIGAS",
+   "title": "Fragile Flower",
+   "hero": "doomfist",
+   "role": "tank",
+   "perks": [
+    "Power Matrix",
+    "One-Two"
+   ],
+   "E": 17,
+   "A": 5,
+   "D": 15,
+   "DMG": 11672,
+   "H": 743,
+   "MIT": 4982
+  },
+  {
+   "team": "bottom",
+   "player": "GAARUTO",
+   "title": "Heroic Water Wielder",
+   "hero": "wuyang",
+   "role": "support",
+   "perks": [
+    "Falling Rain",
+    "Balance"
+   ],
+   "E": 17,
+   "A": 6,
+   "D": 8,
+   "DMG": 13740,
+   "H": 14251,
+   "MIT": 1879
+  },
+  {
+   "team": "bottom",
+   "player": "JOYSTICKTTV",
+   "title": "Champion Open Competitor",
+   "hero": "vendetta",
+   "role": "damage",
+   "perks": [
+    "Raging Storm",
+    "Siphoning Strike"
+   ],
+   "E": 25,
+   "A": 5,
+   "D": 18,
+   "DMG": 9818,
+   "H": 330,
+   "MIT": 955
+  },
+  {
+   "team": "bottom",
+   "player": "LEGACY",
+   "title": null,
+   "hero": "hanzo",
+   "role": "damage",
+   "perks": [
+    "Dragon Fury",
+    "Swift Lunge"
+   ],
+   "E": 25,
+   "A": 4,
+   "D": 9,
+   "DMG": 14241,
+   "H": 0,
+   "MIT": 108
+  },
+  {
+   "team": "bottom",
+   "player": "SHREK",
+   "title": null,
+   "hero": "winston",
+   "role": "tank",
+   "perks": [
+    "Chain Lightning",
+    "Heavy Landing"
+   ],
+   "E": 24,
+   "A": 4,
+   "D": 10,
+   "DMG": 18839,
+   "H": 0,
+   "MIT": 24952
+  }
+ ]
+}

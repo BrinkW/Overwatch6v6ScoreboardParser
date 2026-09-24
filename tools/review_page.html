@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scoreboard review</title>
+<style>
+  :root {
+    --bg: #14161a; --panel: #1c1f25; --panel2: #23272f; --line: #323741; --text: #e6e8ec; --muted: #9aa1ad;
+    --accent: #5aa9ff; --flag: #f5b642; --changed: #5aa9ff; --bad: #ff6b6b; --ok: #4cc38a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.35 system-ui, "Segoe UI", sans-serif; }
+  header { height: 46px; display: flex; align-items: center; gap: 10px; padding: 0 14px; background: var(--panel);
+           border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 14px; margin: 0 8px 0 0; font-weight: 600; }
+  header .spacer { flex: 1; }
+  header .counts { color: var(--muted); }
+  main { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(540px, 1fr); height: calc(100vh - 46px); }
+  #left { display: flex; flex-direction: column; min-width: 0; border-right: 1px solid var(--line); }
+  #shotwrap { position: relative; flex: 0 0 auto; background: #000; }
+  #shot { display: block; width: 100%; height: auto; }
+  #overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  #overlay rect { fill: none; stroke: var(--flag); stroke-width: 4; vector-effect: non-scaling-stroke; }
+  #zoom { flex: 1; min-height: 0; padding: 12px 14px; overflow: auto; }
+  #zoom .label { font-weight: 600; margin-bottom: 4px; }
+  #zoom .note { color: var(--muted); margin-bottom: 8px; white-space: pre-wrap; }
+  #zoom img { max-width: 100%; max-height: 240px; image-rendering: auto; border: 1px solid var(--line); background: #000; }
+  #right { display: flex; flex-direction: column; min-height: 0; }
+  #form { flex: 1; overflow: auto; padding: 10px 14px 20px; }
+  #actions { display: flex; gap: 8px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line);
+             background: var(--panel); }
+  #actions .spacer { flex: 1; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+  .banner { padding: 8px 10px; border-radius: 6px; margin: 6px 0; white-space: pre-wrap; }
+  .banner.err { background: #3a1f22; border: 1px solid var(--bad); }
+  .banner.warn { background: #3a3120; border: 1px solid var(--flag); }
+  .banner.info { background: var(--panel2); border: 1px solid var(--line); color: var(--muted); }
+  .grid { display: grid; gap: 6px 8px; align-items: center; }
+  .hdr { grid-template-columns: 52px 1fr 52px 1fr; }
+  .lab { color: var(--muted); font-size: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; margin: 6px 0; }
+  .card .l1 { display: grid; grid-template-columns: 26px 96px 1fr 1fr 1fr; gap: 6px; align-items: center; }
+  .card .l2 { display: grid; grid-template-columns: 26px 1fr 1fr; gap: 6px; align-items: center; margin-top: 6px; }
+  .card .l3 { display: grid; grid-template-columns: 26px repeat(6, 1fr); gap: 6px; align-items: end; margin-top: 6px; }
+  .idx { color: var(--muted); font-weight: 600; text-align: center; }
+  .withicon { display: flex; gap: 5px; align-items: center; min-width: 0; }
+  .withicon img { width: 26px; height: 26px; flex: 0 0 26px; object-fit: contain; border-radius: 4px; background: #0b0c0e; }
+  .withicon select { flex: 1; min-width: 0; }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat span { font-size: 11px; color: var(--muted); }
+  input, select, button { font: inherit; color: var(--text); }
+  input, select { width: 100%; min-width: 0; background: var(--panel2); border: 1px solid var(--line); border-radius: 5px;
+                  padding: 4px 6px; height: 28px; }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+  .flag { border-color: var(--flag); box-shadow: inset 0 0 0 1px var(--flag); }
+  .changed { border-left: 4px solid var(--changed); }
+  button { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: #1f6f4a; border-color: var(--ok); font-weight: 600; }
+  button.danger:hover { border-color: var(--bad); }
+  kbd { font: 11px ui-monospace, monospace; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; color: var(--muted); }
+  #items { max-width: 360px; }
+  #toast { position: fixed; bottom: 70px; right: 20px; background: var(--panel2); border: 1px solid var(--ok);
+           padding: 8px 12px; border-radius: 6px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #toast.show { opacity: 1; }
+  .empty { padding: 40px; color: var(--muted); text-align: center; grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Scoreboard review</h1>
+  <button id="prev" title="Previous capture">&#9664;</button>
+  <select id="items"></select>
+  <button id="next" title="Next capture">&#9654;</button>
+  <span class="spacer"></span>
+  <span class="counts" id="counts"></span>
+</header>
+<main id="main">
+  <section id="left">
+    <div id="shotwrap"><img id="shot" alt=""><svg id="overlay"><rect id="focusbox" width="0" height="0"></rect></svg></div>
+    <div id="zoom"><div class="label" id="zlabel">Click or tab into a field to see its crop.</div>
+      <div class="note" id="znote"></div><img id="zimg" alt="" hidden></div>
+  </section>
+  <section id="right">
+    <div id="form"></div>
+    <div id="actions">
+      <button id="nextflag" title="Next flagged field (Alt+Down)">Next flag <kbd>Alt+&#8595;</kbd></button>
+      <button id="redraft" title="Parse this capture again">Re-parse</button>
+      <span class="spacer"></span>
+      <button id="reject" class="danger" title="Not a usable scoreboard">Reject&hellip;</button>
+      <button id="accept" class="primary">Accept <kbd>Ctrl+Enter</kbd></button>
+    </div>
+  </section>
+</main>
+<div id="toast"></div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v; else if (k === "text") e.textContent = v; else e.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) e.append(k);
+  return e;
+};
+const api = async (path, body) => {
+  const r = await fetch(path, body === undefined ? {} :
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const data = await r.json().catch(() => ({}));
+  return { ok: r.ok, data };
+};
+
+let OPTS = null, ITEMS = [], CUR = null, DRAFT = null, FLAGS = new Set(), FIELDS = [], DIRTY = false, BAN_COUNT = 4;
+const HEROES = () => Object.fromEntries(OPTS.heroes.map((h) => [h.slug, h]));
+
+// ---- review flags -> field ids (same mapping as tools/review.py flagged_fields)
+function flagSet(review) {
+  const out = new Set();
+  for (const f of review || []) {
+    if (f.endsWith(".perk")) { out.add(f + "_left"); out.add(f + "_right"); }
+    else if (f.startsWith("header.rank_")) out.add(f.split(".").slice(0, 2).join("."));
+    else if (f === "header.map") { out.add("header.map"); out.add("header.mode"); }
+    else out.add(f);
+  }
+  return out;
+}
+
+// ---- field registry: id -> {get(), set(v), box, label, note, draft}
+function register(id, input, get, draft, box, label, note) {
+  const f = { id, input, get, draft, box, label, note };
+  FIELDS.push(f);
+  input.dataset.field = id;
+  if (FLAGS.has(id)) input.classList.add("flag");
+  const mark = () => {
+    const changed = JSON.stringify(get()) !== JSON.stringify(draft);
+    input.classList.toggle("changed", changed);
+    DIRTY = true;
+  };
+  input.addEventListener("input", mark);
+  input.addEventListener("change", mark);
+  input.addEventListener("focus", () => focusField(f));
+  return f;
+}
+
+function focusField(f) {
+  const rect = $("focusbox");
+  $("zlabel").textContent = f.label;
+  $("znote").textContent = [FLAGS.has(f.id) ? "Flagged by the parser." : "", f.note || ""].filter(Boolean).join("\n");
+  if (f.box) {
+    const [x0, y0, x1, y1] = f.box;
+    rect.setAttribute("x", x0); rect.setAttribute("y", y0);
+    rect.setAttribute("width", x1 - x0); rect.setAttribute("height", y1 - y0);
+    $("zimg").src = `/crop/${encodeURIComponent(CUR)}?box=${f.box.join(",")}`;
+    $("zimg").hidden = false;
+  } else {
+    rect.setAttribute("width", 0); $("zimg").hidden = true;
+  }
+}
+
+// ---- inputs
+const textInput = (value, list) => {
+  const i = el("input", { type: "text", spellcheck: "false" });
+  i.value = value ?? "";
+  if (list) i.setAttribute("list", list);
+  return i;
+};
+const nullable = (s) => { const t = s.trim(); return t === "" ? null : t; };
+function selectOf(options, value) {   // options: [value, label] or {group: [[value, label]]}
+  const s = el("select");
+  const add = (parent, [v, lab]) => parent.append(el("option", { value: v, text: lab }));
+  for (const o of options) {
+    if (Array.isArray(o)) add(s, o);
+    else for (const [g, list] of Object.entries(o)) { const og = el("optgroup", { label: g }); list.forEach((x) => add(og, x)); s.append(og); }
+  }
+  s.value = value ?? "";
+  if (s.value !== (value ?? "")) {   // a value not in the list (keep it visible)
+    s.append(el("option", { value: value, text: `${value} (not in list)` })); s.value = value;
+  }
+  return s;
+}
+const iconBox = (sel, src) => {
+  const img = el("img", { alt: "" });
+  const upd = () => { const u = src(sel.value); img.style.visibility = u ? "visible" : "hidden"; if (u) img.src = u; };
+  sel.addEventListener("change", upd); upd();
+  return el("div", { class: "withicon" }, img, sel);
+};
+const heroIcon = (slug) => (slug && slug !== "none" ? `/asset/heroes/${slug}.png` : null);
+const banIcon = (slug) => (slug && slug !== "none" ? `/asset/bans/${slug}.png` : null);
+
+function heroOptions() { return [["", "? unknown"], ...OPTS.heroes.map((h) => [h.slug, h.name])]; }
+function perkOptions(hero) {
+  const perks = OPTS.perks[hero] || [];
+  const grp = (era) => perks.filter((p) => p.era === era).map((p) => [p.name, `${p.name} · ${p.tier}`]);
+  const out = [["none", "— empty slot"], ["", "? present, unidentified"]];
+  const cur = grp("current"), leg = grp("legacy");
+  if (cur.length) out.push({ Current: cur });
+  if (leg.length) out.push({ Legacy: leg });
+  return out;
+}
+function perkIconFor(hero) {
+  return (name) => {
+    const p = (OPTS.perks[hero] || []).find((x) => x.name === name);
+    return p && p.icon ? `/asset/perks/${p.icon}` : null;
+  };
+}
+
+// ---- form
+function fmtNote(parts) { return parts.filter((x) => x !== null && x !== undefined && x !== "").join(" · "); }
+
+function buildForm() {
+  FIELDS = []; DIRTY = false;
+  FLAGS = flagSet(DRAFT._review);
+  const form = $("form"); form.replaceChildren();
+  const boxes = DRAFT._boxes || { header: {}, rows: [] };
+  const hb = boxes.header || {};
+  const hm = (DRAFT._margins || {}).header || {};
+
+  if (DRAFT._error) form.append(el("div", { class: "banner err", text: `The parser failed on this capture:\n${DRAFT._error}\nReject it if it isn't a usable scoreboard.` }));
+  if ((DRAFT._problems || []).length) form.append(el("div", { class: "banner warn", text: "Structural problems:\n" + DRAFT._problems.join("\n") }));
+  const src = DRAFT._source || {};
+  const flagCount = FLAGS.size;
+  form.append(el("div", { class: "banner info", text: fmtNote([
+    `${DRAFT.image}`, DRAFT._size ? `${DRAFT._size[0]}×${DRAFT._size[1]}` : null,
+    src.contributor ? `from ${src.contributor}` : null, src.zip || null,
+    `${flagCount} flagged field${flagCount === 1 ? "" : "s"}`]) }));
+
+  // header
+  const H = DRAFT.header;
+  form.append(el("h2", { text: "Match" }));
+  const g = el("div", { class: "grid hdr" });
+  const modes = [...new Set(OPTS.maps.map((m) => m.mode))].sort();
+  const mode = selectOf([["", "? unknown"], ...modes.map((m) => [m, m])], H.mode);
+  const byMode = {};
+  for (const m of OPTS.maps) (byMode[m.mode] = byMode[m.mode] || []).push([m.name, m.name]);
+  const map = selectOf([["", "? unknown"], byMode], H.map);
+  map.addEventListener("change", () => {
+    const m = OPTS.maps.find((x) => x.name === map.value);
+    if (m) { mode.value = m.mode; mode.dispatchEvent(new Event("change")); }
+  });
+  const time = textInput(H.time); time.placeholder = "m:ss";
+  const mmt = hb.mode_map_time;
+  register("header.mode", mode, () => mode.value || null, H.mode, mmt, "Mode");
+  register("header.map", map, () => map.value || null, H.map, mmt, "Map",
+    DRAFT._raw && DRAFT._raw.mode_map ? `parser read ${JSON.stringify(DRAFT._raw.mode_map)}` : "");
+  register("header.time", time, () => nullable(time.value), H.time, mmt, "Match time");
+  g.append(el("span", { class: "lab", text: "Map" }), map, el("span", { class: "lab", text: "Mode" }), mode,
+           el("span", { class: "lab", text: "Time" }), time);
+  form.append(g);
+
+  // 4 or 5 ban slots, as many as the screen shows; the 5th can be added or removed
+  const banHead = el("h2", { text: "Bans" });
+  const banToggle = el("button", { type: "button", style: "margin-left: 10px; font-size: 11px; padding: 1px 8px" });
+  banHead.append(banToggle);
+  form.append(banHead);
+  const bg = el("div", { class: "grid", style: "grid-template-columns: repeat(2, 1fr)" });
+  const bans = (H.bans || []).slice(0, 5);
+  while (bans.length < 4) bans.push(null);
+  BAN_COUNT = bans.length;
+  const banWraps = [];
+  [0, 1, 2, 3, 4].forEach((i) => {
+    const b = i < bans.length ? bans[i] : null;
+    const s = selectOf([["", "? unknown"], ["none", "— no ban"],
+                        ...OPTS.heroes.filter((h) => h.slug !== "mystery").map((h) => [h.slug, h.name])], b);
+    register(`header.ban_${i}`, s, () => s.value || null, i < bans.length ? b : null, hb[`ban_${i}`], `Ban ${i + 1}`,
+      hm[`ban_${i}`] !== undefined ? `margin ${hm[`ban_${i}`]}` : "");
+    const w = iconBox(s, banIcon);
+    banWraps.push(w);
+    bg.append(w);
+  });
+  const showBans = () => {
+    banWraps[4].style.display = BAN_COUNT === 5 ? "" : "none";
+    banToggle.textContent = BAN_COUNT === 5 ? "− remove 5th slot" : "+ 5th slot";
+  };
+  banToggle.onclick = () => { BAN_COUNT = BAN_COUNT === 5 ? 4 : 5; DIRTY = true; showBans(); };
+  showBans();
+  form.append(bg);
+
+  form.append(el("h2", { text: "Rank range" }));
+  const rg = el("div", { class: "grid", style: "grid-template-columns: 40px 1fr 70px 40px 1fr 70px" });
+  ["rank_low", "rank_high"].forEach((k, i) => {
+    const v = (H.rank_range || [])[i];
+    const [tier, div] = v ? [v.slice(0, v.lastIndexOf(" ")), v.slice(v.lastIndexOf(" ") + 1)] : ["", ""];
+    const ts = selectOf([["", "?"], ...OPTS.tiers.map((t) => [t, t])], tier);
+    const ds = selectOf([["", "?"], ...[1, 2, 3, 4, 5].map((d) => [String(d), String(d)])], div);
+    const get = () => (ts.value && ds.value ? `${ts.value} ${ds.value}` : null);
+    const note = fmtNote([hm[`${k}_tier`] !== undefined ? `tier margin ${hm[`${k}_tier`]}` : null,
+                          hm[`${k}_division`] !== undefined ? `division margin ${hm[`${k}_division`]}` : null]);
+    register(`header.${k}`, ts, get, v, hb[k], i ? "Highest rank" : "Lowest rank", note);
+    register(`header.${k}`, ds, get, v, hb[k], i ? "Highest rank" : "Lowest rank", note);
+    rg.append(el("span", { class: "lab", text: i ? "High" : "Low" }), ts, ds);
+  });
+  form.append(rg);
+
+  // rows
+  let rows = DRAFT.rows;
+  if (!rows.length) rows = [...Array(12)].map((_, k) => ({ team: k < 6 ? "top" : "bottom", perks: [null, null] }));
+  const counters = { top: 0, bottom: 0 };
+  let lastTeam = null;
+  rows.forEach((r, k) => {
+    if (r.team !== lastTeam) {
+      form.append(el("h2", { text: r.team === "top" ? "Top team" : "Bottom team" }));
+      lastTeam = r.team;
+    }
+    const idx = counters[r.team]++;
+    const where = `${r.team}${idx}`;
+    const rb = (boxes.rows || [])[k] || {};
+    const margin = ((DRAFT._margins || {}).rows || [])[k] || {};
+    const notes = (DRAFT._notes || [])[k] || {};
+    const card = el("div", { class: "card" });
+
+    const role = selectOf([["", "?"], ["tank", "Tank"], ["damage", "Damage"], ["support", "Support"]], r.role);
+    const hero = selectOf(heroOptions(), r.hero);
+    const player = textInput(r.player, "dl-players"); player.placeholder = "player";
+    const title = textInput(r.title, "dl-titles"); title.placeholder = "no title";
+    const heroWrap = iconBox(hero, heroIcon);
+    card.append(el("div", { class: "l1" }, el("span", { class: "idx", text: String(idx + 1) }), role, heroWrap, player, title));
+
+    const perkSel = [0, 1].map((s) => selectOf(perkOptions(r.hero), r.perks ? r.perks[s] : null));
+    const perkWraps = perkSel.map((s) => iconBox(s, perkIconFor(hero.value)));
+    card.append(el("div", { class: "l2" }, el("span"), ...perkWraps));
+    hero.addEventListener("change", () => {
+      const h = HEROES()[hero.value];
+      if (h) { role.value = h.role || ""; role.dispatchEvent(new Event("change")); }   // mystery: no role
+      perkSel.forEach((s) => {   // the new hero's perks; keep the choice only if it is one of them
+        const keep = s.value;
+        const valid = keep === "none" || keep === "" || (OPTS.perks[hero.value] || []).some((p) => p.name === keep);
+        s.replaceChildren(...selectOf(perkOptions(hero.value), "").childNodes);
+        s.value = valid ? keep : "";
+        s.dispatchEvent(new Event("change"));
+      });
+    });
+    perkSel.forEach((s, i) => s.addEventListener("change", () => {
+      const img = perkWraps[i].querySelector("img"), u = perkIconFor(hero.value)(s.value);
+      img.style.visibility = u ? "visible" : "hidden"; if (u) img.src = u;
+    }));
+
+    const statIn = OPTS.stats.map((c) => {
+      const i = textInput(r[c] ?? ""); i.inputMode = "numeric";
+      return [c, i];
+    });
+    card.append(el("div", { class: "l3" }, el("span"),
+      ...statIn.map(([c, i]) => el("label", { class: "stat" }, el("span", { text: c }), i))));
+
+    const nameNote = notes.name ? fmtNote([notes.name.raw && notes.name.raw !== r.player ? `read ${JSON.stringify(notes.name.raw)}` : null,
+      notes.name.font ? `${notes.name.font} font` : null, notes.name.snapped ? "snapped to a known player" : null,
+      notes.name.note || null, margin.name !== undefined ? `margin ${margin.name}` : null]) : "";
+    const titleNote = notes.title ? fmtNote([notes.title.raw ? `read ${JSON.stringify(notes.title.raw)}` : null,
+      notes.title.similarity !== undefined ? `similarity ${notes.title.similarity}` : null,
+      notes.title.margin !== undefined ? `margin ${notes.title.margin}` : null]) : "";
+    const lbl = (s) => `${r.team === "top" ? "Top" : "Bottom"} ${idx + 1} · ${s}`;
+    register(`${where}.role`, role, () => role.value || null, r.role ?? null, rb.role, lbl("Role"),
+      margin.role !== undefined ? `margin ${margin.role}` : "");
+    register(`${where}.hero`, hero, () => hero.value || null, r.hero ?? null, rb.portrait, lbl("Hero"),
+      fmtNote([margin.portrait !== undefined ? `portrait margin ${margin.portrait}` : null, ...(notes.hero || [])]));
+    register(`${where}.player`, player, () => nullable(player.value), r.player ?? null, rb.name, lbl("Player"), nameNote);
+    register(`${where}.title`, title, () => nullable(title.value), r.title ?? null, rb.title, lbl("Title"), titleNote);
+    perkSel.forEach((s, i) => {
+      const side = i ? "perk_right" : "perk_left";
+      register(`${where}.${side}`, s, () => (s.value === "" ? null : s.value), r.perks ? r.perks[i] : null, rb[side],
+        lbl(i ? "Right perk" : "Left perk"));
+    });
+    for (const [c, i] of statIn) {
+      register(`${where}.${c}`, i, () => { const t = i.value.replace(/[,\s]/g, ""); return t === "" ? null : (/^\d+$/.test(t) ? parseInt(t, 10) : t); },
+        r[c] ?? null, rb[c], lbl(c), margin[c] !== undefined ? `margin ${margin[c]}` : "");
+    }
+    card.dataset.team = r.team;
+    form.append(card);
+  });
+  DIRTY = false;
+  const firstFlag = FIELDS.find((f) => FLAGS.has(f.id));
+  if (firstFlag) setTimeout(() => firstFlag.input.focus(), 0);
+}
+
+function collect() {
+  const val = (id) => FIELDS.find((f) => f.id === id).get();
+  const header = { mode: val("header.mode"), map: val("header.map"), time: val("header.time"),
+                   bans: [0, 1, 2, 3, 4].slice(0, BAN_COUNT).map((i) => val(`header.ban_${i}`)),
+                   rank_range: [val("header.rank_low"), val("header.rank_high")] };
+  const rows = [];
+  const counters = { top: 0, bottom: 0 };
+  for (const card of document.querySelectorAll(".card")) {
+    const team = card.dataset.team, w = `${team}${counters[team]++}`;
+    const row = { team, player: val(`${w}.player`), title: val(`${w}.title`), hero: val(`${w}.hero`), role: val(`${w}.role`),
+                  perks: [val(`${w}.perk_left`), val(`${w}.perk_right`)] };
+    for (const c of OPTS.stats) row[c] = val(`${w}.${c}`);
+    rows.push(row);
+  }
+  return { header, rows };
+}
+
+// ---- navigation
+function renderItems() {
+  const s = $("items"); s.replaceChildren();
+  for (const it of ITEMS) {
+    const tag = it.error ? " · parse failed" : it.flagged ? ` · ${it.flagged} flagged` : "";
+    s.append(el("option", { value: it.name, text: it.name + tag }));
+  }
+  if (CUR) s.value = CUR;
+}
+async function refreshItems() {
+  const { data } = await api("/api/items");
+  ITEMS = data.items;
+  $("counts").textContent = `${ITEMS.length} to review · ${data.reviewed} reviewed · ${data.rejected} rejected`;
+  renderItems();
+}
+async function open(name) {
+  if (DIRTY && !confirm("Discard your changes to this capture?")) { $("items").value = CUR; return; }
+  CUR = name;
+  if (!name) { showEmpty(); return; }
+  $("form").replaceChildren(el("div", { class: "banner info", text: "Loading (re-parsing if the templates changed)…" }));
+  const { ok, data } = await api(`/api/draft/${encodeURIComponent(name)}`);
+  if (!ok) { $("form").replaceChildren(el("div", { class: "banner err", text: data.error || "failed to load" })); return; }
+  DRAFT = data;
+  const svg = $("overlay");
+  svg.setAttribute("viewBox", `0 0 ${DRAFT._size[0]} ${DRAFT._size[1]}`);
+  svg.setAttribute("preserveAspectRatio", "none");
+  $("focusbox").setAttribute("width", 0);
+  $("shot").src = `/image/${encodeURIComponent(name)}`;
+  $("zimg").hidden = true; $("zlabel").textContent = "Click or tab into a field to see its crop."; $("znote").textContent = "";
+  buildForm();
+  renderItems();
+}
+function showEmpty() {
+  DRAFT = null; FIELDS = [];
+  $("shot").removeAttribute("src"); $("zimg").hidden = true;
+  $("form").replaceChildren(el("div", { class: "empty", text: "Inbox empty. Rebuild the templates to learn from what you reviewed:\npython tools/build_templates.py" }));
+}
+function step(d) {
+  const i = ITEMS.findIndex((x) => x.name === CUR);
+  const n = ITEMS[i + d];
+  if (n) open(n.name);
+}
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 1800); }
+
+async function accept() {
+  if (!DRAFT) return;
+  const { ok, data } = await api(`/api/accept/${encodeURIComponent(CUR)}`, collect());
+  if (!ok) {
+    const box = el("div", { class: "banner err", text: "Not saved:\n" + (data.errors || [data.error]).join("\n") });
+    $("form").prepend(box); $("form").scrollTop = 0; return;
+  }
+  const i = ITEMS.findIndex((x) => x.name === CUR);
+  DIRTY = false; toast(`Saved ${CUR}`);
+  await refreshItems();
+  open(ITEMS[Math.min(i, ITEMS.length - 1)]?.name);
+}
+async function reject() {
+  if (!DRAFT) return;
+  const reason = prompt("Why reject this capture? (e.g. not a scoreboard, cropped, overlay covers it)", "not a usable scoreboard");
+  if (reason === null) return;
+  const i = ITEMS.findIndex((x) => x.name === CUR);
+  await api(`/api/reject/${encodeURIComponent(CUR)}`, { reason });
+  DIRTY = false; toast(`Rejected ${CUR}`);
+  await refreshItems();
+  open(ITEMS[Math.min(i, ITEMS.length - 1)]?.name);
+}
+function nextFlag(d = 1) {
+  const flagged = FIELDS.filter((f, i, a) => FLAGS.has(f.id) && a.findIndex((g) => g.id === f.id) === i);
+  if (!flagged.length) return;
+  const cur = document.activeElement?.dataset?.field;
+  const i = flagged.findIndex((f) => f.id === cur);
+  const n = flagged[(i + d + flagged.length) % flagged.length];
+  n.input.focus(); n.input.scrollIntoView({ block: "center" });
+}
+
+$("items").addEventListener("change", (e) => open(e.target.value));
+$("prev").onclick = () => step(-1);
+$("next").onclick = () => step(1);
+$("accept").onclick = accept;
+$("reject").onclick = reject;
+$("nextflag").onclick = () => nextFlag(1);
+$("redraft").onclick = async () => {
+  if (!CUR) return;
+  $("form").replaceChildren(el("div", { class: "banner info", text: "Re-parsing…" }));
+  const { data } = await api(`/api/redraft/${encodeURIComponent(CUR)}`, {});
+  DRAFT = data; buildForm(); refreshItems();
+};
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.key === "Enter") { e.preventDefault(); accept(); }
+  if (e.altKey && e.key === "ArrowDown") { e.preventDefault(); nextFlag(1); }
+  if (e.altKey && e.key === "ArrowUp") { e.preventDefault(); nextFlag(-1); }
+});
+window.addEventListener("beforeunload", (e) => { if (DIRTY) { e.preventDefault(); e.returnValue = ""; } });
+
+(async () => {
+  OPTS = (await api("/api/options")).data;
+  document.body.append(
+    el("datalist", { id: "dl-players" }, ...OPTS.players.map((p) => el("option", { value: p }))),
+    el("datalist", { id: "dl-titles" }, ...OPTS.titles.map((t) => el("option", { value: t }))));
+  await refreshItems();
+  if (ITEMS.length) open(ITEMS[0].name); else showEmpty();
+})();
+</script>
+</body>
+</html>

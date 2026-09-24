@@ -1,0 +1,226 @@
+{
+ "image": "test9.png",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. SPEEDSPORT! is rendered in a non-display font. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Reaper's first perk is 'Lingering Wraith|Ravenous Wraith': the two share one icon, and paired with Shadow Blink (which has been both minor and major) either reading gives one major + one minor, so the screenshot can't tell them apart; either answer is accepted.",
+ "header": {
+  "mode": "Flashpoint",
+  "map": "Suravasa",
+  "time": "11:20",
+  "bans": [
+   "freja",
+   "zarya",
+   "wuyang",
+   "orisa"
+  ],
+  "rank_range": [
+   "Grandmaster 2",
+   "Champion 2"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "SNK",
+   "title": "Titan",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    "Accelerando",
+    "Beat Drop"
+   ],
+   "E": 20,
+   "A": 22,
+   "D": 5,
+   "DMG": 7787,
+   "H": 12759,
+   "MIT": 4380
+  },
+  {
+   "team": "top",
+   "player": "GAARUTO",
+   "title": "Heroic Water Wielder",
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    "Shield System",
+    "Extended Boosters"
+   ],
+   "E": 23,
+   "A": 11,
+   "D": 5,
+   "DMG": 8701,
+   "H": 697,
+   "MIT": 13246
+  },
+  {
+   "team": "top",
+   "player": "LEGACY",
+   "title": null,
+   "hero": "hanzo",
+   "role": "damage",
+   "perks": [
+    "Dragon Fury",
+    "Swift Lunge"
+   ],
+   "E": 18,
+   "A": 9,
+   "D": 5,
+   "DMG": 12624,
+   "H": 0,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "PONYO",
+   "title": "Challenger Tank",
+   "hero": "symmetra",
+   "role": "damage",
+   "perks": [
+    "Shield Battery",
+    "Perfect Alignment"
+   ],
+   "E": 19,
+   "A": 4,
+   "D": 9,
+   "DMG": 11192,
+   "H": 931,
+   "MIT": 6162
+  },
+  {
+   "team": "top",
+   "player": "SHREK",
+   "title": null,
+   "hero": "mauga",
+   "role": "tank",
+   "perks": [
+    "Firewalker",
+    "Pyromaniac"
+   ],
+   "E": 17,
+   "A": 13,
+   "D": 8,
+   "DMG": 13870,
+   "H": 2178,
+   "MIT": 7212
+  },
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": null,
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    "Foxtrot",
+    "Fortune Teller"
+   ],
+   "E": 14,
+   "A": 33,
+   "D": 5,
+   "DMG": 4040,
+   "H": 13261,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "ANSR",
+   "title": "Nocturnal Creature",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 21,
+   "A": 2,
+   "D": 7,
+   "DMG": 9860,
+   "H": 4854,
+   "MIT": 4070
+  },
+  {
+   "team": "bottom",
+   "player": "ASPEN",
+   "title": "Wildflower",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Locked On",
+    "Lift Off"
+   ],
+   "E": 20,
+   "A": 17,
+   "D": 4,
+   "DMG": 7752,
+   "H": 14562,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "CHRONO",
+   "title": null,
+   "hero": "reaper",
+   "role": "damage",
+   "perks": [
+    "Lingering Wraith|Ravenous Wraith",
+    "Shadow Blink"
+   ],
+   "E": 19,
+   "A": 0,
+   "D": 7,
+   "DMG": 12060,
+   "H": 2136,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "RONRON",
+   "title": null,
+   "hero": "tracer",
+   "role": "damage",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 13,
+   "A": 3,
+   "D": 7,
+   "DMG": 10948,
+   "H": 23,
+   "MIT": 1914
+  },
+  {
+   "team": "bottom",
+   "player": "RUDO",
+   "title": "Justice Execution",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    "Noise Violation",
+    "Beat Drop"
+   ],
+   "E": 11,
+   "A": 13,
+   "D": 8,
+   "DMG": 6632,
+   "H": 11758,
+   "MIT": 3339
+  },
+  {
+   "team": "bottom",
+   "player": "SPEEDSPORT!",
+   "title": "Titan",
+   "hero": "sigma",
+   "role": "tank",
+   "perks": [
+    "Hyper Strike",
+    "Hyper Regeneration"
+   ],
+   "E": 20,
+   "A": 6,
+   "D": 8,
+   "DMG": 11948,
+   "H": 0,
+   "MIT": 22654
+  }
+ ]
+}

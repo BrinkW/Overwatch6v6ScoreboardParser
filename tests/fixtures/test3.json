@@ -1,0 +1,226 @@
+{
+ "image": "test3.png",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
+ "header": {
+  "mode": "Control",
+  "map": "Oasis",
+  "time": "7:16",
+  "bans": [
+   "vendetta",
+   "bastion",
+   "d_va",
+   "lucio"
+  ],
+  "rank_range": [
+   "Master 3",
+   "Champion 4"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "TMG",
+   "title": "Cabbage Merchant",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Locked On",
+    "Lift Off"
+   ],
+   "E": 11,
+   "A": 20,
+   "D": 2,
+   "DMG": 3693,
+   "H": 9497,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "DECAY",
+   "title": "Champion Support",
+   "hero": "kiriko",
+   "role": "support",
+   "perks": [
+    "Foxtrot",
+    "Fortune Teller"
+   ],
+   "E": 13,
+   "A": 15,
+   "D": 3,
+   "DMG": 4525,
+   "H": 5117,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "DJCOLE",
+   "title": "Master Open Competitor",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    "Agility Training",
+    "Recycled Pulse Munitions"
+   ],
+   "E": 14,
+   "A": 3,
+   "D": 3,
+   "DMG": 8549,
+   "H": 338,
+   "MIT": 291
+  },
+  {
+   "team": "top",
+   "player": "KOKOMI",
+   "title": "Bytefixer",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "Adaptive Barrier",
+    "Steamroller"
+   ],
+   "E": 15,
+   "A": 4,
+   "D": 2,
+   "DMG": 7475,
+   "H": 0,
+   "MIT": 2643
+  },
+  {
+   "team": "top",
+   "player": "KCRISISSIR",
+   "title": "Hashimoto Goon",
+   "hero": "roadhog",
+   "role": "tank",
+   "perks": [
+    "Invigorate",
+    "Scrap Hook"
+   ],
+   "E": 17,
+   "A": 3,
+   "D": 4,
+   "DMG": 5480,
+   "H": 3666,
+   "MIT": 821
+  },
+  {
+   "team": "top",
+   "player": "SAOLVIER",
+   "title": "Trickster",
+   "hero": "torbjorn",
+   "role": "damage",
+   "perks": [
+    "Anchor Bolts",
+    "Fully Loaded"
+   ],
+   "E": 18,
+   "A": 0,
+   "D": 3,
+   "DMG": 7692,
+   "H": 0,
+   "MIT": 878
+  },
+  {
+   "team": "bottom",
+   "player": "ABDALA",
+   "title": "Opening Act",
+   "hero": "sojourn",
+   "role": "damage",
+   "perks": [
+    "Deceleration Field",
+    "Friction Generators"
+   ],
+   "E": 7,
+   "A": 0,
+   "D": 8,
+   "DMG": 6684,
+   "H": 0,
+   "MIT": 98
+  },
+  {
+   "team": "bottom",
+   "player": "AMBIPOMED",
+   "title": "Wraith",
+   "hero": "widowmaker",
+   "role": "damage",
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 8,
+   "A": 0,
+   "D": 6,
+   "DMG": 6663,
+   "H": 453,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "DEADLYPANTS",
+   "title": "Monstrosity",
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    "none",
+    "Mobile Fortification"
+   ],
+   "E": 7,
+   "A": 2,
+   "D": 7,
+   "DMG": 5305,
+   "H": 2066,
+   "MIT": 4089
+  },
+  {
+   "team": "bottom",
+   "player": "DIZZY",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Faster Blaster",
+    "Familiar Vitals"
+   ],
+   "E": 6,
+   "A": 7,
+   "D": 3,
+   "DMG": 3124,
+   "H": 8150,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "LIV",
+   "title": "n00b",
+   "hero": "junker_queen",
+   "role": "tank",
+   "perks": [
+    "none",
+    "Rampant Charge"
+   ],
+   "E": 11,
+   "A": 5,
+   "D": 5,
+   "DMG": 9387,
+   "H": 191,
+   "MIT": 4635
+  },
+  {
+   "team": "bottom",
+   "player": "THEZODIAC",
+   "title": "Hollow Heart",
+   "hero": "ana",
+   "role": "support",
+   "perks": [
+    "Biotic Bounce",
+    "Groggy"
+   ],
+   "E": 5,
+   "A": 8,
+   "D": 4,
+   "DMG": 2684,
+   "H": 8316,
+   "MIT": 1149
+  }
+ ]
+}

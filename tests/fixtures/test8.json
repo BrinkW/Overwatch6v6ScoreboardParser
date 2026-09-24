@@ -1,0 +1,226 @@
+{
+ "image": "test8.png",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting.",
+ "header": {
+  "mode": "Push",
+  "map": "Esperança",
+  "time": "9:27",
+  "bans": [
+   "roadhog",
+   "wuyang",
+   "freja",
+   "wrecking_ball"
+  ],
+  "rank_range": [
+   "Grandmaster 2",
+   "Champion 2"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "SNK",
+   "title": "Titan",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    "Noise Violation",
+    "Beat Drop"
+   ],
+   "E": 21,
+   "A": 27,
+   "D": 3,
+   "DMG": 5465,
+   "H": 9788,
+   "MIT": 1880
+  },
+  {
+   "team": "top",
+   "player": "ASPEN",
+   "title": "Wildflower",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Locked On",
+    "Lift Off"
+   ],
+   "E": 23,
+   "A": 17,
+   "D": 5,
+   "DMG": 6997,
+   "H": 7082,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "KAPPACAPPER",
+   "title": "Expert Competitor",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    "Stim Pack",
+    "Recycled Pulse Munitions"
+   ],
+   "E": 22,
+   "A": 0,
+   "D": 1,
+   "DMG": 11819,
+   "H": 1381,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "KINGSOULS",
+   "title": "Giant Troll",
+   "hero": "hazard",
+   "role": "tank",
+   "perks": [
+    "Explosive Impalements",
+    "Deep Leap"
+   ],
+   "E": 19,
+   "A": 3,
+   "D": 5,
+   "DMG": 7206,
+   "H": 0,
+   "MIT": 8377
+  },
+  {
+   "team": "top",
+   "player": "SPICE",
+   "title": "Divine Being",
+   "hero": "junker_queen",
+   "role": "tank",
+   "perks": [
+    "Savage Satiation",
+    "Rampant Charge"
+   ],
+   "E": 23,
+   "A": 9,
+   "D": 6,
+   "DMG": 6759,
+   "H": 1646,
+   "MIT": 2323
+  },
+  {
+   "team": "top",
+   "player": "WOOFAROONI",
+   "title": "Sharpshooter 77",
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    "Self-Repair",
+    "Configuration Reload"
+   ],
+   "E": 29,
+   "A": 4,
+   "D": 4,
+   "DMG": 13415,
+   "H": 1305,
+   "MIT": 1101
+  },
+  {
+   "team": "bottom",
+   "player": "BREAKUPWME",
+   "title": "Hollow Heart",
+   "hero": "ana",
+   "role": "support",
+   "perks": [
+    "Headhunter",
+    "Speed Serum"
+   ],
+   "E": 3,
+   "A": 15,
+   "D": 8,
+   "DMG": 1471,
+   "H": 7615,
+   "MIT": 420
+  },
+  {
+   "team": "bottom",
+   "player": "CHU",
+   "title": "Champion Support",
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    "Lindholm Explosives",
+    "Armored Artillery"
+   ],
+   "E": 8,
+   "A": 2,
+   "D": 8,
+   "DMG": 10716,
+   "H": 0,
+   "MIT": 673
+  },
+  {
+   "team": "bottom",
+   "player": "J4K3",
+   "title": "Champion Support",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Faster Blaster",
+    "Familiar Vitals"
+   ],
+   "E": 8,
+   "A": 10,
+   "D": 6,
+   "DMG": 2490,
+   "H": 14221,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "KARMAZ",
+   "title": "Divine Being",
+   "hero": "d_va",
+   "role": "tank",
+   "perks": [
+    "Shield System",
+    "Extended Boosters"
+   ],
+   "E": 13,
+   "A": 6,
+   "D": 11,
+   "DMG": 4982,
+   "H": 693,
+   "MIT": 14822
+  },
+  {
+   "team": "bottom",
+   "player": "RUDO",
+   "title": "Justice Execution",
+   "hero": "widowmaker",
+   "role": "damage",
+   "perks": [
+    "none",
+    "Scoped Efficiency"
+   ],
+   "E": 16,
+   "A": 2,
+   "D": 11,
+   "DMG": 11349,
+   "H": 0,
+   "MIT": 203
+  },
+  {
+   "team": "bottom",
+   "player": "RUDOLPH",
+   "title": null,
+   "hero": "ramattra",
+   "role": "tank",
+   "perks": [
+    "Vengeful Vortex",
+    "Void Surge"
+   ],
+   "E": 13,
+   "A": 1,
+   "D": 11,
+   "DMG": 7290,
+   "H": 323,
+   "MIT": 11714
+  }
+ ]
+}

@@ -1,0 +1,1425 @@
+{
+ "_meta": {
+  "description": "Player titles, for snapping the scoreboard's title line. Maintained by tools/sync_reference.py from the wiki's Titles page, plus competitive reward titles generated from the pattern seen on scoreboards (source rank-pattern). Titles seen in the answer keys are added at build time (reference/templates/known_text.json), so event titles the wiki lacks still snap."
+ },
+ "titles": [
+  {
+   "title": "Stalwart Hero",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Tenacious Hero",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Unrelenting Hero",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Partygoer",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Executioner",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Shapeshifter",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Assassin",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "All-Star",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Medic",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Vanguard",
+   "source": "wiki",
+   "section": "Overwatch"
+  },
+  {
+   "title": "Adept Competitor",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Seasoned Competitor",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Expert Competitor",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Determined Flag Runner",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Unparalleled Flag Runner",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Cryptic Chameleon",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Enigmatic Chameleon",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Gold Challenger",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Platinum Challenger",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Diamond Challenger",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Master Challenger",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Grandmaster Challenger",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Top 500 Challenger",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Diamond Flag Bearer",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Master Flag Bearer",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Grandmaster Flag Bearer",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Top 500 Flag Bearer",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Platinum Sleuth",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Diamond Sleuth",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Master Sleuth",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Grandmaster Sleuth",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Top 500 Sleuth",
+   "source": "wiki",
+   "section": "Competitive"
+  },
+  {
+   "title": "Nomad",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Neogun",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Streetrunner",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Bytefixer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Netbreaker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Data Broker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Technoknight",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Cyberdemon",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Mortal",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Philosopher",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Argonaut",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Gorgon",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Daimon",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Demigod",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Olympian",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Titan",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Peasant",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Trickster",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Disciple",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Noble",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Scholar",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sage",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fearsome Spirit",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Legendary Beast",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Rebel",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Extraterrestrial",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Star Pilot",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Bounty hunter",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Officer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Oracle",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "World Eater",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Conqueror",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Adventurer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Barbarian",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Bard",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Knight",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Druid",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Rogue",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Paladin",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Archmage",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Nulltrooper",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Jumpjet",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Slicer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Breacher",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Subjugator",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Vulture",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Charger",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Null Titan",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Graverobber",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Harbinger",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Butcher",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fearmonger",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Treasure Goblin",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Deceiver",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Temptation",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Prime Evil",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Easy Prey",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Scavenger",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Pack Animal",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Tracker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Nocturnal Creature",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Aerial Hunter",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Monster Slayer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Behemoth",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Betrayer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Haunted Shadow",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Monstrosity",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Blighted Eye",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Cosmic Being",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Chaos Bringer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Ancient One",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Eldritch Nightmare",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Doppelganger",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Hashimoto Goon",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Talon Operative",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Overwatch Agent",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Scrapyard Artiste",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fallen Knight",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Commander of Hope",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Angel of Vengeance",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Minion",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sentai",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Kaiju",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Retro Hero",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "City Razer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Nemesis",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Calamity Sovereign",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Final Boss",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Stone Worker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Mummy",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Scribe",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Vizier",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Divine Mourner",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Descendant of Ra",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Child of Anubis",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Pharaoh",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Conjurer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sorcerer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Bog Witch",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Potion Seller",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Witch's Familiar",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Unlucky Omen",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Kitten of Discord",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Spellbinder",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Gingerbread Friend",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Midgardian",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Mistletoe Dodger",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Viking Raider",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Holiday Delight",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Odin's Favorite Child",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Snowflake",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Giant Troll",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Puddle Stomper",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Journey Walker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sun Chaser",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Toxic Mess",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Lilypad Leaper",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sky Mender",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Godforged",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Kingdom Overlord",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Bounty Collector",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Magitechnician",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Demon Rocker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Stormchaser",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Hollow Heart",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Monster Mosher",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Hero of Heart",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Royal Pain",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Retro Gamer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Teacher's Pet",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fragile Flower",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Min-Maxer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Bad Apple",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fleeting Beauty",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Smarty Pants",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "n00b",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Opening Act",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Wildflower",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Beach Bum",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fashion Icon",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Headliner",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Trendsetter",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sunscreen Stan",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sweet Summer Child",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Arcanist",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Femme Fatale",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Divine Being",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Technomancer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Trick-or-Treater",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Mad Scientist",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Scary Skeleton",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fallen Angel",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Cozy Homebody",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Stargazer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Getaway Driver",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "exo-FAUNA Critter",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Ice Breaker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Escape Artist",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Uninvited Guest",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Aura Farmer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fire Cracker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Heartbreaker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Talon Imperial",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Voidwalker",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Celestial Angel",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Recall Responder",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Chronically Online",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Empire's Favored",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Funny Bunny",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Budding Talent",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Storm Cloud",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Court Jester",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Cherry Blossom",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Enchanted Fae",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Doomsday Prepper",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Throne Usurper",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Tourist",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Street Rebel",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Claw Machine Pro",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Café Cutie",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Festival Foodie",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Spellbound Mage",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Sweaty",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Over-caffeinated",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Squad Member",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Fluffy Friend",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Cyber Gamer",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Glitch",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "<3",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Dead Pixel",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Keyboard Warrior",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "UwU",
+   "source": "wiki",
+   "section": "Battle Pass"
+  },
+  {
+   "title": "Ant Overlord",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "MVP",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Playmaker",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Game Changer",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Franchise Player",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Elite",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Pro",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Legend",
+   "source": "wiki",
+   "section": "Stadium"
+  },
+  {
+   "title": "Zeus's Favorite Child",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Pride of Poseidon",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Sentinel of Hades",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Herald of Hermes",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Master of Minotaurs",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Acolyte of Medusa",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Scion of Cyclops",
+   "source": "wiki",
+   "section": "Events"
+  },
+  {
+   "title": "Genji's Peace",
+   "source": "wiki",
+   "section": "Web Events"
+  },
+  {
+   "title": "Mercy's Angel",
+   "source": "wiki",
+   "section": "Web Events"
+  },
+  {
+   "title": "Cupid's Arrow",
+   "source": "wiki",
+   "section": "Web Events"
+  },
+  {
+   "title": "Bronze Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Bronze Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Bronze Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Bronze Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Bronze Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Silver Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Silver Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Silver Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Silver Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Silver Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Gold Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Gold Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Gold Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Gold Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Gold Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Platinum Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Platinum Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Platinum Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Platinum Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Platinum Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Emerald Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Emerald Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Emerald Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Emerald Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Emerald Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Diamond Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Diamond Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Diamond Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Diamond Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Diamond Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Master Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Master Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Master Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Master Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Master Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Grandmaster Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Grandmaster Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Grandmaster Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Grandmaster Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Grandmaster Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Champion Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Champion Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Champion Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Champion Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Champion Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Challenger Tank",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Challenger Damage",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Challenger Support",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Challenger Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Challenger Open Challenger",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Open Competitor",
+   "source": "rank-pattern"
+  },
+  {
+   "title": "Open Challenger",
+   "source": "rank-pattern"
+  }
+ ]
+}

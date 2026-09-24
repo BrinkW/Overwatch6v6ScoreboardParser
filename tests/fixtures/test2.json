@@ -1,0 +1,226 @@
+{
+ "image": "test2.jpg",
+ "verified": true,
+ "note": "Transcribed by Claude from full-resolution crops, then reviewed by the user on 2026-09-22 (bans, heroes corrected; mode/map/time/rank confirmed). null = unknown (never scored). perks: \"none\" = empty slot, null = present but not yet identified. Formerly test4.jpg (a different match from test4.png). JPEG compression. BLACK! is in a non-display font. Perk names: identified by the parser's icon matcher, each checked by eye against the artwork by Claude (debug/perk_review_*.png); spot-check before trusting. Moira's 'Phantom Step|Uprush': the two share one icon, and paired with Ethical Nourishment (both tiers over time) either reading gives one major + one minor; either answer is accepted.",
+ "header": {
+  "mode": "Flashpoint",
+  "map": "Suravasa",
+  "time": "12:13",
+  "bans": [
+   "vendetta",
+   "roadhog",
+   "bastion",
+   "orisa"
+  ],
+  "rank_range": [
+   "Master 1",
+   "Grandmaster 1"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "BLACK!",
+   "title": null,
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "Adaptive Barrier",
+    "Steamroller"
+   ],
+   "E": 29,
+   "A": 14,
+   "D": 9,
+   "DMG": 11393,
+   "H": 0,
+   "MIT": 4837
+  },
+  {
+   "team": "top",
+   "player": "BLIP",
+   "title": "Headliner",
+   "hero": "reaper",
+   "role": "damage",
+   "perks": [
+    "Soul Reaving",
+    "Shadow Blink"
+   ],
+   "E": 29,
+   "A": 1,
+   "D": 8,
+   "DMG": 14396,
+   "H": 2085,
+   "MIT": 37
+  },
+  {
+   "team": "top",
+   "player": "BLUE",
+   "title": "Open Challenger",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    "Noise Violation",
+    "Soundwave Rider"
+   ],
+   "E": 20,
+   "A": 26,
+   "D": 7,
+   "DMG": 6180,
+   "H": 13727,
+   "MIT": 3618
+  },
+  {
+   "team": "top",
+   "player": "ECLIPSE",
+   "title": null,
+   "hero": "moira",
+   "role": "support",
+   "perks": [
+    "Phantom Step",
+    "Destruction's Divide"
+   ],
+   "E": 32,
+   "A": 24,
+   "D": 2,
+   "DMG": 12117,
+   "H": 14922,
+   "MIT": 0
+  },
+  {
+   "team": "top",
+   "player": "REDHUNTER",
+   "title": "6v6 Enthusiast",
+   "hero": "zarya",
+   "role": "tank",
+   "perks": [
+    "Energy Lance",
+    "Energy Converter"
+   ],
+   "E": 27,
+   "A": 12,
+   "D": 5,
+   "DMG": 12848,
+   "H": 0,
+   "MIT": 7202
+  },
+  {
+   "team": "top",
+   "player": "SEWERRAT",
+   "title": "Vulture",
+   "hero": "cassidy",
+   "role": "damage",
+   "perks": [
+    "Silver Bullet",
+    "Even the Odds"
+   ],
+   "E": 29,
+   "A": 5,
+   "D": 10,
+   "DMG": 12969,
+   "H": 46,
+   "MIT": 89
+  },
+  {
+   "team": "bottom",
+   "player": "ANDYGDH",
+   "title": "Bottom 500",
+   "hero": "wrecking_ball",
+   "role": "tank",
+   "perks": [
+    "Hang Time",
+    "Pack Rat"
+   ],
+   "E": 24,
+   "A": 6,
+   "D": 8,
+   "DMG": 12177,
+   "H": 264,
+   "MIT": 6716
+  },
+  {
+   "team": "bottom",
+   "player": "ANIMAFAN",
+   "title": "All-Star",
+   "hero": "soldier_76",
+   "role": "damage",
+   "perks": [
+    "Stim Pack",
+    "Recycled Pulse Munitions"
+   ],
+   "E": 12,
+   "A": 2,
+   "D": 14,
+   "DMG": 10506,
+   "H": 214,
+   "MIT": 862
+  },
+  {
+   "team": "bottom",
+   "player": "J4K3",
+   "title": "Champion Support",
+   "hero": "lucio",
+   "role": "support",
+   "perks": [
+    "Noise Violation",
+    "Beat Drop"
+   ],
+   "E": 17,
+   "A": 17,
+   "D": 8,
+   "DMG": 5815,
+   "H": 13019,
+   "MIT": 3381
+  },
+  {
+   "team": "bottom",
+   "player": "KINGSOULS",
+   "title": "Giant Troll",
+   "hero": "mauga",
+   "role": "tank",
+   "perks": [
+    "Firewalker",
+    "Pyromaniac"
+   ],
+   "E": 22,
+   "A": 11,
+   "D": 10,
+   "DMG": 15992,
+   "H": 1906,
+   "MIT": 6373
+  },
+  {
+   "team": "bottom",
+   "player": "KUDU",
+   "title": "Ant Overlord",
+   "hero": "moira",
+   "role": "support",
+   "perks": [
+    "Phantom Step|Uprush",
+    "Ethical Nourishment"
+   ],
+   "E": 13,
+   "A": 22,
+   "D": 8,
+   "DMG": 7735,
+   "H": 11806,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "PURPZUKI",
+   "title": "GOAT of All Time",
+   "hero": "brigitte",
+   "role": "support",
+   "perks": [
+    "Inspiring Strike",
+    "Combat Medic"
+   ],
+   "E": 13,
+   "A": 13,
+   "D": 11,
+   "DMG": 5626,
+   "H": 9070,
+   "MIT": 1250
+  }
+ ]
+}

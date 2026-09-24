@@ -1,0 +1,193 @@
+{
+ "_meta": {
+  "description": "Maps and their modes, for snapping the scoreboard header's map name. Maintained by tools/sync_reference.py from the wiki's Maps page.",
+  "current": "true = in the Standard Play pool; false = a former mode (Assault, Clash)"
+ },
+ "maps": [
+  {
+   "name": "Antarctic Peninsula",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Busan",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Ilios",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Lijiang Tower",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Nepal",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Oasis",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Samoa",
+   "mode": "Control",
+   "current": true
+  },
+  {
+   "name": "Circuit Royal",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Dorado",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Havana",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Junkertown",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Rialto",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Route 66",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Shambali Monastery",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Watchpoint: Gibraltar",
+   "mode": "Escort",
+   "current": true
+  },
+  {
+   "name": "Aatlis",
+   "mode": "Flashpoint",
+   "current": true
+  },
+  {
+   "name": "New Junk City",
+   "mode": "Flashpoint",
+   "current": true
+  },
+  {
+   "name": "Suravasa",
+   "mode": "Flashpoint",
+   "current": true
+  },
+  {
+   "name": "Blizzard World",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Eichenwalde",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Hollywood",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "King's Row",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Midtown",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Neon Junction",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Numbani",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Paraíso",
+   "mode": "Hybrid",
+   "current": true
+  },
+  {
+   "name": "Colosseo",
+   "mode": "Push",
+   "current": true
+  },
+  {
+   "name": "Esperança",
+   "mode": "Push",
+   "current": true
+  },
+  {
+   "name": "New Queen Street",
+   "mode": "Push",
+   "current": true
+  },
+  {
+   "name": "Runasapi",
+   "mode": "Push",
+   "current": true
+  },
+  {
+   "name": "Hanamura",
+   "mode": "Assault",
+   "current": false
+  },
+  {
+   "name": "Horizon Lunar Colony",
+   "mode": "Assault",
+   "current": false
+  },
+  {
+   "name": "Paris",
+   "mode": "Assault",
+   "current": false
+  },
+  {
+   "name": "Temple of Anubis",
+   "mode": "Assault",
+   "current": false
+  },
+  {
+   "name": "Volskaya Industries",
+   "mode": "Assault",
+   "current": false
+  },
+  {
+   "name": "Hanaoka",
+   "mode": "Clash",
+   "current": false
+  },
+  {
+   "name": "Throne of Anubis",
+   "mode": "Clash",
+   "current": false
+  }
+ ]
+}
