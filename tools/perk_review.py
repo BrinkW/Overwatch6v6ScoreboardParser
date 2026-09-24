@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import numpy as np  # noqa: E402
 from PIL import Image, ImageDraw  # noqa: E402
 
-from build_templates import SAMPLES, fixtures  # noqa: E402
+from build_templates import fixtures, image_path  # noqa: E402
 from src import layout as L  # noqa: E402
 from src.parse import Models, load_rgb, parse  # noqa: E402
 
@@ -39,7 +39,7 @@ def main():
     models = Models.load()
     tiles = []
     for fx in fixtures():
-        rgb = load_rgb(SAMPLES / fx["image"])
+        rgb = load_rgb(image_path(fx))
         lay = L.detect(rgb)
         result = parse(rgb, models)
         for i, (row, got) in enumerate(zip(lay.rows, result["rows"])):

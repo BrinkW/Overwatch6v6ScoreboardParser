@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
-from build_templates import SAMPLES, build, fixtures  # noqa: E402
+from build_templates import build, fixtures, image_path  # noqa: E402
 from src import digits as D, header as HD, icons as I, layout as L, text as T  # noqa: E402
 from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
 
@@ -60,10 +60,10 @@ def main(argv=None):
     full = models_for((), cache) if args.in_sample else None
     for fx in fixtures():
         img = fx["image"]
-        result = parse(SAMPLES / img, full or models_for((img,), cache))
+        result = parse(image_path(fx), full or models_for((img,), cache))
         if args.overlays:
             (ROOT / "debug").mkdir(exist_ok=True)
-            rgb = load_rgb(SAMPLES / img)
+            rgb = load_rgb(image_path(fx))
             L.draw(rgb, L.detect(rgb)).save(ROOT / "debug" / (img.replace(".", "_") + "_layout.png"))
         for i, (got, want) in enumerate(zip(result["rows"], fx["rows"])):
             where = f"{img:12} {want['team']}{i % 6}"

@@ -18,6 +18,9 @@ Every learned template comes from a screenshot whose answer is known:
   - fallback_names: whole-name images of fallback-font players;
   - players, titles: the names and titles themselves (known_text.json), which
                    names are snapped to and titles are matched against.
+Answer keys come from two places: tests/fixtures/ (committed, images in
+sample_screenshots/) and data/reviewed/ (git-ignored captures accepted with
+tools/review.py, each key next to its image).
 --exclude supports leave-one-image-out evaluation (tools/evaluate.py).
 """
 
@@ -39,21 +42,29 @@ from src.parse import STATS, load_rgb  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures"
 SAMPLES = ROOT / "sample_screenshots"
+REVIEWED = ROOT / "data" / "reviewed"
 KINDS = ["digits", "roles", "letters", "time_digits", "division", "rank_emblems",
          "name_glyphs", "title_glyphs", "fallback_names"]
 STRING_KINDS = ["players", "titles"]
 
 
 def fixtures(exclude=()):
-    for f in sorted(FIXTURES.glob("*.json")):
-        fx = json.loads(f.read_text(encoding="utf-8"))
-        if fx["image"] not in exclude:
-            yield fx
+    """Every answer key: the committed fixtures, then reviewed captures."""
+    for folder, images in ((FIXTURES, SAMPLES), (REVIEWED, REVIEWED)):
+        for f in sorted(folder.glob("*.json")) if folder.exists() else []:
+            fx = json.loads(f.read_text(encoding="utf-8"))
+            if fx["image"] not in exclude:
+                fx["_image_path"] = str(images / fx["image"])
+                yield fx
+
+
+def image_path(fx: dict) -> Path:
+    return Path(fx.get("_image_path") or SAMPLES / fx["image"])
 
 
 def harvest(fx: dict) -> dict[str, list]:
     """Labelled samples of every kind from one answer-key screenshot."""
-    rgb = load_rgb(SAMPLES / fx["image"])
+    rgb = load_rgb(image_path(fx))
     lay = L.detect(rgb)
     got = {k: [] for k in KINDS + STRING_KINDS}
     for row, truth in zip(lay.rows, fx["rows"]):
