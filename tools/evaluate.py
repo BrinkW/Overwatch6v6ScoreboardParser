@@ -106,17 +106,20 @@ def main(argv=None):
                 per_field[f][0] += 1
             else:
                 mismatches.append(f"{img:12} header {f:5} want {hw[f]!r} got {hg.get(f)!r}  (raw {hg.get('raw')})")
-        for f, n in (("bans", 4), ("rank_range", 2)):
-            for k in range(n):
-                w = (hw.get(f) or [None] * n)[k]
+        for f in ("bans", "rank_range"):          # 4 or 5 ban slots; 2 rank ends
+            want_f, got_f = hw.get(f) or [], hg.get(f) or []
+            key = "ban" if f == "bans" else "rank"
+            if f == "bans" and want_f and len(got_f) != len(want_f):
+                mismatches.append(f"{img:12} header found {len(got_f)} ban slots, want {len(want_f)}")
+            for k, w in enumerate(want_f):
                 if w is None:
                     continue
-                key = "ban" if f == "bans" else "rank"
+                got = got_f[k] if k < len(got_f) else None
                 per_field[key][1] += 1
-                if hg[f][k] == w:
+                if got == w:
                     per_field[key][0] += 1
                 else:
-                    mismatches.append(f"{img:12} header {key}{k} want {w!r} got {hg[f][k]!r}")
+                    mismatches.append(f"{img:12} header {key}{k} want {w!r} got {got!r}")
         for p in result["problems"]:
             mismatches.append(f"{img:12} STRUCTURE {p}")
 

@@ -73,7 +73,7 @@ def harvest(fx: dict) -> dict[str, list]:
                 got["digits"] += D.harvest(L.crop(rgb, row.rois[c]), truth[c])
         if truth.get("role"):
             got["roles"].append((I.role_descriptor(L.crop(rgb, row.rois["role"])), truth["role"]))
-        harvest_text(rgb, row, truth, lay.scale, got)
+        harvest_text(rgb, row, truth, lay.scale, T.TITLE_SCALE.get(lay.ui, 1.0), got)
 
     h = fx.get("header", {})
     grey, orange = HD.split_strip(L.crop(rgb, lay.header["mode_map_time"]))
@@ -101,7 +101,7 @@ def harvest(fx: dict) -> dict[str, list]:
     return got
 
 
-def harvest_text(rgb, row, truth: dict, scale: float, got: dict):
+def harvest_text(rgb, row, truth: dict, scale: float, ts: float, got: dict):
     name, title = truth.get("player"), truth.get("title")
     block = T.text_block(rgb, row)
     glyphs, band = T.name_line(block, scale)
@@ -115,10 +115,10 @@ def harvest_text(rgb, row, truth: dict, scale: float, got: dict):
     if title:
         got["titles"].append(title)
         if band is not None:
-            tg, base = T.title_line(block, band, scale)
+            tg, base = T.title_line(block, band, scale, ts)
             chars = title.replace(" ", "")
             if tg and len(tg) == len(chars):
-                got["title_glyphs"] += list(zip(T.title_vectors(tg, base, scale), chars))
+                got["title_glyphs"] += list(zip(T.title_vectors(tg, base, ts), chars))
 
 
 def build(exclude=(), cache: dict | None = None) -> dict:

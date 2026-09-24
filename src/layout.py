@@ -1,18 +1,34 @@
 """
-Scoreboard layout: find the table and express every region of interest (ROI)
-relative to it.
+Scoreboard layout: find the table and the header, and express every region of
+interest (ROI) relative to what it is attached to on screen.
 
-Anchors (see CLAUDE.md "Layout: anchor, don't hardcode"):
+Two UIs exist: "classic", and "tabbed" (a HERO INFO | SCOREBOARD tab strip,
+from late 2026). They differ in table size, table position, the name area's
+width, the header's placement and the ban count. Nothing here branches on the
+UI: every element is anchored to what it is attached to on screen, so both are
+handled by one code path (see CLAUDE.md "Layout: anchor, don't hardcode").
+
+Table anchors:
   - the white column-header bar: its LEFT edge, top and height. Its right edge
     is unreliable (it blends into other bright UI in some captures), so column
     positions come from the dark E/A/D/DMG/H/MIT labels printed inside it;
-  - the two saturated team blocks below it (split by the "VS" gap);
-  - the thin dark separator lines between rows, used to fit the row count.
+  - left side of a row (role, portrait, ult, start of the name): the bar's
+    left edge;
+  - right side (perk slots, end of the name, stats): the E column. The name
+    area between them is wider in the tabbed UI (15.6h vs 14.7h);
+  - the two saturated team blocks below the bar (split by the "VS" gap), and
+    the thin dark separator lines between rows, used to fit the row count.
+Row geometry is in units of the bar height `h` (39 px in the classic UI at
+2560x1440, 34 px in the tabbed one), so it survives rescaled captures. Rows
+are labelled top/bottom, never by colour: team colours change with the
+colour-blind setting.
 
-All geometry is in units of the bar height `h` (39 px on a native 2560x1440
-capture), measured from the bar's left edge `x0` / top `y0`, so it survives
-rescaled or cropped captures. Rows are labelled top/bottom, never by colour:
-team colours change with the colour-blind setting.
+Header anchors (the header is pinned to the screen, not to the table):
+  - bans: the red ban icon at the top left; ban slots follow it at a fixed
+    pitch, 4 or 5 of them, each a red frame (or grey when a team didn't ban);
+  - mode, map and match time: the orange time digits at the top right;
+  - rank range: the white dash between the two rank emblems.
+Header geometry is in units of the ban icon's diameter (41 px at 1440p).
 """
 
 from __future__ import annotations
@@ -22,41 +38,70 @@ from dataclasses import dataclass, field
 import numpy as np
 from PIL import Image, ImageDraw
 
-BAR_H_REF = 39  # px, native 2560x1440
+BAR_H_REF = 39  # px, classic UI at 2560x1440
+CLASSIC_BAR_TO_E = (965 - 393) / BAR_H_REF   # h from the bar's left edge to the E column (classic UI)
 
-# Horizontal row ROIs: (x0, x1) in h units from the bar's left edge.
+# Horizontal row ROIs, (x0, x1) in h units from the bar's left edge.
 ROW_X = {
     "role":      (0.05, 0.85),
     "portrait":  (0.90, 2.85),
     "ult":       (3.00, 4.20),    # top (friendly) team only
-    "perk_left": (10.12, 11.60),
-    "perk_right": (12.04, 13.52),
 }
-NAME_X = {"top": (4.35, 10.05), "bottom": (2.90, 10.05)}  # bottom team has no ult column
+# ... and from the E column (negative = left of it): identical in both UIs.
+ROW_X_FROM_E = {
+    "perk_left": (10.12 - CLASSIC_BAR_TO_E, 11.60 - CLASSIC_BAR_TO_E),
+    "perk_right": (12.04 - CLASSIC_BAR_TO_E, 13.52 - CLASSIC_BAR_TO_E),
+}
+NAME_START = {"top": 4.35, "bottom": 2.90}      # from the bar edge; the bottom team has no ult column
+NAME_END_FROM_E = 10.05 - CLASSIC_BAR_TO_E      # the name and title end just before the left perk slot
 # Vertical row ROIs: (y0, y1) as fractions of the row pitch.
 ROW_Y = {
     "role": (0.25, 0.75), "portrait": (0.02, 0.98), "ult": (0.20, 0.80),
-    "name": (0.06, 0.74), "title": (0.66, 0.99),
+    "name": (0.06, 0.74), "title": (0.66, 1.06),   # a little past the row: descenders (the next name starts at ~0.25)
     "perk_left": (0.14, 0.86), "perk_right": (0.14, 0.86),
     "stat": (0.30, 0.76),
 }
 STAT_COLS = ["E", "A", "D", "DMG", "H", "MIT"]
 STAT_HALF_W = {"E": 0.85, "A": 0.85, "D": 0.85, "DMG": 1.55, "H": 1.55, "MIT": 1.55}
 
-# Header ROIs, (x0, y0, x1, y1) in h units from the bar's top-left corner.
-HEADER = {
-    "ban_0": (-7.05, -4.05, -5.25, -2.30),
-    "ban_1": (-4.95, -4.05, -3.15, -2.30),
-    "ban_2": (-2.85, -4.05, -1.05, -2.30),
-    "ban_3": (-0.75, -4.05, 1.05, -2.30),
-    # "MODE | MAP  TIME: mm:ss" is one right-aligned group whose left end moves with
-    # the text length, so it is read as one strip and split on "TIME".
-    "mode_map_time": (38.0, -4.15, 54.6, -2.75),
-    # wide enough for Grandmaster's wings (narrower boxes clipped 8 of 26 emblems);
-    # the white dash between the two is colourless, so the emblem mask ignores it
-    "rank_low": (47.9, -2.75, 51.35, -0.25),
-    "rank_high": (51.45, -2.75, 55.2, -0.25),
-}
+# Header geometry, in px at 1440p; scaled by the found ban icon (41 px across)
+# for the bans, and by the time digits' height (32 px) for everything else.
+BAN_ICON_REF, TIME_DIGIT_REF = 41, 32
+BAN_FIRST_DX, BAN_PITCH = 65, 83        # first slot's left edge from the icon's left edge; slot pitch
+BAN_DY, BAN_W, BAN_H = -14, 70, 68      # slot box relative to the icon's top edge
+BAN_FRAME_MIN = 0.3                     # share of a slot's border that is frame (red or grey): slots 0.50-0.66, no slot 0.0
+MAX_BANS = 5
+# "MODE | MAP  TIME: mm:ss" is one right-aligned group whose left end moves with
+# the text length, so it is read as one strip (split on the orange time digits).
+STRIP_FROM_TIME = (-628, -13, 20, 9)    # (left of right edge, above top, right of right edge, below bottom)
+# The rank boxes, from the dash between the two emblems: (x0, y0, x1, y1) from its
+# left/top edge. Wide enough for Grandmaster's wings (narrower boxes clipped 8 of
+# 26 emblems); the dash itself is colourless, so the emblem mask ignores it.
+RANK_FROM_DASH = {"rank_low": (-128, -49, 6, 49), "rank_high": (10, -49, 156, 49)}
+
+
+def components(mask: np.ndarray, min_px: int = 1) -> list[tuple[np.ndarray, np.ndarray]]:
+    """(ys, xs) of every 8-connected component of at least `min_px` pixels."""
+    H, W = mask.shape
+    seen = np.zeros_like(mask, bool)
+    out = []
+    for y0, x0 in zip(*np.where(mask)):
+        if seen[y0, x0]:
+            continue
+        stack, cy, cx = [(y0, x0)], [], []
+        seen[y0, x0] = True
+        while stack:
+            y, x = stack.pop()
+            cy.append(y)
+            cx.append(x)
+            for ny in (y - 1, y, y + 1):
+                for nx in (x - 1, x, x + 1):
+                    if 0 <= ny < H and 0 <= nx < W and mask[ny, nx] and not seen[ny, nx]:
+                        seen[ny, nx] = True
+                        stack.append((ny, nx))
+        if len(cy) >= min_px:
+            out.append((np.array(cy), np.array(cx)))
+    return out
 
 
 @dataclass
@@ -77,6 +122,7 @@ class Layout:
     teams: dict[str, tuple[int, int]]    # team block (y0, y1)
     rows: list[Row]
     header: dict[str, tuple[int, int, int, int]]
+    ui: str = "classic"   # "classic" or "tabbed"; reported only, nothing branches on it
 
     @property
     def scale(self) -> float:
@@ -165,7 +211,123 @@ def fit_rows(rgb, block, h, columns) -> list[tuple[int, int]]:
     return [(int(round(y0 + i * pitch)), int(round(y0 + (i + 1) * pitch)) - 1) for i in range(best_n)]
 
 
-E_TO_MIT_REF = 1438 - 965  # px between the E and MIT label centres, native 2560x1440
+E_TO_MIT_REF = 1438 - 965  # px between the E and MIT label centres, classic UI at 2560x1440
+
+
+# ---------------------------------------------------------------------------
+# Header
+# ---------------------------------------------------------------------------
+def _red(a):
+    return (a[..., 0] > 170) & (a[..., 1] < 80) & (a[..., 2] < 80)
+
+
+def find_ban_icon(rgb: np.ndarray) -> tuple[int, int, int] | None:
+    """(x, y, diameter) of the red ban icon left of the ban slots: the leftmost
+    roughly square red component in the top-left of the screen."""
+    H, W = rgb.shape[:2]
+    top = rgb[:int(0.15 * H), :int(0.6 * W)].astype(np.int16)
+    cands = []
+    for ys, xs in components(_red(top), 30):
+        w, h = np.ptp(xs) + 1, np.ptp(ys) + 1
+        if h >= 0.01 * H and abs(w - h) <= 0.15 * max(w, h):
+            cands.append((int(xs.min()), int(ys.min()), int(w)))
+    return min(cands) if cands else None
+
+
+def _frame_share(rgb: np.ndarray, box) -> float:
+    """Share of a box's 4-px border that is a ban-slot frame: red, or grey for an empty slot."""
+    t = crop(rgb, box).astype(np.int16)
+    if t.shape[0] < 10 or t.shape[1] < 10:
+        return 0.0
+    ring = np.zeros(t.shape[:2], bool)
+    ring[:4] = ring[-4:] = True
+    ring[:, :4] = ring[:, -4:] = True
+    mx, mn = t.max(2), t.min(2)
+    frame = ((t[..., 0] > 150) & (t[..., 1] < 90) & (t[..., 2] < 90)) | (((mx - mn) < 30) & (mx > 110))
+    return float(frame[ring].mean())
+
+
+def find_bans(rgb: np.ndarray, icon) -> list[tuple[int, int, int, int]]:
+    """Ban slot boxes, left to right: slots follow the ban icon at a fixed pitch
+    until a position has no frame (4 or 5 slots)."""
+    x, y, d = icon
+    s = d / BAN_ICON_REF
+    boxes = []
+    for k in range(MAX_BANS):
+        bx, by = round(x + (BAN_FIRST_DX + BAN_PITCH * k) * s), round(y + BAN_DY * s)
+        box = (bx, by, bx + round(BAN_W * s), by + round(BAN_H * s))
+        if _frame_share(rgb, box) < BAN_FRAME_MIN:
+            break
+        boxes.append(box)
+    return boxes
+
+
+def find_time(rgb: np.ndarray) -> tuple[int, int, int, int] | None:
+    """Bounding box of the orange match-time digits at the top right."""
+    H, W = rgb.shape[:2]
+    a = rgb[:int(0.15 * H), W // 2:].astype(np.int16)
+    orange = (a[..., 0] > 200) & (a[..., 1] > 60) & (a[..., 1] < 180) & (a[..., 2] < 90)
+    cs = [c for c in components(orange, 15)]
+    if not cs:
+        return None
+    tallest = max(np.ptp(ys) for ys, _ in cs)
+    digits = [(ys, xs) for ys, xs in cs if np.ptp(ys) >= 0.5 * tallest]
+    ys = np.concatenate([c[0] for c in digits])
+    xs = np.concatenate([c[1] for c in digits]) + W // 2
+    return int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
+
+
+def find_rank_dash(rgb: np.ndarray, time_box) -> tuple[int, int] | None:
+    """(left, top) of the white dash between the two rank emblems: a short, wide,
+    solid white bar below the time with emblem metal on both sides (highlights on
+    the emblems themselves are white too, but sparse)."""
+    _, _, xr, yb = time_box
+    s = (time_box[3] - time_box[1] + 1) / TIME_DIGIT_REF
+    x0, y0 = max(0, int(xr - 260 * s)), int(yb)
+    a = rgb[y0:int(yb + 160 * s), x0:int(xr + 60 * s)].astype(np.int16)
+    mx, mn = a.max(2), a.min(2)
+    metal = (mx > 150) & ((mx - mn) > 35)
+    reach = int(60 * s)
+    for ys, xs in components(mn > 200, 10):
+        w, h = np.ptp(xs) + 1, np.ptp(ys) + 1
+        if not (12 * s <= w <= 40 * s and h <= 12 * s) or len(ys) < 0.8 * w * h:   # a solid bar
+            continue
+        band = slice(max(0, ys.min() - reach), ys.max() + reach)
+        if metal[band, max(0, xs.min() - reach):xs.min()].any() and metal[band, xs.max() + 1:xs.max() + 1 + reach].any():
+            return x0 + int(xs.min()), y0 + int(ys.min())
+    return None
+
+
+def is_tabbed(rgb: np.ndarray, icon) -> bool:
+    """The tabbed UI has a bright blue SCOREBOARD tab just left of the ban icon."""
+    if icon is None:
+        return False
+    x, y, d = icon
+    a = crop(rgb, (int(x - 6 * d), int(y - d / 2), int(x - d), int(y + 1.5 * d))).astype(np.int16)
+    if a.size == 0:
+        return False
+    blue = (a[..., 2] > 100) & (a[..., 2] - a[..., 0] > 80)     # the tab is (7, 71, 131)
+    return bool(blue.mean() > 0.4)
+
+
+def find_header(rgb: np.ndarray) -> tuple[dict[str, tuple[int, int, int, int]], str]:
+    """({roi: box}, ui). Missing elements are simply absent from the dict."""
+    header = {}
+    icon = find_ban_icon(rgb)
+    if icon is not None:
+        for k, box in enumerate(find_bans(rgb, icon)):
+            header[f"ban_{k}"] = box
+    t = find_time(rgb)
+    if t is not None:
+        xl, yt, xr, yb = t
+        s = (yb - yt + 1) / TIME_DIGIT_REF
+        dx0, dy0, dx1, dy1 = STRIP_FROM_TIME
+        header["mode_map_time"] = (int(xr + dx0 * s), int(yt + dy0 * s), int(xr + dx1 * s), int(yb + dy1 * s))
+        dash = find_rank_dash(rgb, t)
+        if dash is not None:
+            for key, (a, b, c, d) in RANK_FROM_DASH.items():
+                header[key] = (int(dash[0] + a * s), int(dash[1] + b * s), int(dash[0] + c * s), int(dash[1] + d * s))
+    return header, ("tabbed" if is_tabbed(rgb, icon) else "classic")
 
 
 def detect(rgb: np.ndarray) -> Layout:
@@ -175,8 +337,7 @@ def detect(rgb: np.ndarray) -> Layout:
     # understates the scale. The E..MIT label span is a long, blur-proof baseline.
     h_eff = BAR_H_REF * (columns["MIT"] - columns["E"]) / E_TO_MIT_REF
     y0 = int(round(y0 + h / 2 - h_eff / 2))
-    x0 = int(round(columns["E"] - (965 - 393) / BAR_H_REF * h_eff))
-    h = h_eff
+    h = h_eff        # x0 stays the measured bar edge: the bar-to-E distance differs between UIs
     teams = find_teams(rgb, y0, h, columns)
     rows = []
     for team, block in teams.items():
@@ -192,16 +353,19 @@ def detect(rgb: np.ndarray) -> Layout:
                 if name == "ult" and team != "top":
                     continue
                 row.rois[name] = box(xr, ROW_Y[name])
-            row.rois["name"] = box(NAME_X[team], ROW_Y["name"])
-            row.rois["title"] = box(NAME_X[team], ROW_Y["title"])
+            to_e = (columns["E"] - x0) / h        # bar edge to E column, in h
+            for name, xr in ROW_X_FROM_E.items():
+                row.rois[name] = box((to_e + xr[0], to_e + xr[1]), ROW_Y[name])
+            name_x = (NAME_START[team], to_e + NAME_END_FROM_E)
+            row.rois["name"] = box(name_x, ROW_Y["name"])
+            row.rois["title"] = box(name_x, ROW_Y["title"])
             for c in STAT_COLS:
                 cx, hw = columns[c], STAT_HALF_W[c] * h
                 row.rois[c] = (int(cx - hw), int(ry0 + ROW_Y["stat"][0] * pitch),
                                int(cx + hw), int(ry0 + ROW_Y["stat"][1] * pitch))
             rows.append(row)
-    header = {k: (int(x0 + v[0] * h), int(y0 + v[1] * h), int(x0 + v[2] * h), int(y0 + v[3] * h))
-              for k, v in HEADER.items()}
-    return Layout(x0, y0, float(h), columns, teams, rows, header)
+    header, ui = find_header(rgb)
+    return Layout(x0, y0, float(h), columns, teams, rows, header, ui)
 
 
 def crop(rgb: np.ndarray, box) -> np.ndarray:

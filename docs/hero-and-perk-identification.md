@@ -30,6 +30,9 @@ small one sends the field to the `review` list.
   known, stored in `reference/templates/roles.npz` by `tools/build_templates.py`.
 - **Result:** 156/156, even when each screenshot is judged only by templates from
   the others. The smallest margin is 4.6, a very safe gap.
+- **No icon:** a player who has just swapped hero has an empty role cell (white
+  share < 0.05, against ≥ 0.20 for any icon). The role is then `null`, not
+  guessed.
 
 ## Step 2: portrait → candidate hero
 
@@ -43,6 +46,16 @@ small one sends the field to the `review` list.
   through the reference sync; nothing needs training.
 - **Result:** 156/156, including skinned rows. The smallest margin is 2.7 and the
   median 16.6. The ban-screen 3D art only gets 48/156, so it isn't used.
+- **Mystery portrait:** a player who has just swapped hero shows a translucent
+  "?" silhouette over the team colour.
+  - It is recognised before the portrait lookup: every pixel is tinted with one
+    hue (score 0.999, against ≤ 0.79 for real portraits).
+  - The row gets `hero: "mystery"`, the role from step 1 (normally `null`), and
+    perks from the empty-slot test. Steps 3–5 are skipped.
+- **Respawn timer:** a dead player's portrait is dimmed, with a countdown ring
+  over the face. The ring is detected (see `docs/extraction-notes.md` §6), and
+  such a portrait never outvotes confident perk votes (step 4). The row is
+  flagged "respawn timer covers the portrait".
 
 ## Step 3: perk slots
 
@@ -69,7 +82,7 @@ For each of the two slots:
 ## Step 4: decide the hero
 
 ```
-if portrait margin ≥ 1.5 or no perk cast a confident vote:
+if (portrait margin ≥ 1.5 and no respawn timer covers it) or no perk cast a confident vote:
     hero = portrait's answer                 ("decided_by": "portrait")
 elif the confident perk votes all name one hero:
     hero = that hero                         ("decided_by": "perks")
@@ -84,8 +97,10 @@ silent about conflicts. `hero_flags` lists every disagreement:
 - a role icon that doesn't match the hero's role in `reference/heroes.json`
   (expect this for Sombra around her Season 5 move from damage to support).
 
-On the reviewed screenshots there are **zero flags**: all three signals agree
-on every row.
+On the classic screenshots there are **zero flags**: all three signals agree on
+every row. In test13, the three dead players are flagged for their respawn
+timers, and two of them because the covered portrait disagreed; their perks
+decided correctly.
 
 ## Step 5: identify the perks
 

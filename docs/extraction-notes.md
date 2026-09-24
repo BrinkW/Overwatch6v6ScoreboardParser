@@ -300,7 +300,81 @@ must not assume every row has two perks.
 
 ---
 
-## 6. Open questions
+## 6. Two scoreboard UIs, and special row states
+
+**Classic** (all captures up to test12) and **tabbed** (test13, late 2026: a
+"HERO INFO | SCOREBOARD" tab strip). `layout.detect` handles both with one code
+path by anchoring every element to what it is attached to. The UI is reported
+as `layout.ui`, from the blue SCOREBOARD tab left of the ban icon. Only the
+title text size is keyed on it.
+
+| | Classic | Tabbed |
+|---|---|---|
+| Bar height `h` (from the E..MIT span) | 39 px | 34.1 px |
+| Bar left edge | 393 | 448 |
+| Bar edge → E column | 14.7h | 15.6h (wider name area) |
+| Perk slots | 4.56h left of E | the same |
+| Ban icon (red ⊘) | (53, 66), 41 px | (473, 39), 41 px |
+| Ban slots | 4 | 4 or 5 |
+| Time digits, right edge / top | 2502–2503 / 61 | 2509 / 43 |
+| Rank dash (left, top) | (2389, 151) | (2389, 159) |
+| Title x-height | 8 px | 10 px |
+
+- **Table:**
+  - Left-side ROIs (role, portrait, ult, name start) hang off the measured bar
+    edge.
+  - Right-side ROIs (perks, name end, stats) hang off the E column. The old code
+    derived the bar edge as "E − 14.67h", which is only true in the classic UI.
+- **The header is pinned to the screen, not the table,** so it is found by
+  content (sizes in px at 1440p, scaled by the found element):
+  - **Bans:** the leftmost square red component in the top-left is the ⊘ icon.
+    - Slots start 65 px right of it at an 83 px pitch; each box is 70×68 px,
+      14 px above the icon's top.
+    - A slot exists if ≥ 30% of its 4-px border is frame: red, or grey for a team
+      that didn't ban. Real slots score 0.50–0.66, empty positions 0.00.
+    - The walk stops at the first empty position, so there are 4 or 5 slots.
+  - **Mode, map and time:** the orange digits (32 px tall) at the top right.
+    The strip reaches 628 px left of their right edge.
+    - The tabbed UI's map text is lavender (chroma ~43), so the "grey" mask
+      allows chroma < 60 (the classic text is ~3).
+  - **Rank range:** the white dash between the emblems, a solid 23×7 px bar
+    (fill 0.94) with emblem metal on both sides. White highlights on the
+    emblems are sparse (fill ≤ 0.52).
+    - The boxes are fixed offsets from it, which reproduce the classic boxes
+      exactly.
+- **Title size is set by the UI,** not the table. The tabbed table is 0.875x,
+  yet its titles are 1.25x larger (ascenders 14 vs 10–11 px). Pooled
+  per-screenshot estimates failed on the JPEG (8 and 10 px tied), so the title
+  scale is keyed on `layout.ui`.
+
+**Mystery hero** (a player who has just swapped hero):
+- The portrait is a translucent "?" head-and-shoulders silhouette over the
+  team colour, with no role icon and no perks. Recorded as `hero: "mystery"`,
+  `role: null`.
+- **Detection:** min(share of pixels with chroma > 30, concentration of their
+  hue) is 0.999 on it, and at most 0.79 on the other 167 portraits
+  (threshold 0.93).
+- **Role:** a role cell with white share < 0.05 has no icon (every icon scores
+  ≥ 0.20; the blank cell 0.0), so the role is null instead of guessed.
+- **Asset:** `assets/heroes/mystery.png` is **not** the in-game art, which is on
+  neither the wiki nor the official site. It is the "?" figure cut out of the
+  wiki's `File:Achievement Mystery Swap.png` (839 px; triangle frame removed),
+  for display. The figure has narrower shoulders than the in-game bust.
+  Detection doesn't use it, and it is excluded from the portrait library.
+
+**Respawn timers** (dead players, test13 bottom 3–5):
+- The portrait is dimmed, with a white-and-red countdown ring (radius 0.275x the
+  portrait width) and the seconds inside.
+- **Detection:** on a thin circle at that radius, 0.95–0.99 of pixels are
+  ring-coloured, against ≤ 0.73 on any other portrait (threshold 0.85).
+- The ring covers the face, so the portrait is not trusted:
+  - confident perk votes decide the hero, and the row is flagged;
+  - masking the ring out made things worse (Mei matched Vendetta with margin
+    3.0).
+
+---
+
+## 7. Open questions
 
 - **Settled: perk slot order is not reliable** (confirmed by the user). A row
   with two perks always holds one major and one minor, and a lone perk is minor,
@@ -311,5 +385,9 @@ must not assume every row has two perks.
   Deceleration Field + Friction Generators. No slot-based tier inference is made.
   Under the one-major-one-minor rule, all 13 reviewed screenshots are consistent
   with `perks.json`'s tier history.
-- Whether Emerald's badge art reuses a hue close to Master's.
 - Whether perk icons are ever rendered at a different size in 5v5 vs 6v6 layouts.
+- Whether the tabbed UI appears at other resolutions and UI scales. Its header
+  constants are measured at 2560×1440 only; they scale with the found ban icon and
+  time digits.
+- A real 5-ban capture: 5-slot detection is only tested on a synthetic copy of
+  test13.

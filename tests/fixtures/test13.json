@@ -1,0 +1,226 @@
+{
+ "image": "test13.png",
+ "verified": false,
+ "note": "Tabbed UI (HERO INFO | SCOREBOARD tabs), 4 ban slots. Transcribed on 2026-09-23 from the parser's draft, every field checked by eye against the image; not yet spot-checked by the user. SONIA had just swapped hero: 'mystery' portrait, no role icon (role null), no perks. PLYM, PATRICIA and PRISONBLAKE were dead (respawn timers over their portraits); their heroes follow from their perks. null = unknown (never scored), except title: null = no title. perks: \"none\" = empty slot.",
+ "header": {
+  "mode": "Hybrid",
+  "map": "King's Row",
+  "time": "19:08",
+  "bans": [
+   "roadhog",
+   "jetpack_cat",
+   "freja",
+   "junkrat"
+  ],
+  "rank_range": [
+   "Grandmaster 2",
+   "Champion 3"
+  ]
+ },
+ "rows": [
+  {
+   "team": "top",
+   "player": "SUKUNA",
+   "title": null,
+   "hero": "mizuki",
+   "role": "support",
+   "perks": [
+    "Resonant Return",
+    "Exposed Soul"
+   ],
+   "E": 27,
+   "A": 25,
+   "D": 6,
+   "DMG": 12677,
+   "H": 19664,
+   "MIT": 6138
+  },
+  {
+   "team": "top",
+   "player": "HITOGAMI",
+   "title": null,
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Lift Off",
+    "Familiar Vitals"
+   ],
+   "E": 29,
+   "A": 23,
+   "D": 8,
+   "DMG": 8211,
+   "H": 17492,
+   "MIT": 2955
+  },
+  {
+   "team": "top",
+   "player": "CLARK",
+   "title": null,
+   "hero": "sombra",
+   "role": "damage",
+   "perks": [
+    "High-Speed Bandwidth",
+    "CTRL ALT ESC"
+   ],
+   "E": 33,
+   "A": 6,
+   "D": 16,
+   "DMG": 17639,
+   "H": 1496,
+   "MIT": 56
+  },
+  {
+   "team": "top",
+   "player": "COLDSKIN",
+   "title": "6v6 Enthusiast",
+   "hero": "d_mon",
+   "role": "tank",
+   "perks": [
+    "Focused Fusion",
+    "Beast Within"
+   ],
+   "E": 35,
+   "A": 8,
+   "D": 13,
+   "DMG": 15436,
+   "H": 391,
+   "MIT": 20594
+  },
+  {
+   "team": "top",
+   "player": "HYPERIONEXP",
+   "title": null,
+   "hero": "doomfist",
+   "role": "tank",
+   "perks": [
+    "Power Matrix",
+    "Survival of the Fittest"
+   ],
+   "E": 26,
+   "A": 8,
+   "D": 14,
+   "DMG": 12114,
+   "H": 4064,
+   "MIT": 6337
+  },
+  {
+   "team": "top",
+   "player": "PHANTOMLEX",
+   "title": null,
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    "Self-Repair",
+    "Configuration Reload"
+   ],
+   "E": 29,
+   "A": 1,
+   "D": 18,
+   "DMG": 14805,
+   "H": 1686,
+   "MIT": 1784
+  },
+  {
+   "team": "bottom",
+   "player": "APPLY",
+   "title": "Minion",
+   "hero": "juno",
+   "role": "support",
+   "perks": [
+    "Lift Off",
+    "Locked On"
+   ],
+   "E": 37,
+   "A": 43,
+   "D": 10,
+   "DMG": 8956,
+   "H": 19564,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "GLENFRAGMIRE",
+   "title": null,
+   "hero": "mizuki",
+   "role": "support",
+   "perks": [
+    "Resonant Return",
+    "Exposed Soul"
+   ],
+   "E": 26,
+   "A": 37,
+   "D": 12,
+   "DMG": 12571,
+   "H": 16414,
+   "MIT": 0
+  },
+  {
+   "team": "bottom",
+   "player": "PLYM",
+   "title": "Celestial Angel",
+   "hero": "orisa",
+   "role": "tank",
+   "perks": [
+    "Heavy Javelin",
+    "Defense Protocol"
+   ],
+   "E": 35,
+   "A": 8,
+   "D": 11,
+   "DMG": 20077,
+   "H": 673,
+   "MIT": 11357
+  },
+  {
+   "team": "bottom",
+   "player": "PATRICIA",
+   "title": "6v6 Champion",
+   "hero": "mei",
+   "role": "damage",
+   "perks": [
+    "Deep Freeze",
+    "Glacial Propulsion"
+   ],
+   "E": 41,
+   "A": 16,
+   "D": 9,
+   "DMG": 14000,
+   "H": 2547,
+   "MIT": 12692
+  },
+  {
+   "team": "bottom",
+   "player": "PRISONBLAKE",
+   "title": "Sweaty",
+   "hero": "bastion",
+   "role": "damage",
+   "perks": [
+    "Self-Repair",
+    "Configuration Reload"
+   ],
+   "E": 36,
+   "A": 3,
+   "D": 12,
+   "DMG": 16045,
+   "H": 85,
+   "MIT": 885
+  },
+  {
+   "team": "bottom",
+   "player": "SONIA",
+   "title": null,
+   "hero": "mystery",
+   "role": null,
+   "perks": [
+    "none",
+    "none"
+   ],
+   "E": 29,
+   "A": 8,
+   "D": 13,
+   "DMG": 14895,
+   "H": 515,
+   "MIT": 23180
+  }
+ ]
+}

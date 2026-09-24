@@ -72,7 +72,7 @@ def parse(image, models: Models | None = None) -> dict:
                 review.append(f"{where}.{c}")
         identify_hero(rgb, r, out, models, review)
         if models.text is not None:
-            read_text(rgb, r, out, models, lay.scale, review)
+            read_text(rgb, r, out, models, lay, review)
         rows.append(out)
     header = {"mode": None, "map": None, "time": None, "bans": [None] * 4, "rank_range": [None, None]}
     header_margin, header_problems = {}, []
@@ -81,7 +81,7 @@ def parse(image, models: Models | None = None) -> dict:
         review += header_review
     return {
         "image": Path(image).name if not isinstance(image, np.ndarray) else None,
-        "layout": {"x0": lay.x0, "y0": lay.y0, "scale": round(lay.scale, 3),
+        "layout": {"ui": lay.ui, "x0": lay.x0, "y0": lay.y0, "scale": round(lay.scale, 3),
                    "rows": {t: sum(1 for r in lay.rows if r.team == t) for t in ("top", "bottom")}},
         "header": header,
         "header_margin": header_margin,
@@ -105,8 +105,15 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
        (two perks = one major + one minor; a lone perk = minor).
     """
     where = f"{r.team}{r.index}"
-    role, role_m = models.roles.classify(L.crop(rgb, r.rois["role"]))
-    p_hero, p_m = models.portraits.classify(L.crop(rgb, r.rois["portrait"]))
+    role_crop, portrait = L.crop(rgb, r.rois["role"]), L.crop(rgb, r.rois["portrait"])
+    # no role icon (a player who just swapped hero): the role is unknown, not guessed
+    role, role_m = (None, 99.0) if I.role_is_blank(role_crop) else models.roles.classify(role_crop)
+    tint = I.mystery_score(portrait)
+    if tint >= I.MYSTERY_TINT:
+        mystery_row(rgb, r, out, role, role_m, tint, review)
+        return
+    p_hero, p_m = models.portraits.classify(portrait)
+    ring = I.respawn_ring(portrait) is not None     # dead: a respawn timer covers the face
 
     glyphs, votes = [], []
     for slot in ("perk_left", "perk_right"):
@@ -116,14 +123,14 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
         votes.append(models.perks.vote(v, role) if v is not None else None)
 
     confident_votes = {h for h, m in filter(None, votes) if h is not None and m >= PERK_VOTE_CONFIDENT}
-    if p_m >= REVIEW_MARGIN["portrait"] or not confident_votes:
+    if (p_m >= REVIEW_MARGIN["portrait"] and not ring) or not confident_votes:
         hero, decided_by = p_hero, "portrait"
     elif len(confident_votes) == 1:
         hero, decided_by = next(iter(confident_votes)), "perks"
     else:
         hero, decided_by = p_hero, "portrait (perks split)"
 
-    flags = []
+    flags = ["respawn timer covers the portrait"] if ring else []
     if confident_votes - {hero}:
         flags.append(f"perk glyph points to {sorted(confident_votes - {hero})}, not {hero}")
     if p_hero != hero:
@@ -168,10 +175,10 @@ def identify_hero(rgb, r: L.Row, out: dict, models: Models, review: list):
         review.append(f"{where}.hero")
 
 
-def read_text(rgb, r: L.Row, out: dict, models: Models, scale: float, review: list):
+def read_text(rgb, r: L.Row, out: dict, models: Models, lay: L.Layout, review: list):
     """Player name and title (src/text.py)."""
     where = f"{r.team}{r.index}"
-    name, title = T.read_text(rgb, r, models.text, scale)
+    name, title = T.read_text(rgb, r, models.text, lay.scale, lay.ui)
     out["player"], out["title"] = name["name"], title["title"]
     out["margin"]["name"] = round(min(name["margin"], 99.0), 3)
     out["text_evidence"] = {"name": {k: v for k, v in name.items() if k not in ("name", "band", "margin")},
@@ -184,6 +191,20 @@ def read_text(rgb, r: L.Row, out: dict, models: Models, scale: float, review: li
         # an exact read of a listed title needs no margin; a close read does
         if sim < T.TITLE_SIMILARITY or (sim < 1.0 and title.get("margin", 0.0) < T.TITLE_MARGIN):
             review.append(f"{where}.title")
+
+
+def mystery_row(rgb, r: L.Row, out: dict, role, role_m: float, tint: float, review: list):
+    """A player who has just swapped hero: the "?" portrait, normally with no role
+    icon and no perks. The hero is "mystery"; any perk glyph can't be attributed."""
+    where = f"{r.team}{r.index}"
+    perks = ["none" if I.slot_is_empty(L.crop(rgb, r.rois[s])) else None for s in ("perk_left", "perk_right")]
+    flags = [] if role is None else [f"role icon {role} shown on a mystery portrait"]
+    out.update(role=role, hero=I.MYSTERY, perks=perks, perk_detail=[None, None])
+    out["margin"].update(role=round(min(role_m, 99.0), 3), portrait=round(tint, 3))
+    out["hero_evidence"] = {"decided_by": "mystery portrait", "tint": round(tint, 3), "role_icon": role}
+    out["hero_flags"], out["reference_notes"] = flags, []
+    if flags or None in perks:
+        review.append(f"{where}.hero")
 
 
 def problems(rows: list[dict]) -> list[str]:

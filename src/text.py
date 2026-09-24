@@ -29,7 +29,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 from .header import _fold, _runs
-from .layout import crop
+from .layout import components, crop
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -41,7 +41,12 @@ FALLBACK_H, FALLBACK_W = 24, 240
 # Native-size geometry (bar height 39 px), scaled by layout.scale:
 NAME_MIN_CAP = 12         # a name glyph is at least this tall (cap height is 21-26)
 STREAK_RUN = 18           # a horizontal run this long in the title line is a nameplate streak
-TITLE_GLYPH_MAX = (14, 18)  # (h, w): anything bigger in the title line is not a glyph
+# Title text size is set by the UI, not by the table: the tabbed UI's table is
+# 0.875x the classic one, but its titles are 1.25x larger (x-height 10 px vs 8 px
+# at 1440p; ascenders 14 vs 10-11). No anchor on screen predicts it, so it is keyed
+# by the detected UI (layout.ui).
+TITLE_SCALE = {"classic": 1.0, "tabbed": 1.25}
+TITLE_GLYPH_MAX = (14, 18)  # (h, w) at title scale 1: anything bigger in the title line is not a glyph
 TITLE_ASCENT, TITLE_DESCENT = 14, 4   # rows above / below the title baseline
 TITLE_WORD_GAP = 4
 
@@ -60,30 +65,6 @@ FALLBACK_MATCH = 9.0      # same player in two screenshots: 5.0 apart; different
 # ---------------------------------------------------------------------------
 # Segmentation
 # ---------------------------------------------------------------------------
-def components(mask: np.ndarray, min_px: int = 1) -> list[tuple[np.ndarray, np.ndarray]]:
-    """(ys, xs) of every 8-connected component of at least `min_px` pixels."""
-    H, W = mask.shape
-    seen = np.zeros_like(mask, bool)
-    out = []
-    for y0, x0 in zip(*np.where(mask)):
-        if seen[y0, x0]:
-            continue
-        stack, cy, cx = [(y0, x0)], [], []
-        seen[y0, x0] = True
-        while stack:
-            y, x = stack.pop()
-            cy.append(y)
-            cx.append(x)
-            for ny in (y - 1, y, y + 1):
-                for nx in (x - 1, x, x + 1):
-                    if 0 <= ny < H and 0 <= nx < W and mask[ny, nx] and not seen[ny, nx]:
-                        seen[ny, nx] = True
-                        stack.append((ny, nx))
-        if len(cy) >= min_px:
-            out.append((np.array(cy), np.array(cx)))
-    return out
-
-
 def text_block(rgb: np.ndarray, row) -> np.ndarray:
     """The name and title lines of one row (name ROI top to title ROI bottom)."""
     x0, y0, x1, _ = row.rois["name"]
@@ -115,10 +96,10 @@ def slant(glyphs) -> float:
     return float(np.median(out)) if out else 0.0
 
 
-def title_line(block: np.ndarray, band, scale: float = 1.0):
+def title_line(block: np.ndarray, band, scale: float = 1.0, ts: float = 1.0):
     """(glyphs, baseline) of the title line below the name, or ([], None).
-    Nameplate streaks are cut out first (long horizontal runs), and i/j dots
-    are merged into their stems."""
+    Nameplate streaks are cut out first (long horizontal runs), and i/j dots are
+    merged into their stems. `ts` is the title text scale (TITLE_SCALE)."""
     top = band[1] + 2
     sub = block[top:]
     if sub.shape[0] < 4:
@@ -130,23 +111,22 @@ def title_line(block: np.ndarray, band, scale: float = 1.0):
         for a, b in _runs(m[y]):
             if b - a + 1 >= run:
                 m[y, a:b + 1] = False
-    max_h, max_w = TITLE_GLYPH_MAX[0] * scale, TITLE_GLYPH_MAX[1] * scale
+    max_h, max_w = TITLE_GLYPH_MAX[0] * ts, TITLE_GLYPH_MAX[1] * ts
     cs = [(ys, xs) for ys, xs in components(m, 3) if np.ptp(ys) <= max_h and np.ptp(xs) <= max_w]
-    bottoms = collections.Counter(ys.max() for ys, _ in cs if np.ptp(ys) >= 4 * scale)
+    bottoms = collections.Counter(ys.max() for ys, _ in cs if np.ptp(ys) >= 4 * ts)
     if not bottoms:
         return [], None
     base = max(bottoms, key=lambda b: sum(n for k, n in bottoms.items() if abs(k - b) <= 1))
-    asc = TITLE_ASCENT * scale
-    keep = [(ys, xs) for ys, xs in cs
-            if abs(ys.max() - base) <= 4 * scale or (base - asc < ys.max() < base)]
-    is_dot = [np.ptp(ys) <= 3 * scale and np.ptp(xs) <= 5 * scale and ys.max() < base - 5 * scale for ys, xs in keep]
+    asc = TITLE_ASCENT * ts
+    keep = [(ys, xs) for ys, xs in cs if abs(ys.max() - base) <= 4 * ts or (base - asc < ys.max() < base)]
+    is_dot = [np.ptp(ys) <= 3 * ts and np.ptp(xs) <= 5 * ts and ys.max() < base - 5 * ts for ys, xs in keep]
     glyphs = [[ys, xs] for (ys, xs), d in zip(keep, is_dot) if not d]
     for (ys, xs), d in zip(keep, is_dot):
         if not d or not glyphs:
             continue
         cx = xs.mean()
         g = min(glyphs, key=lambda g: abs(g[1].mean() - cx))
-        if abs(g[1].mean() - cx) <= 5 * scale:
+        if abs(g[1].mean() - cx) <= 5 * ts:
             g[0], g[1] = np.concatenate([g[0], ys]), np.concatenate([g[1], xs])
     glyphs = sorted(((ys + top, xs) for ys, xs in glyphs if np.ptp(ys) >= 3), key=lambda c: c[1].min())
     return glyphs, base + top
@@ -324,13 +304,13 @@ class TextModels:
         return {**out, "name": name, "distance": round(dist, 3), "margin": min(margin, 99.0)}
 
     # -- titles -------------------------------------------------------------
-    def read_title(self, block: np.ndarray, band, scale: float = 1.0) -> dict:
-        glyphs, base = title_line(block, band, scale) if band else ([], None)
+    def read_title(self, block: np.ndarray, band, scale: float = 1.0, ts: float = 1.0) -> dict:
+        glyphs, base = title_line(block, band, scale, ts) if band else ([], None)
         on_base = sum(abs(ys.max() - base) <= 1 for ys, _ in glyphs) if glyphs else 0
         if on_base < 3:
             return {"title": None}
-        labels = [self.title_glyphs.classify(v)[0] for v in title_vectors(glyphs, base, scale)]
-        raw = words(glyphs, labels, scale)
+        labels = [self.title_glyphs.classify(v)[0] for v in title_vectors(glyphs, base, ts)]
+        raw = words(glyphs, labels, ts)
         if not self.titles:
             return {"title": raw, "raw": raw, "similarity": 0.0, "margin": 0.0}
         scored = sorted(((difflib.SequenceMatcher(None, _fold_title(raw), _fold_title(t)).ratio(), t)
@@ -347,9 +327,9 @@ def reference_titles(path: Path = ROOT / "reference" / "titles.json") -> list[st
     return [t["title"] for t in json.loads(path.read_text(encoding="utf-8"))["titles"]]
 
 
-def read_text(rgb: np.ndarray, row, models: TextModels, scale: float = 1.0) -> tuple[dict, dict]:
+def read_text(rgb: np.ndarray, row, models: TextModels, scale: float = 1.0, ui: str = "classic") -> tuple[dict, dict]:
     """(name read, title read) for one row."""
     block = text_block(rgb, row)
     name = models.read_name(block, scale)
-    title = models.read_title(block, name.get("band"), scale)
+    title = models.read_title(block, name.get("band"), scale, TITLE_SCALE.get(ui, 1.0))
     return name, title

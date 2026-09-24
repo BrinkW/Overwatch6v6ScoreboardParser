@@ -63,6 +63,14 @@ def role_descriptor(crop: np.ndarray) -> np.ndarray:
                       np.float32).ravel() / 255
 
 
+ROLE_BLANK = 0.05   # white share of a role cell: every icon >= 0.20; a blank cell 0.0
+
+
+def role_is_blank(crop: np.ndarray) -> bool:
+    """No role icon (a player who just swapped hero): the role cell is plain team colour."""
+    return float((whiteness(crop) > 0.5).mean()) < ROLE_BLANK
+
+
 class RoleClassifier:
     def __init__(self, templates: np.ndarray, labels):
         self.T, self.y = templates.reshape(len(templates), -1), list(labels)
@@ -89,11 +97,62 @@ def portrait_descriptor(img: np.ndarray, size: int = 24) -> np.ndarray:
     return ((a - a.mean()) / (a.std() + 1e-6)).ravel()
 
 
+# A player who has just swapped hero shows a translucent "?" silhouette over the
+# team colour instead of a portrait (assets/heroes/mystery.png is that figure, for
+# display). It is recognised by being tinted with one hue throughout: min(share of
+# tinted pixels, hue concentration) is 0.999 for it and at most 0.79 for any of
+# the 167 real portraits in the answer keys.
+MYSTERY = "mystery"
+MYSTERY_TINT = 0.93
+
+
+def mystery_score(crop: np.ndarray) -> float:
+    """min(share of pixels with chroma > 30, concentration of their hue), in [0, 1]."""
+    a = crop.astype(np.float32)
+    ch = a.max(2) - a.min(2)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    hue = np.arctan2(np.sqrt(3) * (g - b), 2 * r - g - b)
+    w = ch * (ch > 30)
+    conc = np.hypot((w * np.cos(hue)).sum(), (w * np.sin(hue)).sum()) / max(float(w.sum()), 1e-6)
+    return min(float((ch > 30).mean()), float(conc))
+
+
+# A dead player's portrait is dimmed and overlaid with a respawn countdown: a thin
+# white-and-red ring at 0.275x the portrait width, with the seconds inside. On a
+# thin circle at that radius 0.95-0.99 of the pixels are ring-coloured; on any
+# plain portrait at most 0.73. The ring and digits cover the face, so such a
+# portrait can't be trusted (masking them out made it worse: Mei matched Vendetta
+# with margin 3.0); the perk glyphs decide instead.
+RESPAWN_RING = 0.85
+RING_RADIUS = (0.25, 0.32)      # searched radius range, x portrait width
+
+
+def respawn_ring(crop: np.ndarray) -> tuple[float, float, float] | None:
+    """(cy, cx, r) of a respawn countdown ring in a portrait crop, or None."""
+    a = crop.astype(np.int16)
+    h, w = a.shape[:2]
+    on = (a.min(2) > 170) | ((a[..., 0] > 150) & (a[..., 1] < 90) & (a[..., 2] < 90))
+    if on.mean() < 0.1:                     # cheap reject: a ring alone covers ~12% of the crop
+        return None
+    yy, xx = np.mgrid[0:h, 0:w]
+    best = (0.0, None)
+    k = max(2, round(0.08 * w))            # the ring sits up to ~4 px off the crop's centre
+    for cy in np.arange(h / 2 - k, h / 2 + k + 1):
+        for cx in np.arange(w / 2 - k, w / 2 + k + 1):
+            d = np.hypot(yy - cy, xx - cx)
+            for r in np.arange(RING_RADIUS[0] * w, RING_RADIUS[1] * w):
+                v = float(on[np.abs(d - r) <= 1.5].mean())
+                if v > best[0]:
+                    best = (v, (float(cy), float(cx), float(r)))
+    return best[1] if best[0] >= RESPAWN_RING else None
+
+
 class PortraitLibrary:
-    """Every hero with an assets/heroes/<slug>.png: grows automatically with the reference sync."""
+    """Every hero with an assets/heroes/<slug>.png: grows automatically with the reference sync.
+    The mystery figure is not a portrait: it is detected by mystery_score instead."""
 
     def __init__(self, heroes_dir: Path = ROOT / "assets" / "heroes"):
-        files = sorted(p for p in heroes_dir.iterdir() if p.suffix.lower() == ".png")
+        files = sorted(p for p in heroes_dir.iterdir() if p.suffix.lower() == ".png" and p.stem != MYSTERY)
         self.labels = [p.stem for p in files]
         self.M = np.stack([portrait_descriptor(np.asarray(Image.open(p).convert("RGB"))) for p in files])
 

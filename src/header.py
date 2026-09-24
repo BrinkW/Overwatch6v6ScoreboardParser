@@ -241,15 +241,16 @@ TIME_SHEAR = 0.2           # undo the time digits' italic slant (they touch othe
 
 
 def split_strip(strip: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """(grey text mask left of the time, orange time-digit mask). The time digits
-    are the only orange in the strip; "MODE | MAP" and "TIME:" are light grey. The
-    faint "PRESS F9 ..." ghost text is dimmer than the grey threshold."""
+    """(light text mask left of the time, orange time-digit mask). The time digits
+    are the only orange in the strip; "MODE | MAP" and "TIME:" are light grey in
+    the classic UI and lavender (chroma ~43) in the tabbed one. The faint
+    "PRESS F9 ..." ghost text is dimmer than the brightness threshold."""
     a = strip.astype(np.int16)
     mx, mn = a.max(2), a.min(2)
     orange = (a[..., 0] > 200) & (a[..., 1] > 60) & (a[..., 1] < 180) & (a[..., 2] < 90)
     cols = np.where(orange.sum(0) >= 2)[0]
     x_time = int(cols.min()) if len(cols) else a.shape[1]
-    grey = (mx > 150) & ((mx - mn) < 40)
+    grey = (mx > 150) & ((mx - mn) < 60)
     return grey[:, :x_time], orange[:, max(0, x_time - 2):]
 
 
@@ -372,16 +373,23 @@ def read_header(rgb: np.ndarray, layout, models: HeaderModels) -> tuple[dict, di
     from .layout import crop
     review, problems, margin = [], [], {}
 
+    # 4 or 5 ban slots, however many the screen shows (layout.find_bans)
     bans = []
-    for i in range(4):
+    for i in range(sum(k.startswith("ban_") for k in layout.header)):
         slug, m = models.bans.read(crop(rgb, layout.header[f"ban_{i}"]))
         bans.append(slug)
         margin[f"ban_{i}"] = round(min(m, 99.0), 3)
         if m < REVIEW["ban"]:
             review.append(f"header.ban_{i}")
+    if not bans:
+        problems.append("header: no ban slots found")
 
     rank = []
     for key in ("rank_low", "rank_high"):
+        if key not in layout.header:
+            rank.append(None)
+            problems.append(f"header: {key} not found")
+            continue
         c = crop(rgb, layout.header[key])
         tier, tm, _ = models.tiers.classify(c[:int(c.shape[0] * EMBLEM_FRACTION)])
         div, dm = models.divisions.read(c)
@@ -392,6 +400,10 @@ def read_header(rgb: np.ndarray, layout, models: HeaderModels) -> tuple[dict, di
         if div is None or dm < REVIEW["division"]:
             review.append(f"header.{key}.division")
 
+    if "mode_map_time" not in layout.header:
+        problems.append("header: match time not found")
+        header = {"mode": None, "map": None, "time": None, "bans": bans, "rank_range": rank, "raw": {"mode_map": None}}
+        return header, margin, review, problems
     grey, orange = split_strip(crop(rgb, layout.header["mode_map_time"]))
     raw, _ = models.letters.read(text_glyphs(grey))
     mode_raw, _, map_raw = raw.partition("|")
