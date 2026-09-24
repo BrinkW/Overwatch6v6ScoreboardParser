@@ -1,7 +1,7 @@
 {
  "image": "test13.png",
- "verified": false,
- "note": "Tabbed UI (HERO INFO | SCOREBOARD tabs), 4 ban slots. Transcribed on 2026-09-23 from the parser's draft, every field checked by eye against the image; not yet spot-checked by the user. SONIA had just swapped hero: 'mystery' portrait, no role icon (role null), no perks. PLYM, PATRICIA and PRISONBLAKE were dead (respawn timers over their portraits); their heroes follow from their perks. null = unknown (never scored), except title: null = no title. perks: \"none\" = empty slot.",
+ "verified": true,
+ "note": "New UI (here with the HERO INFO | SCOREBOARD tabs), 4 ban slots. Transcribed on 2026-09-23 from the parser's draft, every field checked by eye against the image and verified by the user on 2026-09-23 (3rd ban Freja, rank range, COLDSKIN = D.Mon, and the three dead players' heroes explicitly confirmed). SONIA had just swapped hero: 'mystery' portrait, no role icon (role null), no perks. PLYM, PATRICIA and PRISONBLAKE were dead (respawn timers over their portraits); their heroes follow from their perks. null = unknown (never scored), except title: null = no title. perks: \"none\" = empty slot.",
  "header": {
   "mode": "Hybrid",
   "map": "King's Row",
