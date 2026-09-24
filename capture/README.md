@@ -16,9 +16,9 @@ you've collected a few, click **Package for sending** and send the zip file.
 3. At the **end of a match**, when the full scoreboard is showing (both teams,
    the stats and the hero panel), press the hotkey. The default is **F8**; you
    can change it in the app. You'll hear a beep and see the saved file name.
-4. When you have some captures, click **Package for sending**. A zip file
-   opens in Explorer; send it however you were asked to (Discord, Drive,
-   email). Packaged captures move to a `sent` folder, so the next package only
+4. When you have some captures, click **Package for sending**. The folder
+   with the new zip file opens; send the zip however you were asked to
+   (Discord, Drive, email). Packaged captures move to a `sent` folder, so the next package only
    has new ones.
 
 Tips:
@@ -48,9 +48,13 @@ Build the exe (Windows, Python 3.10+):
 powershell -ExecutionPolicy Bypass -File capture\build.ps1
 ```
 
-This installs Pillow and PyInstaller if needed and writes
-`capture\dist\OWScoreboardCapture.exe` (build outputs are git-ignored). Attach
-that file to a GitHub release.
+This installs the pinned Pillow and PyInstaller versions
+(`requirements-build.txt`) if needed, and writes
+`capture\dist\OWScoreboardCapture.exe` (build outputs are git-ignored). Close
+the app first if it's running: Windows locks the old exe. Attach the file to a
+GitHub release, with its SHA-256 (`Get-FileHash capture\dist\OWScoreboardCapture.exe`)
+so people can check they got the same file. UPX compression is turned off
+(`--noupx`), because it's a common cause of antivirus false positives.
 
 Design notes:
 - The hotkey uses the Win32 `RegisterHotKey` API, the same mechanism ShareX
@@ -59,3 +63,5 @@ Design notes:
 - The process is per-monitor DPI aware, so captures are full native
   resolution under Windows display scaling.
 - Captures are lossless PNG, named `scoreboard_YYYY-MM-DD_HH-MM-SS.png`.
+- The app makes no network connections and starts no other programs. Its only
+  file writes are the captures, the zips, and its own settings file.

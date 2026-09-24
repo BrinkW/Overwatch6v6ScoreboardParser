@@ -5,30 +5,35 @@ scoreboard, then click one button to zip everything up for sending.
 Windows only. Built into a standalone .exe with capture/build.ps1; see
 capture/README.md.
 
-Design notes:
-  - The hotkey is registered with the Win32 RegisterHotKey API (the same
-    mechanism ShareX / OBS use), not a keyboard hook: nothing reads or injects
-    game input.
-  - The process is made per-monitor DPI aware so captures are at full native
-    resolution on displays with Windows scaling (125%, 150%, ...).
-  - Screenshots are lossless PNG.
+What it does, and nothing else:
+  - registers one global hotkey with the Win32 RegisterHotKey API (the same
+    mechanism ShareX / OBS use). It is not a keyboard hook: no other key
+    presses are seen, and no input is read or sent to the game;
+  - on that hotkey, saves a lossless PNG of the chosen monitor to the chosen
+    folder;
+  - on request, zips the saved PNGs plus a short info.txt (app version,
+    optional name, capture count, monitor resolutions) into a packages/ folder
+    and opens that folder;
+  - remembers its settings in settings.json, in an OWScoreboardCapture folder
+    under %APPDATA%.
+It makes no network connections and starts no other programs. The process is
+per-monitor DPI aware so captures are at full native resolution on displays
+with Windows scaling (125%, 150%, ...).
 """
 
 from __future__ import annotations
 
-import argparse
 import ctypes
 import ctypes.wintypes as wt
 import datetime as dt
 import json
 import os
-import platform
 import queue
 import shutil
-import subprocess
 import sys
 import threading
 import tkinter as tk
+import winsound
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -37,8 +42,8 @@ from tkinter import filedialog, messagebox, ttk
 from PIL import ImageGrab
 
 APP_NAME = "OW Scoreboard Capture"
-APP_VERSION = "1.0.0"
-SETTINGS_DIR = Path(os.environ.get("APPDATA", Path.home())) / "OWScoreboardCapture"
+APP_VERSION = "1.0.1"
+SETTINGS_PATH = Path(os.environ.get("APPDATA", Path.home())) / "OWScoreboardCapture" / "settings.json"
 DEFAULT_SAVE_DIR = Path.home() / "Pictures" / "OW Scoreboard Captures"
 
 user32 = ctypes.windll.user32
@@ -129,7 +134,7 @@ class HotkeyThread(threading.Thread):
 
 
 # ---------------------------------------------------------------------------
-# Capture and packaging (no UI; also used by the self-test)
+# Capture and packaging
 # ---------------------------------------------------------------------------
 def capture(bbox, save_dir: Path) -> tuple[Path, bool]:
     """Grab `bbox` and save it as PNG. Returns (path, looks_black)."""
@@ -167,8 +172,7 @@ def package(save_dir: Path, contributor: str = "") -> tuple[Path, int]:
     info = {
         "app": APP_NAME, "version": APP_VERSION, "contributor": contributor or None,
         "packaged": dt.datetime.now().isoformat(timespec="seconds"),
-        "captures": len(files), "windows": platform.version(),
-        "monitors": [m["name"] for m in monitors()],
+        "captures": len(files), "monitors": [m["name"] for m in monitors()],
     }
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_STORED) as z:  # PNGs are already compressed
         for f in files:
@@ -204,11 +208,9 @@ def save_settings(path: Path, s: dict):
         pass
 
 
-def open_in_explorer(path: Path, select: bool = False):
-    if select:
-        subprocess.Popen(["explorer", "/select,", str(path)])
-    else:
-        os.startfile(str(path))  # noqa: S606 - opening a local folder the user chose
+def open_folder(path: Path):
+    """Show a folder in File Explorer (the Windows shell's default action for a folder)."""
+    os.startfile(str(path))
 
 
 # ---------------------------------------------------------------------------
@@ -311,7 +313,6 @@ class App:
                     path, black = data
                     self.session_count += 1
                     if self.beep.get():
-                        import winsound
                         winsound.MessageBeep(winsound.MB_OK)
                     self.status.set(f"Saved {path.name}" + (
                         "\n⚠ That capture is black. Set Overwatch to Borderless Windowed "
@@ -340,7 +341,7 @@ class App:
     def open_folder(self):
         p = Path(self.save_dir.get())
         p.mkdir(parents=True, exist_ok=True)
-        open_in_explorer(p)
+        open_folder(p)
 
     def package(self):
         try:
@@ -353,7 +354,7 @@ class App:
             return
         self.refresh_counts()
         self.status.set(f"Packaged {n} capture(s) into {zip_path.name}. Send that file.")
-        open_in_explorer(zip_path, select=True)
+        open_folder(zip_path.parent)
 
     def refresh_counts(self):
         n = len(pending(Path(self.save_dir.get())))
@@ -374,14 +375,10 @@ class App:
         self.root.destroy()
 
 
-def main(argv=None):
-    ap = argparse.ArgumentParser(description=APP_NAME)
-    ap.add_argument("--settings", type=Path, default=SETTINGS_DIR / "settings.json",
-                    help=argparse.SUPPRESS)  # used by the self-test to avoid touching real settings
-    args = ap.parse_args(argv)
+def main():
     make_dpi_aware()
     root = tk.Tk()
-    App(root, args.settings)
+    App(root, SETTINGS_PATH)
     root.mainloop()
 
 
