@@ -111,7 +111,7 @@ const api = async (path, body) => {
   return { ok: r.ok, data };
 };
 
-let OPTS = null, ITEMS = [], CUR = null, DRAFT = null, FLAGS = new Set(), FIELDS = [], DIRTY = false;
+let OPTS = null, ITEMS = [], CUR = null, DRAFT = null, FLAGS = new Set(), FIELDS = [], DIRTY = false, BAN_COUNT = 4;
 const HEROES = () => Object.fromEntries(OPTS.heroes.map((h) => [h.slug, h]));
 
 // ---- review flags -> field ids (same mapping as tools/review.py flagged_fields)
@@ -248,14 +248,32 @@ function buildForm() {
            el("span", { class: "lab", text: "Time" }), time);
   form.append(g);
 
-  form.append(el("h2", { text: "Bans" }));
+  // 4 or 5 ban slots, as many as the screen shows; the 5th can be added or removed
+  const banHead = el("h2", { text: "Bans" });
+  const banToggle = el("button", { type: "button", style: "margin-left: 10px; font-size: 11px; padding: 1px 8px" });
+  banHead.append(banToggle);
+  form.append(banHead);
   const bg = el("div", { class: "grid", style: "grid-template-columns: repeat(2, 1fr)" });
-  (H.bans || [null, null, null, null]).forEach((b, i) => {
-    const s = selectOf([["", "? unknown"], ["none", "— no ban"], ...OPTS.heroes.map((h) => [h.slug, h.name])], b);
-    register(`header.ban_${i}`, s, () => s.value || null, b, hb[`ban_${i}`], `Ban ${i + 1}`,
+  const bans = (H.bans || []).slice(0, 5);
+  while (bans.length < 4) bans.push(null);
+  BAN_COUNT = bans.length;
+  const banWraps = [];
+  [0, 1, 2, 3, 4].forEach((i) => {
+    const b = i < bans.length ? bans[i] : null;
+    const s = selectOf([["", "? unknown"], ["none", "— no ban"],
+                        ...OPTS.heroes.filter((h) => h.slug !== "mystery").map((h) => [h.slug, h.name])], b);
+    register(`header.ban_${i}`, s, () => s.value || null, i < bans.length ? b : null, hb[`ban_${i}`], `Ban ${i + 1}`,
       hm[`ban_${i}`] !== undefined ? `margin ${hm[`ban_${i}`]}` : "");
-    bg.append(iconBox(s, banIcon));
+    const w = iconBox(s, banIcon);
+    banWraps.push(w);
+    bg.append(w);
   });
+  const showBans = () => {
+    banWraps[4].style.display = BAN_COUNT === 5 ? "" : "none";
+    banToggle.textContent = BAN_COUNT === 5 ? "− remove 5th slot" : "+ 5th slot";
+  };
+  banToggle.onclick = () => { BAN_COUNT = BAN_COUNT === 5 ? 4 : 5; DIRTY = true; showBans(); };
+  showBans();
   form.append(bg);
 
   form.append(el("h2", { text: "Rank range" }));
@@ -303,7 +321,7 @@ function buildForm() {
     card.append(el("div", { class: "l2" }, el("span"), ...perkWraps));
     hero.addEventListener("change", () => {
       const h = HEROES()[hero.value];
-      if (h) { role.value = h.role; role.dispatchEvent(new Event("change")); }
+      if (h) { role.value = h.role || ""; role.dispatchEvent(new Event("change")); }   // mystery: no role
       perkSel.forEach((s) => {   // the new hero's perks; keep the choice only if it is one of them
         const keep = s.value;
         const valid = keep === "none" || keep === "" || (OPTS.perks[hero.value] || []).some((p) => p.name === keep);
@@ -357,7 +375,7 @@ function buildForm() {
 function collect() {
   const val = (id) => FIELDS.find((f) => f.id === id).get();
   const header = { mode: val("header.mode"), map: val("header.map"), time: val("header.time"),
-                   bans: [0, 1, 2, 3].map((i) => val(`header.ban_${i}`)),
+                   bans: [0, 1, 2, 3, 4].slice(0, BAN_COUNT).map((i) => val(`header.ban_${i}`)),
                    rank_range: [val("header.rank_low"), val("header.rank_high")] };
   const rows = [];
   const counters = { top: 0, bottom: 0 };

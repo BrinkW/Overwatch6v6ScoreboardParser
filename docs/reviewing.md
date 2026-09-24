@@ -31,6 +31,10 @@ python tools/review.py --stats                                           # how g
    - Blank means unknown (not scored), except the title, where blank means the
      row has no title. Perk slots have "— empty slot" and "? present,
      unidentified".
+   - Bans show as many slots as the screen has (4 or 5). "+ 5th slot" /
+     "− remove 5th slot" corrects the count.
+   - A player who had just swapped hero shows a grey "?" portrait: pick
+     **Mystery (swapped hero)**, which clears the role. Its perks must be empty.
 3. **Accept** (**Ctrl+Enter**). The key is validated before it is written. For
    example, the map must match the mode, a perk must belong to its hero, stats
    must be whole numbers, and a team can have at most 2 tanks. The capture and

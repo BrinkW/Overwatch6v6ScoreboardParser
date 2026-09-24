@@ -186,6 +186,10 @@ class Store:
                                 "hero": r.get("hero_flags")} for r in res["rows"]]
             draft["_boxes"] = {"header": {k: [int(v) for v in b] for k, b in lay.header.items()},
                                "rows": [{k: [int(v) for v in b] for k, b in r.rois.items()} for r in lay.rows]}
+            hb = draft["_boxes"]["header"]
+            if "ban_3" in hb and "ban_2" in hb and "ban_4" not in hb:   # where a 5th slot would be, for its crop
+                step = hb["ban_3"][0] - hb["ban_2"][0]
+                hb["ban_4"] = [hb["ban_3"][0] + step, hb["ban_3"][1], hb["ban_3"][2] + step, hb["ban_3"][3]]
         except Exception as e:     # a capture the parser can't handle is still reviewable (or rejectable)
             draft["_error"] = f"{type(e).__name__}: {e}"
             traceback.print_exc()
@@ -233,9 +237,12 @@ def options() -> dict:
     perks = load_json(ROOT / "reference" / "perks.json")["heroes"]
     maps = load_json(ROOT / "reference" / "maps.json", {"maps": []})["maps"]
     known = load_json(TEMPLATES / "known_text.json", {"players": [], "titles": []})
+    heroes = sorted(({"slug": s, "name": h["name"], "role": h["role"]} for s, h in roster.items()),
+                    key=lambda h: h["name"].lower())
+    # a player who has just swapped hero: "?" portrait, normally no role icon and no perks
+    heroes.append({"slug": "mystery", "name": "Mystery (swapped hero)", "role": None})
     return {
-        "heroes": sorted(({"slug": s, "name": h["name"], "role": h["role"]} for s, h in roster.items()),
-                         key=lambda h: h["name"].lower()),
+        "heroes": heroes,
         "perks": {s: [{"name": e["name"], "tier": e["tier"], "era": e["patch_era"], "icon": e.get("icon")}
                       for e in h["perks"]] for s, h in perks.items()},
         "maps": [{"name": m["name"], "mode": m["mode"]} for m in maps],
@@ -261,10 +268,10 @@ def validate(key: dict, opts: dict) -> list[str]:
     if h.get("time") is not None and not re.fullmatch(r"\d{1,2}:[0-5]\d", h["time"]):
         errs.append(f"time {h['time']!r} is not m:ss")
     bans = h.get("bans") or []
-    if len(bans) != 4:
-        errs.append("there must be 4 ban slots")
+    if len(bans) not in (4, 5):
+        errs.append(f"there must be 4 or 5 ban slots, not {len(bans)}")
     for i, b in enumerate(bans):
-        if b not in (None, "none") and b not in heroes:
+        if b not in (None, "none") and (b not in heroes or b == "mystery"):
             errs.append(f"ban {i + 1}: unknown hero {b!r}")
     for i, r in enumerate(h.get("rank_range") or [None, None]):
         if r is not None and not re.fullmatch(rf"({'|'.join(opts['tiers'])}) [1-5]", r):
@@ -280,6 +287,8 @@ def validate(key: dict, opts: dict) -> list[str]:
             errs.append(f"{where}: unknown hero {r['hero']!r}")
         if r.get("role") not in (None, "tank", "damage", "support"):
             errs.append(f"{where}: role {r.get('role')!r}")
+        if r.get("hero") == "mystery" and any(p not in (None, "none") for p in r.get("perks") or []):
+            errs.append(f"{where}: a mystery portrait can't have identified perks")
         tanks[r.get("team")] += r.get("role") == "tank"
         names = {p["name"] for p in opts["perks"].get(r.get("hero"), [])}
         perks = r.get("perks") or []
@@ -342,8 +351,9 @@ def flagged_fields(review: list[str]) -> set[str]:
 
 def kind(field: str) -> str:
     f = field.split(".", 1)[1]
-    return {"ban_0": "ban", "ban_1": "ban", "ban_2": "ban", "ban_3": "ban", "rank_low": "rank", "rank_high": "rank",
-            "perk_left": "perk", "perk_right": "perk"}.get(f, f)
+    if f.startswith("ban_"):
+        return "ban"
+    return {"rank_low": "rank", "rank_high": "rank", "perk_left": "perk", "perk_right": "perk"}.get(f, f)
 
 
 def same(draft, final) -> bool:
