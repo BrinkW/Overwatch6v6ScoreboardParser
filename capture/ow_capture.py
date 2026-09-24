@@ -5,7 +5,7 @@ scoreboard, then click one button to zip everything up for sending.
 Windows only. Built into a standalone .exe with capture/build.ps1; see
 capture/README.md.
 
-What it does, and nothing else:
+What it does:
   - registers one global hotkey with the Win32 RegisterHotKey API (the same
     mechanism ShareX / OBS use). It is not a keyboard hook: no other key
     presses are seen, and no input is read or sent to the game;
@@ -26,13 +26,16 @@ from __future__ import annotations
 import ctypes
 import ctypes.wintypes as wt
 import datetime as dt
+import io
 import json
+import math
 import os
 import queue
 import shutil
 import sys
 import threading
 import tkinter as tk
+import wave
 import winsound
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
@@ -42,7 +45,7 @@ from tkinter import filedialog, messagebox, ttk
 from PIL import ImageGrab
 
 APP_NAME = "OW Scoreboard Capture"
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 SETTINGS_PATH = Path(os.environ.get("APPDATA", Path.home())) / "OWScoreboardCapture" / "settings.json"
 DEFAULT_SAVE_DIR = Path.home() / "Pictures" / "OW Scoreboard Captures"
 
@@ -131,6 +134,35 @@ class HotkeyThread(threading.Thread):
         if self.thread_id:
             user32.PostThreadMessageW(self.thread_id, WM_QUIT, 0, 0)
         self.join(timeout=2)
+
+
+# ---------------------------------------------------------------------------
+# Capture sound
+# ---------------------------------------------------------------------------
+def make_beep(freq: float = 1047.0, ms: int = 90, volume: float = 0.35, rate: int = 44100) -> bytes:
+    """A short sine tone as an in-memory WAV, faded in and out so it doesn't click.
+    Played through the normal audio device, so it follows the system volume."""
+    n, fade = rate * ms // 1000, rate * 8 // 1000
+    frames = bytearray()
+    for i in range(n):
+        env = min(1.0, i / fade, (n - 1 - i) / fade)
+        v = int(32767 * volume * env * math.sin(2 * math.pi * freq * i / rate))
+        frames += v.to_bytes(2, "little", signed=True)
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(rate)
+        w.writeframes(bytes(frames))
+    return buf.getvalue()
+
+
+BEEP = make_beep()
+
+
+def play_beep():
+    """Blocks for the length of the beep (winsound can't play from memory asynchronously)."""
+    winsound.PlaySound(BEEP, winsound.SND_MEMORY)
 
 
 # ---------------------------------------------------------------------------
@@ -308,12 +340,10 @@ class App:
                                     f"{self.hotkey_label()} is already used by another program. Pick a different key.")
                 elif kind == "press":
                     bbox = self.mons[self.mon.current()]["bbox"]
-                    self.saver.submit(self._capture, bbox, Path(self.save_dir.get()))
+                    self.saver.submit(self._capture, bbox, Path(self.save_dir.get()), self.beep.get())
                 elif kind == "saved":
                     path, black = data
                     self.session_count += 1
-                    if self.beep.get():
-                        winsound.MessageBeep(winsound.MB_OK)
                     self.status.set(f"Saved {path.name}" + (
                         "\n⚠ That capture is black. Set Overwatch to Borderless Windowed "
                         "(Options → Video → Display Mode) and try again." if black else ""))
@@ -324,11 +354,16 @@ class App:
             pass
         self.root.after(100, self.poll)
 
-    def _capture(self, bbox, save_dir):
+    def _capture(self, bbox, save_dir, beep: bool):
+        """Runs on the saver thread, so the beep never stalls the window."""
         try:
-            self.events.put(("saved", capture(bbox, save_dir)))
+            result = capture(bbox, save_dir)
         except Exception as e:  # report any capture/save failure in the UI rather than dying
             self.events.put(("error", str(e)))
+            return
+        if beep:
+            play_beep()      # after the PNG is written: the beep confirms the save
+        self.events.put(("saved", result))
 
     # -- buttons --------------------------------------------------------------
     def browse(self):
