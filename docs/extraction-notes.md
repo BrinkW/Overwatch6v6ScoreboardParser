@@ -302,20 +302,24 @@ must not assume every row has two perks.
 
 ## 6. Two scoreboard UIs, and special row states
 
-**Classic** (all captures up to test12) and **tabbed** (test13, late 2026: a
-"HERO INFO | SCOREBOARD" tab strip). `layout.detect` handles both with one code
-path by anchoring every element to what it is attached to. The UI is reported
-as `layout.ui`, from the blue SCOREBOARD tab left of the ban icon. Only the
-title text size is keyed on it.
+**Classic** (all captures up to test12) and **new** (test13, late 2026). The
+new UI often has a "HERO INFO | SCOREBOARD" tab strip above it, but not always,
+so the tabs are never used to recognise it. `layout.detect` handles both with
+one code path by anchoring every element to what it is attached to. Either UI
+can show 4 or 5 ban slots.
 
-| | Classic | Tabbed |
+The UI is reported as `layout.ui`, from the table's own proportions: bar edge →
+E column is 14.67h in the classic UI and 15.63h in the new one (cutoff 15.15).
+Only the title text size is keyed on it.
+
+| | Classic | New |
 |---|---|---|
 | Bar height `h` (from the E..MIT span) | 39 px | 34.1 px |
 | Bar left edge | 393 | 448 |
 | Bar edge → E column | 14.7h | 15.6h (wider name area) |
 | Perk slots | 4.56h left of E | the same |
 | Ban icon (red ⊘) | (53, 66), 41 px | (473, 39), 41 px |
-| Ban slots | 4 | 4 or 5 |
+| Ban slots | 4 or 5 | 4 or 5 |
 | Time digits, right edge / top | 2502–2503 / 61 | 2509 / 43 |
 | Rank dash (left, top) | (2389, 151) | (2389, 159) |
 | Title x-height | 8 px | 10 px |
@@ -330,22 +334,30 @@ title text size is keyed on it.
   - **Bans:** the leftmost square red component in the top-left is the ⊘ icon.
     - Slots start 65 px right of it at an 83 px pitch; each box is 70×68 px,
       14 px above the icon's top.
-    - A slot exists if ≥ 30% of its 4-px border is frame: red, or grey for a team
-      that didn't ban. Real slots score 0.50–0.66, empty positions 0.00.
-    - The walk stops at the first empty position, so there are 4 or 5 slots.
+    - A slot exists if **every side** of its 4-px border is ≥ 20% frame (red, or
+      grey for a team that didn't ban; real slots ≥ 0.29 per side, empty
+      positions 0.00) **and** its inside is ≤ 50% frame-coloured (real slots
+      ≤ 0.35).
+    - The inside test stops a bright grey scene behind an empty 5th position
+      from passing as a grey "no ban" frame.
+    - The walk stops at the first position that isn't a slot, so there are 4 or
+      5 slots, in either UI.
+    - Tested on copies with a 5th slot pasted in: classic, new with and without
+      its tabs, and a grey "no ban" 5th slot. No real 5-ban capture exists yet.
   - **Mode, map and time:** the orange digits (32 px tall) at the top right.
     The strip reaches 628 px left of their right edge.
-    - The tabbed UI's map text is lavender (chroma ~43), so the "grey" mask
+    - The new UI's map text is lavender (chroma ~43), so the "grey" mask
       allows chroma < 60 (the classic text is ~3).
   - **Rank range:** the white dash between the emblems, a solid 23×7 px bar
     (fill 0.94) with emblem metal on both sides. White highlights on the
     emblems are sparse (fill ≤ 0.52).
     - The boxes are fixed offsets from it, which reproduce the classic boxes
       exactly.
-- **Title size is set by the UI,** not the table. The tabbed table is 0.875x,
+- **Title size is set by the UI,** not the table. The new UI's table is 0.875x,
   yet its titles are 1.25x larger (ascenders 14 vs 10–11 px). Pooled
   per-screenshot estimates failed on the JPEG (8 and 10 px tied), so the title
-  scale is keyed on `layout.ui`.
+  scale is keyed on `layout.ui` (which comes from the table, so it holds without
+  the tabs).
 
 **Mystery hero** (a player who has just swapped hero):
 - The portrait is a translucent "?" head-and-shoulders silhouette over the
@@ -386,7 +398,7 @@ title text size is keyed on it.
   Under the one-major-one-minor rule, all 13 reviewed screenshots are consistent
   with `perks.json`'s tier history.
 - Whether perk icons are ever rendered at a different size in 5v5 vs 6v6 layouts.
-- Whether the tabbed UI appears at other resolutions and UI scales. Its header
+- Whether the new UI appears at other resolutions and UI scales. Its header
   constants are measured at 2560×1440 only; they scale with the found ban icon and
   time digits.
 - A real 5-ban capture: 5-slot detection is only tested on a synthetic copy of

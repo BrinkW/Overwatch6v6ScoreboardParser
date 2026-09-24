@@ -243,7 +243,7 @@ TIME_SHEAR = 0.2           # undo the time digits' italic slant (they touch othe
 def split_strip(strip: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """(light text mask left of the time, orange time-digit mask). The time digits
     are the only orange in the strip; "MODE | MAP" and "TIME:" are light grey in
-    the classic UI and lavender (chroma ~43) in the tabbed one. The faint
+    the classic UI and lavender (chroma ~43) in the new one. The faint
     "PRESS F9 ..." ghost text is dimmer than the brightness threshold."""
     a = strip.astype(np.int16)
     mx, mn = a.max(2), a.min(2)

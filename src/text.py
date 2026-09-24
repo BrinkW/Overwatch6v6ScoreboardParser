@@ -41,11 +41,11 @@ FALLBACK_H, FALLBACK_W = 24, 240
 # Native-size geometry (bar height 39 px), scaled by layout.scale:
 NAME_MIN_CAP = 12         # a name glyph is at least this tall (cap height is 21-26)
 STREAK_RUN = 18           # a horizontal run this long in the title line is a nameplate streak
-# Title text size is set by the UI, not by the table: the tabbed UI's table is
+# Title text size is set by the UI, not by the table: the new UI's table is
 # 0.875x the classic one, but its titles are 1.25x larger (x-height 10 px vs 8 px
 # at 1440p; ascenders 14 vs 10-11). No anchor on screen predicts it, so it is keyed
 # by the detected UI (layout.ui).
-TITLE_SCALE = {"classic": 1.0, "tabbed": 1.25}
+TITLE_SCALE = {"classic": 1.0, "new": 1.25}
 TITLE_GLYPH_MAX = (14, 18)  # (h, w) at title scale 1: anything bigger in the title line is not a glyph
 TITLE_ASCENT, TITLE_DESCENT = 14, 4   # rows above / below the title baseline
 TITLE_WORD_GAP = 4

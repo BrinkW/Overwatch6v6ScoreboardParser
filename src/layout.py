@@ -2,11 +2,13 @@
 Scoreboard layout: find the table and the header, and express every region of
 interest (ROI) relative to what it is attached to on screen.
 
-Two UIs exist: "classic", and "tabbed" (a HERO INFO | SCOREBOARD tab strip,
-from late 2026). They differ in table size, table position, the name area's
-width, the header's placement and the ban count. Nothing here branches on the
-UI: every element is anchored to what it is attached to on screen, so both are
-handled by one code path (see CLAUDE.md "Layout: anchor, don't hardcode").
+Two UIs exist: "classic", and "new" (late 2026; often, but not always, with a
+HERO INFO | SCOREBOARD tab strip above it). They differ in table size, table
+position, the name area's width and the header's placement; either can show 4
+or 5 ban slots. Nothing here branches on the UI: every element is anchored to
+what it is attached to on screen, so both are handled by one code path (see
+CLAUDE.md "Layout: anchor, don't hardcode"). The UI is only reported, from the
+table's own proportions (the name area's width), never from the tab strip.
 
 Table anchors:
   - the white column-header bar: its LEFT edge, top and height. Its right edge
@@ -15,11 +17,11 @@ Table anchors:
   - left side of a row (role, portrait, ult, start of the name): the bar's
     left edge;
   - right side (perk slots, end of the name, stats): the E column. The name
-    area between them is wider in the tabbed UI (15.6h vs 14.7h);
+    area between them is wider in the new UI (15.6h vs 14.7h);
   - the two saturated team blocks below the bar (split by the "VS" gap), and
     the thin dark separator lines between rows, used to fit the row count.
 Row geometry is in units of the bar height `h` (39 px in the classic UI at
-2560x1440, 34 px in the tabbed one), so it survives rescaled captures. Rows
+2560x1440, 34 px in the new one), so it survives rescaled captures. Rows
 are labelled top/bottom, never by colour: team colours change with the
 colour-blind setting.
 
@@ -69,7 +71,11 @@ STAT_HALF_W = {"E": 0.85, "A": 0.85, "D": 0.85, "DMG": 1.55, "H": 1.55, "MIT": 1
 BAN_ICON_REF, TIME_DIGIT_REF = 41, 32
 BAN_FIRST_DX, BAN_PITCH = 65, 83        # first slot's left edge from the icon's left edge; slot pitch
 BAN_DY, BAN_W, BAN_H = -14, 70, 68      # slot box relative to the icon's top edge
-BAN_FRAME_MIN = 0.3                     # share of a slot's border that is frame (red or grey): slots 0.50-0.66, no slot 0.0
+# A slot's 4-px border is frame (red, or grey for a team that didn't ban) on every
+# side: >= 0.29 per side on real slots, 0.0 where there is no slot. Its inside is
+# mostly not frame-coloured (<= 0.35): that rejects a bright grey scene behind an
+# empty 5th position, which would be "frame" everywhere.
+BAN_SIDE_MIN, BAN_INNER_MAX = 0.2, 0.5
 MAX_BANS = 5
 # "MODE | MAP  TIME: mm:ss" is one right-aligned group whose left end moves with
 # the text length, so it is read as one strip (split on the orange time digits).
@@ -122,7 +128,7 @@ class Layout:
     teams: dict[str, tuple[int, int]]    # team block (y0, y1)
     rows: list[Row]
     header: dict[str, tuple[int, int, int, int]]
-    ui: str = "classic"   # "classic" or "tabbed"; reported only, nothing branches on it
+    ui: str = "classic"   # "classic" or "new", from the table's proportions (UI_NAME_AREA)
 
     @property
     def scale(self) -> float:
@@ -212,6 +218,9 @@ def fit_rows(rgb, block, h, columns) -> list[tuple[int, int]]:
 
 
 E_TO_MIT_REF = 1438 - 965  # px between the E and MIT label centres, classic UI at 2560x1440
+# Bar edge to E column, in h: 14.67 in the classic UI, 15.63 in the new one (a wider
+# name area). This tells the UIs apart whether or not the new UI's tab strip is shown.
+UI_NAME_AREA = 15.15
 
 
 # ---------------------------------------------------------------------------
@@ -234,17 +243,16 @@ def find_ban_icon(rgb: np.ndarray) -> tuple[int, int, int] | None:
     return min(cands) if cands else None
 
 
-def _frame_share(rgb: np.ndarray, box) -> float:
-    """Share of a box's 4-px border that is a ban-slot frame: red, or grey for an empty slot."""
+def is_ban_slot(rgb: np.ndarray, box) -> bool:
+    """A ban slot's frame: red (a ban) or grey (no ban) on all four sides of the
+    box, around an inside that isn't frame-coloured."""
     t = crop(rgb, box).astype(np.int16)
-    if t.shape[0] < 10 or t.shape[1] < 10:
-        return 0.0
-    ring = np.zeros(t.shape[:2], bool)
-    ring[:4] = ring[-4:] = True
-    ring[:, :4] = ring[:, -4:] = True
+    if t.shape[0] < 24 or t.shape[1] < 24:
+        return False
     mx, mn = t.max(2), t.min(2)
     frame = ((t[..., 0] > 150) & (t[..., 1] < 90) & (t[..., 2] < 90)) | (((mx - mn) < 30) & (mx > 110))
-    return float(frame[ring].mean())
+    sides = (frame[:4], frame[-4:], frame[:, :4], frame[:, -4:])
+    return min(float(sd.mean()) for sd in sides) >= BAN_SIDE_MIN and float(frame[10:-10, 10:-10].mean()) <= BAN_INNER_MAX
 
 
 def find_bans(rgb: np.ndarray, icon) -> list[tuple[int, int, int, int]]:
@@ -256,7 +264,7 @@ def find_bans(rgb: np.ndarray, icon) -> list[tuple[int, int, int, int]]:
     for k in range(MAX_BANS):
         bx, by = round(x + (BAN_FIRST_DX + BAN_PITCH * k) * s), round(y + BAN_DY * s)
         box = (bx, by, bx + round(BAN_W * s), by + round(BAN_H * s))
-        if _frame_share(rgb, box) < BAN_FRAME_MIN:
+        if not is_ban_slot(rgb, box):
             break
         boxes.append(box)
     return boxes
@@ -298,20 +306,8 @@ def find_rank_dash(rgb: np.ndarray, time_box) -> tuple[int, int] | None:
     return None
 
 
-def is_tabbed(rgb: np.ndarray, icon) -> bool:
-    """The tabbed UI has a bright blue SCOREBOARD tab just left of the ban icon."""
-    if icon is None:
-        return False
-    x, y, d = icon
-    a = crop(rgb, (int(x - 6 * d), int(y - d / 2), int(x - d), int(y + 1.5 * d))).astype(np.int16)
-    if a.size == 0:
-        return False
-    blue = (a[..., 2] > 100) & (a[..., 2] - a[..., 0] > 80)     # the tab is (7, 71, 131)
-    return bool(blue.mean() > 0.4)
-
-
-def find_header(rgb: np.ndarray) -> tuple[dict[str, tuple[int, int, int, int]], str]:
-    """({roi: box}, ui). Missing elements are simply absent from the dict."""
+def find_header(rgb: np.ndarray) -> dict[str, tuple[int, int, int, int]]:
+    """{roi: box}. Missing elements are simply absent."""
     header = {}
     icon = find_ban_icon(rgb)
     if icon is not None:
@@ -327,7 +323,7 @@ def find_header(rgb: np.ndarray) -> tuple[dict[str, tuple[int, int, int, int]], 
         if dash is not None:
             for key, (a, b, c, d) in RANK_FROM_DASH.items():
                 header[key] = (int(dash[0] + a * s), int(dash[1] + b * s), int(dash[0] + c * s), int(dash[1] + d * s))
-    return header, ("tabbed" if is_tabbed(rgb, icon) else "classic")
+    return header
 
 
 def detect(rgb: np.ndarray) -> Layout:
@@ -364,8 +360,8 @@ def detect(rgb: np.ndarray) -> Layout:
                 row.rois[c] = (int(cx - hw), int(ry0 + ROW_Y["stat"][0] * pitch),
                                int(cx + hw), int(ry0 + ROW_Y["stat"][1] * pitch))
             rows.append(row)
-    header, ui = find_header(rgb)
-    return Layout(x0, y0, float(h), columns, teams, rows, header, ui)
+    ui = "new" if (columns["E"] - x0) / h > UI_NAME_AREA else "classic"
+    return Layout(x0, y0, float(h), columns, teams, rows, find_header(rgb), ui)
 
 
 def crop(rgb: np.ndarray, box) -> np.ndarray:
