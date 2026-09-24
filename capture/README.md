@@ -15,7 +15,9 @@ you've collected a few, click **Package for sending** and send the zip file.
    you'll get black images (the app warns you if that happens).
 3. At the **end of a match**, when the full scoreboard is showing (both teams,
    the stats and the hero panel), press the hotkey. The default is **F8**; you
-   can change it in the app. You'll hear a beep and see the saved file name.
+   can change it in the app. You'll hear a beep and see the saved file name. Attempt to
+   take the screenshot while the victory or defeat banners are in the background. Example
+   is attached in this folder.
 4. When you have some captures, click **Package for sending**. The folder
    with the new zip file opens; send the zip however you were asked to
    (Discord, Drive, email). Packaged captures move to a `sent` folder, so the next package only

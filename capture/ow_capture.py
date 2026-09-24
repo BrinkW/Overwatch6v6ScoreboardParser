@@ -139,7 +139,7 @@ class HotkeyThread(threading.Thread):
 # ---------------------------------------------------------------------------
 # Capture sound
 # ---------------------------------------------------------------------------
-def make_beep(freq: float = 1047.0, ms: int = 90, volume: float = 0.35, rate: int = 44100) -> bytes:
+def make_beep(freq: float = 1047.0, ms: int = 90, volume: float = 0.20, rate: int = 44100) -> bytes:
     """A short sine tone as an in-memory WAV, faded in and out so it doesn't click.
     Played through the normal audio device, so it follows the system volume."""
     n, fade = rate * ms // 1000, rate * 8 // 1000
