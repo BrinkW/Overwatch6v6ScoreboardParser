@@ -19,7 +19,7 @@ from src.parse import load_rgb  # noqa: E402
 
 
 def read_name(image: str, row: int, players=None, fallback=True) -> dict:
-    t = build(exclude=(image,))
+    t = build(exclude=(image,), reviewed=False)   # committed answer keys only
     models = T.TextModels(T.GlyphSet(*t["name_glyphs"]), T.GlyphSet(*t["title_glyphs"]),
                           t["players"] if players is None else players, [],
                           T.NameImages(*t["fallback_names"]) if fallback and "fallback_names" in t else None)

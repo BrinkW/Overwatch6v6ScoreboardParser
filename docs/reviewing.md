@@ -8,7 +8,7 @@ then becomes training data (templates) and test data (evaluation).
 
 ```
 python tools/review.py OW-scoreboards_alex_2026-10-01_1830_12shots.zip   # import + review
-python tools/build_templates.py                                          # learn from what you reviewed
+python tools/build_templates.py                                          # learn from what you reviewed (data/templates/)
 python tools/evaluate.py                                                 # leave-one-image-out accuracy, all keys
 python tools/review.py --stats                                           # how good the drafts were
 ```
@@ -41,8 +41,10 @@ python tools/review.py --stats                                           # how g
    its key move to `data/reviewed/`.
 4. **Reject** a capture that isn't a usable scoreboard (wrong screen, cropped,
    covered). It moves to `data/rejected/`, with your reason.
-5. **Rebuild the templates** after a session. Drafts still in the inbox are
-   re-parsed with the new templates when you open them.
+5. **Rebuild the templates** after a session. `python tools/build_templates.py`
+   writes the local build to `data/templates/`, which the parser and this tool
+   use whenever it exists. Drafts still in the inbox are re-parsed with the new
+   templates when you open them.
 
 ## Where things live
 
@@ -54,9 +56,11 @@ python tools/review.py --stats                                           # how g
 | `data/review_log.jsonl` | one line per accept: every field, the flagged ones, and what you changed |
 
 `data/` is git-ignored: contributors' screenshots show other players' names,
-and the images add about 2 MB each. **Back it up yourself.** The templates
-rebuilt from it (`reference/templates/`) are committed, and
-`known_text.json` there lists player names and titles.
+and the images add about 2 MB each. **Back it up yourself.** Everything learned
+from it stays there too (`data/templates/`, including `known_text.json`, which
+lists player names and titles). The committed `reference/templates/` are built
+only from the committed answer keys (`python tools/build_templates.py
+--public`).
 
 `--stats` compares each draft with your final key. Every capture was parsed
 before its own key existed, so this is the parser's real accuracy on unseen

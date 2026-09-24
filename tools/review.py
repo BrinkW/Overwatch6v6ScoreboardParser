@@ -18,7 +18,8 @@ up) and logs which fields you changed to data/review_log.jsonl, so --stats
 measures the parser on captures it had never seen. Reject moves a capture that
 isn't a usable scoreboard to data/rejected/.
 
-After a review session, rebuild the templates so the parser learns from it:
+After a review session, rebuild the local templates (data/templates/) so the
+parser learns from it:
     python tools/build_templates.py
 Drafts made with older templates are re-parsed when opened.
 
@@ -54,12 +55,11 @@ from PIL import Image  # noqa: E402
 from build_templates import SAMPLES  # noqa: E402
 from src import layout as L, text as T  # noqa: E402
 from src.header import TIERS  # noqa: E402
-from src.parse import STATS, Models, load_rgb, parse  # noqa: E402
+from src.parse import STATS, Models, load_rgb, parse, template_dir  # noqa: E402
 
 DATA = ROOT / "data"
 INBOX, REVIEWED, REJECTED = DATA / "inbox", DATA / "reviewed", DATA / "rejected"
 LOG = DATA / "review_log.jsonl"
-TEMPLATES = ROOT / "reference" / "templates"
 PAGE = Path(__file__).with_name("review_page.html")
 IMAGE_EXT = {".png", ".jpg", ".jpeg"}
 ROW_KEYS = ["team", "player", "title", "hero", "role", "perks"] + STATS
@@ -142,7 +142,7 @@ def import_sources(paths: list[Path], store: "Store") -> list[str]:
 # Drafts
 # ---------------------------------------------------------------------------
 def templates_stamp() -> float:
-    return max((p.stat().st_mtime for p in TEMPLATES.glob("*") if p.is_file()), default=0.0)
+    return max((p.stat().st_mtime for p in template_dir().glob("*") if p.is_file()), default=0.0)
 
 
 class Store:
@@ -236,7 +236,7 @@ def options() -> dict:
     roster = load_json(ROOT / "reference" / "heroes.json")["heroes"]
     perks = load_json(ROOT / "reference" / "perks.json")["heroes"]
     maps = load_json(ROOT / "reference" / "maps.json", {"maps": []})["maps"]
-    known = load_json(TEMPLATES / "known_text.json", {"players": [], "titles": []})
+    known = load_json(template_dir() / "known_text.json", {"players": [], "titles": []})
     heroes = sorted(({"slug": s, "name": h["name"], "role": h["role"]} for s, h in roster.items()),
                     key=lambda h: h["name"].lower())
     # a player who has just swapped hero: "?" portrait, normally no role icon and no perks

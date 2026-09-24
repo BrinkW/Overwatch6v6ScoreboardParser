@@ -5,6 +5,7 @@ Score the parser against every answer-key fixture.
     python tools/evaluate.py --in-sample
     python tools/evaluate.py --overlays   # also write debug/<image>_layout.png
     python tools/evaluate.py --tier-gaps  # rows whose perks contradict perks.json's tier history
+    python tools/evaluate.py --public     # committed screenshots only (ignore data/reviewed/)
 
 Leave-one-image-out: learned templates (stat digits, roles, header letters, time
 digits, division badges, rank emblems, name and title glyphs, fallback-font
@@ -38,6 +39,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--in-sample", action="store_true", help="templates include the scored image")
     ap.add_argument("--overlays", action="store_true")
+    ap.add_argument("--public", action="store_true", help="committed answer keys only (ignore data/reviewed/)")
     ap.add_argument("--tier-gaps", action="store_true",
                     help="list rows whose perks can't be one major + one minor under perks.json's tier history")
     args = ap.parse_args(argv)
@@ -46,7 +48,7 @@ def main(argv=None):
     ref_titles = T.reference_titles()
 
     def models_for(excluded, cache):
-        t = build(excluded, cache)
+        t = build(excluded, cache, reviewed=not args.public)
         header = HD.HeaderModels(HD.GlyphReader(*t["letters"]), HD.GlyphReader(*t["time_digits"]),
                                  HD.DivisionReader(*t["division"]),
                                  HD.TierReader(list(zip(t["rank_emblems"][1], t["rank_emblems"][0]))), bans)
@@ -58,7 +60,7 @@ def main(argv=None):
     gaps = Counter()
     snapped = []
     full = models_for((), cache) if args.in_sample else None
-    for fx in fixtures():
+    for fx in fixtures(reviewed=not args.public):
         img = fx["image"]
         result = parse(image_path(fx), full or models_for((img,), cache))
         if args.overlays:
@@ -124,7 +126,7 @@ def main(argv=None):
             mismatches.append(f"{img:12} STRUCTURE {p}")
 
     mode = "in-sample" if args.in_sample else "leave-one-image-out"
-    print(f"Field accuracy ({mode}, {len(list(fixtures()))} images)")
+    print(f"Field accuracy ({mode}, {len(list(fixtures(reviewed=not args.public)))} images)")
     tot_ok = tot_n = 0
     for f, (ok, n) in per_field.items():
         tot_ok, tot_n = tot_ok + ok, tot_n + n

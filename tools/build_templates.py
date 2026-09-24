@@ -1,7 +1,14 @@
 """
-Build reference/templates/ from the answer-key fixtures.
+Build the learned templates from the answer keys.
 
-    python tools/build_templates.py [--exclude IMAGE ...] [--out DIR]
+    python tools/build_templates.py            # local build -> data/templates/ (git-ignored)
+    python tools/build_templates.py --public   # committed build -> reference/templates/
+
+The committed build uses only the committed answer keys (tests/fixtures/), so it
+can be reproduced from the public repo and contains nothing from private
+captures. The local build adds the captures reviewed with tools/review.py
+(data/reviewed/); the parser uses it whenever it exists (src/parse.py
+template_dir).
 
 Every learned template comes from a screenshot whose answer is known:
   - digits:        stat cells whose glyph count matches the known value, one
@@ -48,9 +55,10 @@ KINDS = ["digits", "roles", "letters", "time_digits", "division", "rank_emblems"
 STRING_KINDS = ["players", "titles"]
 
 
-def fixtures(exclude=()):
-    """Every answer key: the committed fixtures, then reviewed captures."""
-    for folder, images in ((FIXTURES, SAMPLES), (REVIEWED, REVIEWED)):
+def fixtures(exclude=(), reviewed: bool = True):
+    """Every answer key: the committed fixtures, then (unless reviewed=False) the
+    captures reviewed locally."""
+    for folder, images in ((FIXTURES, SAMPLES), (REVIEWED, REVIEWED))[:2 if reviewed else 1]:
         for f in sorted(folder.glob("*.json")) if folder.exists() else []:
             fx = json.loads(f.read_text(encoding="utf-8"))
             if fx["image"] not in exclude:
@@ -121,12 +129,12 @@ def harvest_text(rgb, row, truth: dict, scale: float, ts: float, got: dict):
                 got["title_glyphs"] += list(zip(T.title_vectors(tg, base, ts), chars))
 
 
-def build(exclude=(), cache: dict | None = None) -> dict:
+def build(exclude=(), cache: dict | None = None, reviewed: bool = True) -> dict:
     """{kind: (templates, labels)} for every kind. `cache` maps image -> harvested
     samples, so leave-one-image-out evaluation doesn't recompute them."""
     cache = cache if cache is not None else {}
     pooled = {k: [] for k in KINDS}
-    for fx in fixtures(exclude):
+    for fx in fixtures(exclude, reviewed):
         if fx["image"] not in cache:
             cache[fx["image"]] = harvest(fx)
         for k in KINDS + STRING_KINDS:
@@ -140,10 +148,15 @@ def build(exclude=(), cache: dict | None = None) -> dict:
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
+    ap.add_argument("--public", action="store_true",
+                    help="committed answer keys only, written to reference/templates/")
     ap.add_argument("--exclude", nargs="*", default=[])
-    ap.add_argument("--out", type=Path, default=ROOT / "reference" / "templates")
+    ap.add_argument("--out", type=Path, default=None)
     args = ap.parse_args(argv)
-    t = build(args.exclude)
+    args.out = args.out or ROOT / ("reference" if args.public else "data") / "templates"
+    t = build(args.exclude, reviewed=not args.public)
+    n = sum(1 for _ in fixtures(args.exclude, reviewed=not args.public))
+    print(f"{n} answer keys -> {args.out.relative_to(ROOT) if args.out.is_relative_to(ROOT) else args.out}")
     args.out.mkdir(parents=True, exist_ok=True)
     u8 = lambda a: (a * 255).round().astype(np.uint8)
     np.savez_compressed(args.out / "digits.npz", templates=u8(t["digits"][0]), labels=t["digits"][1].astype(np.uint8))

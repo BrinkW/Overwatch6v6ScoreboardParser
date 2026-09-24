@@ -26,7 +26,16 @@ from . import layout as L
 from . import text as T
 
 ROOT = Path(__file__).resolve().parent.parent
-TEMPLATES = ROOT / "reference" / "templates"
+# Learned templates (tools/build_templates.py). The committed set is built from the
+# committed answer keys only; a local build also learns from captures reviewed with
+# tools/review.py and stays in the git-ignored data/ folder.
+PUBLIC_TEMPLATES = ROOT / "reference" / "templates"
+LOCAL_TEMPLATES = ROOT / "data" / "templates"
+
+
+def template_dir() -> Path:
+    """The local build when there is one, else the committed public build."""
+    return LOCAL_TEMPLATES if (LOCAL_TEMPLATES / "digits.npz").exists() else PUBLIC_TEMPLATES
 STATS = ["E", "A", "D", "DMG", "H", "MIT"]
 # Below these margins a field is listed under `review`.
 REVIEW_MARGIN = {"stat": 0.5, "role": 1.0, "portrait": 1.5, "perk": 0.05, "name": 0.5}
@@ -46,7 +55,8 @@ class Models:
         self.roster = json.loads((ROOT / "reference" / "heroes.json").read_text(encoding="utf-8"))["heroes"]
 
     @classmethod
-    def load(cls, folder: Path = TEMPLATES) -> "Models":
+    def load(cls, folder: Path | None = None) -> "Models":
+        folder = folder or template_dir()
         return cls(D.DigitClassifier.load(folder / "digits.npz"), I.RoleClassifier.load(folder / "roles.npz"),
                    header=HD.HeaderModels.load(folder), text=T.TextModels.load(folder))
 

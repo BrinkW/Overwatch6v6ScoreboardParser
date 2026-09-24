@@ -27,7 +27,7 @@ IMAGE = SAMPLES / "maintest.png"
 
 @pytest.fixture(scope="module")
 def result():
-    t = build(exclude=("maintest.png",))
+    t = build(exclude=("maintest.png",), reviewed=False)   # committed answer keys only
     header = HD.HeaderModels(HD.GlyphReader(*t["letters"]), HD.GlyphReader(*t["time_digits"]),
                              HD.DivisionReader(*t["division"]),
                              HD.TierReader(list(zip(t["rank_emblems"][1], t["rank_emblems"][0]))))
